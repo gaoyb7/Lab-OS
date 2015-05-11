@@ -48,6 +48,7 @@ void schedule_prog(char *proc_name, uint16_t proc_size, uint16_t LBA, uint16_t f
     cur_pcb.ip = cur_pcb.sp = address & 0xffff;
     cur_pcb.pid = pid;
     cur_pcb.wait = 0;
+    cur_pcb.ppid = flags ? 0: -1;
     __asm__ volatile("pushf; popl %%eax;" : "=a"(cur_pcb.flags) : : );
 
     static char *ptr;

@@ -23,8 +23,8 @@ typedef struct PCB{
     int bx, dx, cx, ax;
     int ip, cs, flags;
     char name[16];
-    int pid, stat;
-    int wait, parent;
+    int pid, stat, ppid;
+    int wait;
 } PCB;
 
 void load_pcb(PCB *pcb, int id);
