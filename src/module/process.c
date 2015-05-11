@@ -18,9 +18,9 @@ void save_pcb(PCB *cur_pcb, int id) {
 }
 
 void wait() {
-    //_FIX_DS_;
+    _FIX_DS_;
     __asm__ volatile("int $0x74; int $0x71;");
-    //_REC_DS_;
+    _REC_DS_;
 }
 
 void schedule_prog(char *proc_name, uint16_t proc_size, uint16_t LBA, uint16_t flags) {

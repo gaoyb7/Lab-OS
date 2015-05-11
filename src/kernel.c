@@ -38,8 +38,8 @@ void load_ISR() {
     build_ISR(0x09, kb_demo);
     build_ISR(0x1c, switch_content);
     build_ISR(0x71, switch_content_2);
-    build_ISR(0x72, kill_proc);
-    build_ISR(0x73, proc_exit_switch);
+    build_ISR(0x72, proc_exit_switch);
+    build_ISR(0x73, do_exit);
     build_ISR(0x74, do_wait);
     //build_ISR(0x68, syscall);
 }

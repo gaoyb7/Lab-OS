@@ -6,7 +6,6 @@
 #define _FIX_ __asm__ volatile("pushw %cs; popw %ds;");
 #define _FIX_DS_ __asm__ volatile("pushw %ds; pushw %cs; popw %ds;")
 #define _REC_DS_ __asm__ volatile("popw %ds;")
-#define _FIX_ __asm__ volatile("pushw %cs; popw %ds;");
 
 void _kb_demo() {
     static int8_t kb_stat;
@@ -38,19 +37,14 @@ void _do_wait() {
     _REC_DS_;
 }
 
-void _kill_proc() {
+void _do_exit(char ch) {
     _FIX_DS_;
     cur_pcb.stat = PROC_EXIT;
     save_pcb(&cur_pcb, cur_proc);
-    //if (cur_pcb.ppid >= 0 && cur_pcb.ppid < MAX_PROC_NUM) {
-    //    load_pcb(&pcb_tmp, cur_pcb.ppid);
-    //    if (pcb_tmp.stat == PROC_BLOCKED)
-    //        pcb_tmp.stat = PROC_READY;
-    //    save_pcb(&pcb_tmp, cur_pcb.ppid);
-    //}
     if (cur_pcb.ppid >= 0 && cur_pcb.ppid < MAX_PROC_NUM) {
         load_pcb(&pcb_tmp, cur_pcb.ppid);
         pcb_tmp.wait = 0;
+        pcb_tmp.ax = ch;
         save_pcb(&pcb_tmp, cur_pcb.ppid);
     }
     _REC_DS_;
