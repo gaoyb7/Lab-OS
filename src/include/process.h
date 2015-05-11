@@ -7,7 +7,8 @@
 #define PROC_BLOCKED 3
 
 #define MAX_PROC_NUM 6
-#define PCB_ADDR 0x00000500
+#define PID_NUM_ADDR 0x00000500
+#define PCB_ADDR 0x00000600
 #define PROC_ADDR 0x20000500
 #define PROC_SIZE 0x04000000
 #define PROC_TIME 1
@@ -15,7 +16,7 @@
 #include "stdint.h"
 
 //kernel:       0x1000:0x0000
-//pcb:          0x0000:0x0500
+//pcb:          0x0000:0x0600
 //user_program: 0x2000:0x0500, size: 0x4000
 
 typedef struct PCB{

@@ -46,7 +46,7 @@ read_disk:
     mov ax, kernel_segment
     mov es, ax
     mov bx, kernel_offset
-    mov ax, 0x0210
+    mov ax, 0x0213
     mov cx, 0x0002
     mov dx, 0x0000
     int 0x13
