@@ -17,17 +17,24 @@ void save_pcb(PCB *cur_pcb, int id) {
     _REC_DS_;
 }
 
+void wait() {
+    //_FIX_DS_;
+    __asm__ volatile("int $0x74; int $0x71;");
+    //_REC_DS_;
+}
+
 void schedule_prog(char *proc_name, uint16_t proc_size, uint16_t LBA, uint16_t flags) {
     _FIX_DS_;
     static int pid;
     static PCB cur_pcb, pcb_tmp;
     
+    /*
     if (flags == 1) {
         load_pcb(&pcb_tmp, 0);
         pcb_tmp.wait = 1;
         save_pcb(&pcb_tmp, 0);
-        //printf("wait: %s, %d\n", pcb_tmp.name, pcb_tmp.wait);
     }
+    */ 
 
     for (pid = 0; pid < MAX_PROC_NUM; ++pid) {
         load_pcb(&cur_pcb, pid);

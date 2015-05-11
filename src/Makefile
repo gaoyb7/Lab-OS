@@ -11,6 +11,9 @@ DISK=disk.img
 test: all
 	qemu -fda disk.img -m 32
 
+run:
+	qemu -fda disk.img -m 32
+
 all: clean kernel user_program
 	dd if=reboot.com of=$(DISK) seek=20 conv=notrunc
 	dd if=time.com of=$(DISK) seek=30 conv=notrunc

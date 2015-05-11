@@ -81,7 +81,7 @@ _origin_extra_%1 resw2
 
 ISR_WRAPPER timer_demo
 ISR_WRAPPER kb_demo
-;ISR_WRAPPER syscall
+ISR_WRAPPER do_wait
 ISR_WRAPPER switch_content
 ISR_WRAPPER switch_content_2
 ISR_WRAPPER proc_exit_switch

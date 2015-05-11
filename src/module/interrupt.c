@@ -32,7 +32,9 @@ void _timer_demo() {
 
 void _do_wait() {
     _FIX_DS_;
-
+    load_pcb(&cur_pcb, cur_proc);
+    cur_pcb.wait = 1;
+    save_pcb(&cur_pcb, cur_proc);
     _REC_DS_;
 }
 

@@ -25,4 +25,7 @@ void switch_content_2();
 void _proc_exit_switch();
 void proc_exit_switch();
 
+void _do_wait();
+void do_wait();
+
 #endif

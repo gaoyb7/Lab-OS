@@ -30,7 +30,7 @@ int main() {
         while (p < cmd_len) {
             for (i = p; i < cmd_len && cmd_buff[i] != ';'; ++i);
             load_user_program(cmd_buff + p, i - p);
-            asm("pushw %ds; int $0x71; popw %ds;");
+            //asm("pushw %ds; int $0x68; int $0x71; popw %ds;");
             p = i + 1;
             puts("\n");
         }
@@ -61,6 +61,7 @@ void load_user_program(const char *cmd, uint16_t len) {
     for (i = 0; i < NUM_OF_PROG; ++i)
         if (len == __builtin_strlen(program_table[i].prog_name) && strncmp(program_table[i].prog_name, cmd, len) == 0) {
             schedule_prog(program_table[i].prog_name, program_table[i].size, program_table[i].pos, program_table[i].flags);
+            if (program_table[i].flags) wait();
             has_run = 1;
         }
 
