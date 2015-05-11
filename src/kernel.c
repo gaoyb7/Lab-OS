@@ -34,7 +34,7 @@ void show_msg() {
 }
 
 void load_ISR() {
-    build_ISR(0x1c, timer_demo);
+    build_ISR(0x08, timer_demo);
     build_ISR(0x09, kb_demo);
     build_ISR(0x1c, switch_content);
     build_ISR(0x71, switch_content_2);

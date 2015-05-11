@@ -30,7 +30,7 @@ void _timer_demo() {
 }
 
 int _do_fork() {
-    //_FIX_DS_;
+    _FIX_DS_;
     static int pcb_id, tmp;
     //__asm__ volatile("pushw %%cs; popw %0;" : : "m"(tmp) : );
     //printf("My cs: %x\n", tmp);
@@ -73,26 +73,26 @@ int _do_fork() {
         pcb_tmp.wait = 0;
 
         static uint16_t ret_addr;
-        __asm__ volatile("pushw child_proc; popw %0;" : : "m"(ret_addr) :);
-        pcb_tmp.ip = ret_addr;
+        //__asm__ volatile(".intel_syntax noprefix; mov ax, child_proc; mov %0, ax; .att_syntax prefix;" : : "m"(ret_addr) :);
+        //pcb_tmp.ip = ret_addr;
         pcb_tmp.ip = cur_pcb.ip;
         pcb_tmp.flags = cur_pcb.flags;
         pcb_tmp.stat = PROC_READY;
         pcb_tmp.name[0] = 0;
         pcb_tmp.ax = 0;
         pcb_tmp.ss = (PROC_ADDR >> 16) + pcb_id * (PROC_SIZE >> 16);
-        //pcb_tmp.sp += 2;
+        pcb_tmp.sp += 2;
         //pcb_tmp.cs = pcb_tmp.ds = pcb_tmp.es;
         //pcb_tmp.ip = pcb_tmp.sp = 0x500;
         //printf("%x %x\n", cur_pcb.ss, pcb_tmp.ss);
         stack_cpy(cur_pcb.ss << 16, pcb_tmp.ss << 16, 0x500); 
         save_pcb(&pcb_tmp, pcb_id);
-        //_print_pcb(&pcb_tmp);
+        _print_pcb(&pcb_tmp);
         __asm__ volatile("movl %0, %%eax;" : : "m"(pcb_tmp.pid) :);
     }
-    __asm__ volatile("child_proc:;");
-    //if (cur_proc == 2) printf("haha\n");
-    //_REC_DS_;
+    //printf("haha\n");
+    __asm__ volatile(".intel_syntax noprefix; child_proc:; .att_syntax prefix;");
+    _REC_DS_;
 }
 
 void _do_wait() {

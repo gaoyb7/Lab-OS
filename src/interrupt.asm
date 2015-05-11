@@ -130,680 +130,678 @@ Disassembly of section .text:
 0000015e <_do_fork>:
  15e:	66 55                	push   %bp
  160:	66 89 e5             	mov    %sp,%bp
- 163:	66 c7 06 fc 00       	movw   $0xfc,(%esi)
- 168:	00 00                	add    %al,(%eax)
- 16a:	00 00                	add    %al,(%eax)
- 16c:	eb 2d                	jmp    19b <_do_fork+0x3d>
- 16e:	66 a1 fc 00 66 50    	mov    0x506600fc,%ax
- 174:	66 68 80 00          	pushw  $0x80
- 178:	00 00                	add    %al,(%eax)
- 17a:	66 e8 fc ff          	callw  17a <_do_fork+0x1c>
- 17e:	ff                   	(bad)  
- 17f:	ff 66 83             	jmp    *-0x7d(%esi)
- 182:	c4 08                	les    (%eax),%ecx
- 184:	66 a1 d4 00 66 85    	mov    0x856600d4,%ax
- 18a:	c0                   	(bad)  
- 18b:	75 02                	jne    18f <_do_fork+0x31>
- 18d:	eb 16                	jmp    1a5 <_do_fork+0x47>
- 18f:	66 a1 fc 00 66 83    	mov    0x836600fc,%ax
- 195:	c0 01 66             	rolb   $0x66,(%ecx)
- 198:	a3 fc 00 66 a1       	mov    %eax,0xa16600fc
- 19d:	fc                   	cld    
- 19e:	00 66 83             	add    %ah,-0x7d(%esi)
- 1a1:	f8                   	clc    
- 1a2:	05 7e c9 66 a1       	add    $0xa166c97e,%eax
- 1a7:	fc                   	cld    
- 1a8:	00 66 83             	add    %ah,-0x7d(%esi)
- 1ab:	f8                   	clc    
- 1ac:	05 7e 09 66 b8       	add    $0xb866097e,%eax
- 1b1:	ff                   	(bad)  
- 1b2:	ff                   	(bad)  
- 1b3:	ff                   	(bad)  
+ 163:	1e                   	push   %ds
+ 164:	0e                   	push   %cs
+ 165:	1f                   	pop    %ds
+ 166:	66 c7 06 fc 00       	movw   $0xfc,(%esi)
+ 16b:	00 00                	add    %al,(%eax)
+ 16d:	00 00                	add    %al,(%eax)
+ 16f:	eb 2d                	jmp    19e <_do_fork+0x40>
+ 171:	66 a1 fc 00 66 50    	mov    0x506600fc,%ax
+ 177:	66 68 80 00          	pushw  $0x80
+ 17b:	00 00                	add    %al,(%eax)
+ 17d:	66 e8 fc ff          	callw  17d <_do_fork+0x1f>
+ 181:	ff                   	(bad)  
+ 182:	ff 66 83             	jmp    *-0x7d(%esi)
+ 185:	c4 08                	les    (%eax),%ecx
+ 187:	66 a1 d4 00 66 85    	mov    0x856600d4,%ax
+ 18d:	c0                   	(bad)  
+ 18e:	75 02                	jne    192 <_do_fork+0x34>
+ 190:	eb 16                	jmp    1a8 <_do_fork+0x4a>
+ 192:	66 a1 fc 00 66 83    	mov    0x836600fc,%ax
+ 198:	c0 01 66             	rolb   $0x66,(%ecx)
+ 19b:	a3 fc 00 66 a1       	mov    %eax,0xa16600fc
+ 1a0:	fc                   	cld    
+ 1a1:	00 66 83             	add    %ah,-0x7d(%esi)
+ 1a4:	f8                   	clc    
+ 1a5:	05 7e c9 66 a1       	add    $0xa166c97e,%eax
+ 1aa:	fc                   	cld    
+ 1ab:	00 66 83             	add    %ah,-0x7d(%esi)
+ 1ae:	f8                   	clc    
+ 1af:	05 7e 09 66 b8       	add    $0xb866097e,%eax
  1b4:	ff                   	(bad)  
- 1b5:	e9 f5 00 66 c7       	jmp    c76602af <_proc_exit_switch+0xc765fad4>
- 1ba:	06                   	push   %es
- 1bb:	a0 00 34 12 00       	mov    0x123400,%al
- 1c0:	00 66 89             	add    %ah,-0x77(%esi)
- 1c3:	26 a0 00 66 89 3e    	mov    %es:0x3e896600,%al
- 1c9:	94                   	xchg   %eax,%esp
- 1ca:	00 66 89             	add    %ah,-0x77(%esi)
- 1cd:	36 98                	ss cwtl 
- 1cf:	00 66 89             	add    %ah,-0x77(%esi)
- 1d2:	2e 9c                	cs pushf 
- 1d4:	00 66 a3             	add    %ah,-0x5d(%esi)
- 1d7:	b0 00                	mov    $0x0,%al
- 1d9:	66 89 1e             	mov    %bx,(%esi)
- 1dc:	a4                   	movsb  %ds:(%esi),%es:(%edi)
- 1dd:	00 66 89             	add    %ah,-0x77(%esi)
- 1e0:	0e                   	push   %cs
- 1e1:	ac                   	lods   %ds:(%esi),%al
- 1e2:	00 66 89             	add    %ah,-0x77(%esi)
- 1e5:	16                   	push   %ss
- 1e6:	a8 00                	test   $0x0,%al
- 1e8:	8c 16                	mov    %ss,(%esi)
- 1ea:	80 00 8c             	addb   $0x8c,(%eax)
- 1ed:	06                   	push   %es
- 1ee:	8c 00                	mov    %es,(%eax)
- 1f0:	8c 26                	mov    %fs,(%esi)
- 1f2:	88 00                	mov    %al,(%eax)
- 1f4:	8c 2e                	mov    %gs,(%esi)
- 1f6:	84 00                	test   %al,(%eax)
- 1f8:	8c 0e                	mov    %cs,(%esi)
- 1fa:	b8 00 8c 1e 90       	mov    $0x901e8c00,%eax
- 1ff:	00 66 e8             	add    %ah,-0x18(%esi)
- 202:	fc                   	cld    
- 203:	ff                   	(bad)  
- 204:	ff                   	(bad)  
- 205:	ff 66 a3             	jmp    *-0x5d(%esi)
- 208:	d0 00                	rolb   (%eax)
- 20a:	66 a1 e0 00 66 a3    	mov    0xa36600e0,%ax
- 210:	d8 00                	fadds  (%eax)
- 212:	66 c7 06 dc 00       	movw   $0xdc,(%esi)
- 217:	00 00                	add    %al,(%eax)
- 219:	00 00                	add    %al,(%eax)
- 21b:	66 ff 36             	pushw  (%esi)
- 21e:	ad                   	lods   %ds:(%esi),%eax
- 21f:	02 66 8f             	add    -0x71(%esi),%ah
- 222:	06                   	push   %es
- 223:	00 01                	add    %al,(%ecx)
- 225:	66 a1 00 01 66 a3    	mov    0xa3660100,%ax
- 22b:	b4 00                	mov    $0x0,%ah
- 22d:	66 a1 3c 00 66 a3    	mov    0xa366003c,%ax
- 233:	bc 00 66 c7 06       	mov    $0x6c76600,%esp
- 238:	d4 00                	aam    $0x0
- 23a:	01 00                	add    %eax,(%eax)
- 23c:	00 00                	add    %al,(%eax)
- 23e:	c6 06 c0             	movb   $0xc0,(%esi)
- 241:	00 00                	add    %al,(%eax)
- 243:	66 c7 06 b0 00       	movw   $0xb0,(%esi)
- 248:	00 00                	add    %al,(%eax)
- 24a:	00 00                	add    %al,(%eax)
- 24c:	66 a1 fc 00 66 83    	mov    0x836600fc,%ax
- 252:	c0 08 66             	rorb   $0x66,(%eax)
- 255:	c1 e0 0a             	shl    $0xa,%eax
- 258:	66 a3 80 00 66 a1    	mov    %ax,0xa1660080
- 25e:	80 00 66             	addb   $0x66,(%eax)
- 261:	c1 e0 10             	shl    $0x10,%eax
- 264:	66 89 c2             	mov    %ax,%dx
- 267:	66 a1 00 00 66 c1    	mov    0xc1660000,%ax
- 26d:	e0 10                	loopne 27f <_do_fork+0x121>
- 26f:	66 68 00 05          	pushw  $0x500
- 273:	00 00                	add    %al,(%eax)
- 275:	66 52                	push   %dx
- 277:	66 50                	push   %ax
- 279:	66 e8 fc ff          	callw  279 <_do_fork+0x11b>
- 27d:	ff                   	(bad)  
- 27e:	ff 66 83             	jmp    *-0x7d(%esi)
- 281:	c4 0c 66             	les    (%esi,%eiz,2),%ecx
- 284:	a1 fc 00 66 50       	mov    0x506600fc,%eax
- 289:	66 68 80 00          	pushw  $0x80
- 28d:	00 00                	add    %al,(%eax)
- 28f:	66 e8 fc ff          	callw  28f <_do_fork+0x131>
- 293:	ff                   	(bad)  
- 294:	ff 66 83             	jmp    *-0x7d(%esi)
- 297:	c4 08                	les    (%eax),%ecx
- 299:	66 68 80 00          	pushw  $0x80
- 29d:	00 00                	add    %al,(%eax)
- 29f:	66 e8 fc ff          	callw  29f <_do_fork+0x141>
- 2a3:	ff                   	(bad)  
- 2a4:	ff 66 83             	jmp    *-0x7d(%esi)
- 2a7:	c4 04 66             	les    (%esi,%eiz,2),%eax
- 2aa:	a1 d0 00 66 c9       	mov    0xc96600d0,%eax
+ 1b5:	ff                   	(bad)  
+ 1b6:	ff                   	(bad)  
+ 1b7:	ff                   	(bad)  
+ 1b8:	e9 ea 00 66 89       	jmp    896602a7 <_proc_exit_switch+0x8965fad3>
+ 1bd:	26 a0 00 66 89 3e    	mov    %es:0x3e896600,%al
+ 1c3:	94                   	xchg   %eax,%esp
+ 1c4:	00 66 89             	add    %ah,-0x77(%esi)
+ 1c7:	36 98                	ss cwtl 
+ 1c9:	00 66 89             	add    %ah,-0x77(%esi)
+ 1cc:	2e 9c                	cs pushf 
+ 1ce:	00 66 a3             	add    %ah,-0x5d(%esi)
+ 1d1:	b0 00                	mov    $0x0,%al
+ 1d3:	66 89 1e             	mov    %bx,(%esi)
+ 1d6:	a4                   	movsb  %ds:(%esi),%es:(%edi)
+ 1d7:	00 66 89             	add    %ah,-0x77(%esi)
+ 1da:	0e                   	push   %cs
+ 1db:	ac                   	lods   %ds:(%esi),%al
+ 1dc:	00 66 89             	add    %ah,-0x77(%esi)
+ 1df:	16                   	push   %ss
+ 1e0:	a8 00                	test   $0x0,%al
+ 1e2:	8c 16                	mov    %ss,(%esi)
+ 1e4:	80 00 8c             	addb   $0x8c,(%eax)
+ 1e7:	06                   	push   %es
+ 1e8:	8c 00                	mov    %es,(%eax)
+ 1ea:	8c 26                	mov    %fs,(%esi)
+ 1ec:	88 00                	mov    %al,(%eax)
+ 1ee:	8c 2e                	mov    %gs,(%esi)
+ 1f0:	84 00                	test   %al,(%eax)
+ 1f2:	8c 0e                	mov    %cs,(%esi)
+ 1f4:	b8 00 8c 1e 90       	mov    $0x901e8c00,%eax
+ 1f9:	00 66 e8             	add    %ah,-0x18(%esi)
+ 1fc:	fc                   	cld    
+ 1fd:	ff                   	(bad)  
+ 1fe:	ff                   	(bad)  
+ 1ff:	ff 66 a3             	jmp    *-0x5d(%esi)
+ 202:	d0 00                	rolb   (%eax)
+ 204:	66 a1 e0 00 66 a3    	mov    0xa36600e0,%ax
+ 20a:	d8 00                	fadds  (%eax)
+ 20c:	66 c7 06 dc 00       	movw   $0xdc,(%esi)
+ 211:	00 00                	add    %al,(%eax)
+ 213:	00 00                	add    %al,(%eax)
+ 215:	66 a1 a5 02 66 a3    	mov    0xa36602a5,%ax
+ 21b:	00 01                	add    %al,(%ecx)
+ 21d:	66 a1 00 01 66 a3    	mov    0xa3660100,%ax
+ 223:	b4 00                	mov    $0x0,%ah
+ 225:	66 a1 3c 00 66 a3    	mov    0xa366003c,%ax
+ 22b:	bc 00 66 c7 06       	mov    $0x6c76600,%esp
+ 230:	d4 00                	aam    $0x0
+ 232:	01 00                	add    %eax,(%eax)
+ 234:	00 00                	add    %al,(%eax)
+ 236:	c6 06 c0             	movb   $0xc0,(%esi)
+ 239:	00 00                	add    %al,(%eax)
+ 23b:	66 c7 06 b0 00       	movw   $0xb0,(%esi)
+ 240:	00 00                	add    %al,(%eax)
+ 242:	00 00                	add    %al,(%eax)
+ 244:	66 a1 fc 00 66 83    	mov    0x836600fc,%ax
+ 24a:	c0 08 66             	rorb   $0x66,(%eax)
+ 24d:	c1 e0 0a             	shl    $0xa,%eax
+ 250:	66 a3 80 00 66 a1    	mov    %ax,0xa1660080
+ 256:	80 00 66             	addb   $0x66,(%eax)
+ 259:	c1 e0 10             	shl    $0x10,%eax
+ 25c:	66 89 c2             	mov    %ax,%dx
+ 25f:	66 a1 00 00 66 c1    	mov    0xc1660000,%ax
+ 265:	e0 10                	loopne 277 <_do_fork+0x119>
+ 267:	66 68 00 05          	pushw  $0x500
+ 26b:	00 00                	add    %al,(%eax)
+ 26d:	66 52                	push   %dx
+ 26f:	66 50                	push   %ax
+ 271:	66 e8 fc ff          	callw  271 <_do_fork+0x113>
+ 275:	ff                   	(bad)  
+ 276:	ff 66 83             	jmp    *-0x7d(%esi)
+ 279:	c4 0c 66             	les    (%esi,%eiz,2),%ecx
+ 27c:	a1 fc 00 66 50       	mov    0x506600fc,%eax
+ 281:	66 68 80 00          	pushw  $0x80
+ 285:	00 00                	add    %al,(%eax)
+ 287:	66 e8 fc ff          	callw  287 <_do_fork+0x129>
+ 28b:	ff                   	(bad)  
+ 28c:	ff 66 83             	jmp    *-0x7d(%esi)
+ 28f:	c4 08                	les    (%eax),%ecx
+ 291:	66 68 80 00          	pushw  $0x80
+ 295:	00 00                	add    %al,(%eax)
+ 297:	66 e8 fc ff          	callw  297 <_do_fork+0x139>
+ 29b:	ff                   	(bad)  
+ 29c:	ff 66 83             	jmp    *-0x7d(%esi)
+ 29f:	c4 04 66             	les    (%esi,%eiz,2),%eax
+ 2a2:	a1 d0 00 1f 66       	mov    0x661f00d0,%eax
 
-000002ad <child_proc>:
- 2ad:	66 c9                	leavew 
- 2af:	66 c3                	retw   
+000002a5 <child_proc>:
+ 2a5:	1f                   	pop    %ds
+ 2a6:	66 c9                	leavew 
+ 2a8:	66 c3                	retw   
 
-000002b1 <_do_wait>:
- 2b1:	66 55                	push   %bp
- 2b3:	66 89 e5             	mov    %sp,%bp
- 2b6:	66 a1 e0 00 66 50    	mov    0x506600e0,%ax
- 2bc:	66 68 00 00          	pushw  $0x0
- 2c0:	00 00                	add    %al,(%eax)
- 2c2:	66 e8 fc ff          	callw  2c2 <_do_wait+0x11>
- 2c6:	ff                   	(bad)  
- 2c7:	ff 66 83             	jmp    *-0x7d(%esi)
- 2ca:	c4 08                	les    (%eax),%ecx
- 2cc:	66 c7 06 5c 00       	movw   $0x5c,(%esi)
- 2d1:	01 00                	add    %eax,(%eax)
- 2d3:	00 00                	add    %al,(%eax)
- 2d5:	66 a1 e0 00 66 50    	mov    0x506600e0,%ax
- 2db:	66 68 00 00          	pushw  $0x0
- 2df:	00 00                	add    %al,(%eax)
- 2e1:	66 e8 fc ff          	callw  2e1 <_do_wait+0x30>
- 2e5:	ff                   	(bad)  
- 2e6:	ff 66 83             	jmp    *-0x7d(%esi)
- 2e9:	c4 08                	les    (%eax),%ecx
- 2eb:	66 c9                	leavew 
- 2ed:	66 c3                	retw   
+000002aa <_do_wait>:
+ 2aa:	66 55                	push   %bp
+ 2ac:	66 89 e5             	mov    %sp,%bp
+ 2af:	66 a1 e0 00 66 50    	mov    0x506600e0,%ax
+ 2b5:	66 68 00 00          	pushw  $0x0
+ 2b9:	00 00                	add    %al,(%eax)
+ 2bb:	66 e8 fc ff          	callw  2bb <_do_wait+0x11>
+ 2bf:	ff                   	(bad)  
+ 2c0:	ff 66 83             	jmp    *-0x7d(%esi)
+ 2c3:	c4 08                	les    (%eax),%ecx
+ 2c5:	66 c7 06 5c 00       	movw   $0x5c,(%esi)
+ 2ca:	01 00                	add    %eax,(%eax)
+ 2cc:	00 00                	add    %al,(%eax)
+ 2ce:	66 a1 e0 00 66 50    	mov    0x506600e0,%ax
+ 2d4:	66 68 00 00          	pushw  $0x0
+ 2d8:	00 00                	add    %al,(%eax)
+ 2da:	66 e8 fc ff          	callw  2da <_do_wait+0x30>
+ 2de:	ff                   	(bad)  
+ 2df:	ff 66 83             	jmp    *-0x7d(%esi)
+ 2e2:	c4 08                	les    (%eax),%ecx
+ 2e4:	66 c9                	leavew 
+ 2e6:	66 c3                	retw   
 
-000002ef <_do_exit>:
- 2ef:	66 55                	push   %bp
- 2f1:	66 89 e5             	mov    %sp,%bp
- 2f4:	66 83 ec 04          	sub    $0x4,%sp
- 2f8:	67 66 8b 45 08       	mov    0x8(%di),%ax
- 2fd:	67 88 45 fc          	mov    %al,-0x4(%di)
- 301:	66 c7 06 54 00       	movw   $0x54,(%esi)
- 306:	00 00                	add    %al,(%eax)
- 308:	00 00                	add    %al,(%eax)
- 30a:	66 a1 e0 00 66 50    	mov    0x506600e0,%ax
- 310:	66 68 00 00          	pushw  $0x0
- 314:	00 00                	add    %al,(%eax)
- 316:	66 e8 fc ff          	callw  316 <_do_exit+0x27>
- 31a:	ff                   	(bad)  
- 31b:	ff 66 83             	jmp    *-0x7d(%esi)
- 31e:	c4 08                	les    (%eax),%ecx
- 320:	66 a1 58 00 66 85    	mov    0x85660058,%ax
- 326:	c0 78 49 66          	sarb   $0x66,0x49(%eax)
- 32a:	a1 58 00 66 83       	mov    0x83660058,%eax
- 32f:	f8                   	clc    
- 330:	05 7f 3f 66 a1       	add    $0xa1663f7f,%eax
- 335:	58                   	pop    %eax
- 336:	00 66 50             	add    %ah,0x50(%esi)
- 339:	66 68 80 00          	pushw  $0x80
- 33d:	00 00                	add    %al,(%eax)
- 33f:	66 e8 fc ff          	callw  33f <_do_exit+0x50>
- 343:	ff                   	(bad)  
- 344:	ff 66 83             	jmp    *-0x7d(%esi)
- 347:	c4 08                	les    (%eax),%ecx
- 349:	66 c7 06 dc 00       	movw   $0xdc,(%esi)
- 34e:	00 00                	add    %al,(%eax)
- 350:	00 00                	add    %al,(%eax)
- 352:	67 66 0f be 45 fc    	movsbw -0x4(%di),%ax
- 358:	66 a3 b0 00 66 a1    	mov    %ax,0xa16600b0
- 35e:	58                   	pop    %eax
- 35f:	00 66 50             	add    %ah,0x50(%esi)
- 362:	66 68 80 00          	pushw  $0x80
- 366:	00 00                	add    %al,(%eax)
- 368:	66 e8 fc ff          	callw  368 <_do_exit+0x79>
- 36c:	ff                   	(bad)  
- 36d:	ff 66 83             	jmp    *-0x7d(%esi)
- 370:	c4 08                	les    (%eax),%ecx
- 372:	66 c9                	leavew 
- 374:	66 c3                	retw   
+000002e8 <_do_exit>:
+ 2e8:	66 55                	push   %bp
+ 2ea:	66 89 e5             	mov    %sp,%bp
+ 2ed:	66 83 ec 04          	sub    $0x4,%sp
+ 2f1:	67 66 8b 45 08       	mov    0x8(%di),%ax
+ 2f6:	67 88 45 fc          	mov    %al,-0x4(%di)
+ 2fa:	66 c7 06 54 00       	movw   $0x54,(%esi)
+ 2ff:	00 00                	add    %al,(%eax)
+ 301:	00 00                	add    %al,(%eax)
+ 303:	66 a1 e0 00 66 50    	mov    0x506600e0,%ax
+ 309:	66 68 00 00          	pushw  $0x0
+ 30d:	00 00                	add    %al,(%eax)
+ 30f:	66 e8 fc ff          	callw  30f <_do_exit+0x27>
+ 313:	ff                   	(bad)  
+ 314:	ff 66 83             	jmp    *-0x7d(%esi)
+ 317:	c4 08                	les    (%eax),%ecx
+ 319:	66 a1 58 00 66 85    	mov    0x85660058,%ax
+ 31f:	c0 78 49 66          	sarb   $0x66,0x49(%eax)
+ 323:	a1 58 00 66 83       	mov    0x83660058,%eax
+ 328:	f8                   	clc    
+ 329:	05 7f 3f 66 a1       	add    $0xa1663f7f,%eax
+ 32e:	58                   	pop    %eax
+ 32f:	00 66 50             	add    %ah,0x50(%esi)
+ 332:	66 68 80 00          	pushw  $0x80
+ 336:	00 00                	add    %al,(%eax)
+ 338:	66 e8 fc ff          	callw  338 <_do_exit+0x50>
+ 33c:	ff                   	(bad)  
+ 33d:	ff 66 83             	jmp    *-0x7d(%esi)
+ 340:	c4 08                	les    (%eax),%ecx
+ 342:	66 c7 06 dc 00       	movw   $0xdc,(%esi)
+ 347:	00 00                	add    %al,(%eax)
+ 349:	00 00                	add    %al,(%eax)
+ 34b:	67 66 0f be 45 fc    	movsbw -0x4(%di),%ax
+ 351:	66 a3 b0 00 66 a1    	mov    %ax,0xa16600b0
+ 357:	58                   	pop    %eax
+ 358:	00 66 50             	add    %ah,0x50(%esi)
+ 35b:	66 68 80 00          	pushw  $0x80
+ 35f:	00 00                	add    %al,(%eax)
+ 361:	66 e8 fc ff          	callw  361 <_do_exit+0x79>
+ 365:	ff                   	(bad)  
+ 366:	ff 66 83             	jmp    *-0x7d(%esi)
+ 369:	c4 08                	les    (%eax),%ecx
+ 36b:	66 c9                	leavew 
+ 36d:	66 c3                	retw   
 
-00000376 <_switch_content>:
- 376:	66 55                	push   %bp
- 378:	66 89 e5             	mov    %sp,%bp
- 37b:	66 83 ec 04          	sub    $0x4,%sp
- 37f:	0e                   	push   %cs
- 380:	1f                   	pop    %ds
- 381:	66 a3 30 00 66 89    	mov    %ax,0x89660030
- 387:	1e                   	push   %ds
- 388:	24 00                	and    $0x0,%al
- 38a:	66 89 0e             	mov    %cx,(%esi)
- 38d:	2c 00                	sub    $0x0,%al
- 38f:	66 89 16             	mov    %dx,(%esi)
- 392:	28 00                	sub    %al,(%eax)
- 394:	66 a1 08 01 66 85    	mov    0x85660108,%ax
- 39a:	c0 7f 0f 66          	sarb   $0x66,0xf(%edi)
- 39e:	a1 08 01 66 83       	mov    0x83660108,%eax
- 3a3:	c0 01 66             	rolb   $0x66,(%ecx)
- 3a6:	a3 08 01 e9 fa       	mov    %eax,0xfae90108
- 3ab:	01 66 c7             	add    %esp,-0x39(%esi)
- 3ae:	06                   	push   %es
- 3af:	08 01                	or     %al,(%ecx)
- 3b1:	00 00                	add    %al,(%eax)
+0000036f <_switch_content>:
+ 36f:	66 55                	push   %bp
+ 371:	66 89 e5             	mov    %sp,%bp
+ 374:	66 83 ec 04          	sub    $0x4,%sp
+ 378:	0e                   	push   %cs
+ 379:	1f                   	pop    %ds
+ 37a:	66 a3 30 00 66 89    	mov    %ax,0x89660030
+ 380:	1e                   	push   %ds
+ 381:	24 00                	and    $0x0,%al
+ 383:	66 89 0e             	mov    %cx,(%esi)
+ 386:	2c 00                	sub    $0x0,%al
+ 388:	66 89 16             	mov    %dx,(%esi)
+ 38b:	28 00                	sub    %al,(%eax)
+ 38d:	66 a1 08 01 66 85    	mov    0x85660108,%ax
+ 393:	c0 7f 0f 66          	sarb   $0x66,0xf(%edi)
+ 397:	a1 08 01 66 83       	mov    0x83660108,%eax
+ 39c:	c0 01 66             	rolb   $0x66,(%ecx)
+ 39f:	a3 08 01 e9 fa       	mov    %eax,0xfae90108
+ 3a4:	01 66 c7             	add    %esp,-0x39(%esi)
+ 3a7:	06                   	push   %es
+ 3a8:	08 01                	or     %al,(%ecx)
+ 3aa:	00 00                	add    %al,(%eax)
+ 3ac:	00 00                	add    %al,(%eax)
+ 3ae:	66 c7 06 0c 01       	movw   $0x10c,(%esi)
  3b3:	00 00                	add    %al,(%eax)
- 3b5:	66 c7 06 0c 01       	movw   $0x10c,(%esi)
- 3ba:	00 00                	add    %al,(%eax)
- 3bc:	00 00                	add    %al,(%eax)
- 3be:	eb 18                	jmp    3d8 <_switch_content+0x62>
- 3c0:	66 a1 0c 01 67 8f    	mov    0x8f67010c,%ax
- 3c6:	84 00                	test   %al,(%eax)
- 3c8:	e4 00                	in     $0x0,%al
- 3ca:	00 00                	add    %al,(%eax)
- 3cc:	66 a1 0c 01 66 83    	mov    0x8366010c,%ax
- 3d2:	c0 01 66             	rolb   $0x66,(%ecx)
- 3d5:	a3 0c 01 66 a1       	mov    %eax,0xa166010c
- 3da:	0c 01                	or     $0x1,%al
- 3dc:	66 83 f8 09          	cmp    $0x9,%ax
- 3e0:	7e de                	jle    3c0 <_switch_content+0x4a>
- 3e2:	66 a1 e0 00 66 50    	mov    0x506600e0,%ax
- 3e8:	66 68 00 00          	pushw  $0x0
- 3ec:	00 00                	add    %al,(%eax)
- 3ee:	66 e8 fc ff          	callw  3ee <_switch_content+0x78>
- 3f2:	ff                   	(bad)  
- 3f3:	ff 66 83             	jmp    *-0x7d(%esi)
- 3f6:	c4 08                	les    (%eax),%ecx
- 3f8:	66 a1 54 00 66 83    	mov    0x83660054,%ax
- 3fe:	f8                   	clc    
- 3ff:	02 0f                	add    (%edi),%cl
- 401:	85 94 00 66 89 3e 14 	test   %edx,0x143e8966(%eax,%eax,1)
- 408:	00 66 89             	add    %ah,-0x77(%esi)
- 40b:	36 18 00             	sbb    %al,%ss:(%eax)
- 40e:	66 89 2e             	mov    %bp,(%esi)
- 411:	1c 00                	sbb    $0x0,%al
- 413:	66 89 26             	mov    %sp,(%esi)
- 416:	20 00                	and    %al,(%eax)
- 418:	8c 16                	mov    %ss,(%esi)
- 41a:	00 00                	add    %al,(%eax)
- 41c:	8c 06                	mov    %es,(%esi)
- 41e:	0c 00                	or     $0x0,%al
- 420:	8c 26                	mov    %fs,(%esi)
- 422:	08 00                	or     %al,(%eax)
- 424:	8c 2e                	mov    %gs,(%esi)
- 426:	04 00                	add    $0x0,%al
- 428:	66 c7 06 54 00       	movw   $0x54,(%esi)
- 42d:	01 00                	add    %eax,(%eax)
- 42f:	00 00                	add    %al,(%eax)
- 431:	66 0f b7 06          	movzww (%esi),%ax
- 435:	f0 00 66 0f          	lock add %ah,0xf(%esi)
- 439:	b7 c0                	mov    $0xc0,%bh
- 43b:	66 a3 10 00 66 0f    	mov    %ax,0xf660010
- 441:	b7 06                	mov    $0x6,%bh
- 443:	f2 00 66 0f          	repnz add %ah,0xf(%esi)
- 447:	b7 c0                	mov    $0xc0,%bh
- 449:	66 a3 34 00 66 0f    	mov    %ax,0xf660034
- 44f:	b7 06                	mov    $0x6,%bh
- 451:	f4                   	hlt    
- 452:	00 66 0f             	add    %ah,0xf(%esi)
- 455:	b7 c0                	mov    $0xc0,%bh
- 457:	66 a3 38 00 66 0f    	mov    %ax,0xf660038
- 45d:	b7 06                	mov    $0x6,%bh
- 45f:	f6 00 66             	testb  $0x66,(%eax)
- 462:	0f b7 c0             	movzwl %ax,%eax
- 465:	66 a3 3c 00 66 a1    	mov    %ax,0xa166003c
- 46b:	38 00                	cmp    %al,(%eax)
- 46d:	66 c1 e0 10          	shl    $0x10,%ax
- 471:	66 89 c2             	mov    %ax,%dx
- 474:	66 a1 34 00 66 09    	mov    0x9660034,%ax
- 47a:	d0 67 66             	shlb   0x66(%edi)
- 47d:	89 45 fc             	mov    %eax,-0x4(%ebp)
- 480:	66 a1 e0 00 66 50    	mov    0x506600e0,%ax
- 486:	66 68 00 00          	pushw  $0x0
- 48a:	00 00                	add    %al,(%eax)
- 48c:	66 e8 fc ff          	callw  48c <_switch_content+0x116>
- 490:	ff                   	(bad)  
- 491:	ff 66 83             	jmp    *-0x7d(%esi)
- 494:	c4 08                	les    (%eax),%ecx
- 496:	eb 03                	jmp    49b <_switch_content+0x125>
- 498:	83 c4 02             	add    $0x2,%esp
- 49b:	66 a1 e0 00 67 66    	mov    0x666700e0,%ax
- 4a1:	8d 48 01             	lea    0x1(%eax),%ecx
- 4a4:	66 ba ab aa          	mov    $0xaaab,%dx
- 4a8:	aa                   	stos   %al,%es:(%edi)
- 4a9:	2a 66 89             	sub    -0x77(%esi),%ah
- 4ac:	c8 66 f7 ea          	enter  $0xf766,$0xea
- 4b0:	66 89 c8             	mov    %cx,%ax
- 4b3:	66 c1 f8 1f          	sar    $0x1f,%ax
- 4b7:	66 29 c2             	sub    %ax,%dx
- 4ba:	66 89 d0             	mov    %dx,%ax
- 4bd:	66 01 c0             	add    %ax,%ax
- 4c0:	66 01 d0             	add    %dx,%ax
- 4c3:	66 01 c0             	add    %ax,%ax
- 4c6:	66 29 c1             	sub    %ax,%cx
- 4c9:	66 89 ca             	mov    %cx,%dx
- 4cc:	66 89 16             	mov    %dx,(%esi)
- 4cf:	e0 00                	loopne 4d1 <_switch_content+0x15b>
- 4d1:	66 a1 e0 00 66 50    	mov    0x506600e0,%ax
- 4d7:	66 68 00 00          	pushw  $0x0
- 4db:	00 00                	add    %al,(%eax)
- 4dd:	66 e8 fc ff          	callw  4dd <_switch_content+0x167>
- 4e1:	ff                   	(bad)  
- 4e2:	ff 66 83             	jmp    *-0x7d(%esi)
- 4e5:	c4 08                	les    (%eax),%ecx
- 4e7:	66 a1 54 00 66 83    	mov    0x83660054,%ax
- 4ed:	f8                   	clc    
- 4ee:	01 75 7b             	add    %esi,0x7b(%ebp)
- 4f1:	66 a1 5c 00 66 85    	mov    0x8566005c,%ax
- 4f7:	c0                   	(bad)  
- 4f8:	75 72                	jne    56c <_switch_content+0x1f6>
- 4fa:	90                   	nop
- 4fb:	66 c7 06 54 00       	movw   $0x54,(%esi)
- 500:	02 00                	add    (%eax),%al
- 502:	00 00                	add    %al,(%eax)
- 504:	66 a1 e0 00 66 50    	mov    0x506600e0,%ax
- 50a:	66 68 00 00          	pushw  $0x0
- 50e:	00 00                	add    %al,(%eax)
- 510:	66 e8 fc ff          	callw  510 <_switch_content+0x19a>
- 514:	ff                   	(bad)  
- 515:	ff 66 83             	jmp    *-0x7d(%esi)
- 518:	c4 08                	les    (%eax),%ecx
- 51a:	66 ff 36             	pushw  (%esi)
- 51d:	3c 00                	cmp    $0x0,%al
- 51f:	66 9d                	popfw  
- 521:	66 8b 3e             	mov    (%esi),%di
- 524:	14 00                	adc    $0x0,%al
- 526:	66 8b 36             	mov    (%esi),%si
- 529:	18 00                	sbb    %al,(%eax)
- 52b:	66 8b 2e             	mov    (%esi),%bp
- 52e:	1c 00                	sbb    $0x0,%al
- 530:	66 8b 26             	mov    (%esi),%sp
- 533:	20 00                	and    %al,(%eax)
- 535:	8e 16                	mov    (%esi),%ss
- 537:	00 00                	add    %al,(%eax)
- 539:	8e 06                	mov    (%esi),%es
- 53b:	0c 00                	or     $0x0,%al
- 53d:	8e 26                	mov    (%esi),%fs
- 53f:	08 00                	or     %al,(%eax)
- 541:	8e 2e                	mov    (%esi),%gs
- 543:	04 00                	add    $0x0,%al
- 545:	66 a1 10 00 a3 f0    	mov    0xf0a30010,%ax
- 54b:	00 66 a1             	add    %ah,-0x5f(%esi)
- 54e:	34 00                	xor    $0x0,%al
- 550:	a3 f2 00 66 a1       	mov    %eax,0xa16600f2
- 555:	38 00                	cmp    %al,(%eax)
- 557:	a3 f4 00 66 a1       	mov    %eax,0xa16600f4
- 55c:	3c 00                	cmp    $0x0,%al
- 55e:	a3 f6 00 66 c7       	mov    %eax,0xc76600f6
- 563:	06                   	push   %es
- 564:	0c 01                	or     $0x1,%al
- 566:	09 00                	or     %eax,(%eax)
- 568:	00 00                	add    %al,(%eax)
- 56a:	eb 1b                	jmp    587 <_switch_content+0x211>
- 56c:	e9 2c ff 66 a1       	jmp    a167049d <_proc_exit_switch+0xa166fcc2>
- 571:	0c 01                	or     $0x1,%al
- 573:	67 ff b4 00 e4       	pushl  -0x1c00(%si)
- 578:	00 00                	add    %al,(%eax)
- 57a:	00 66 a1             	add    %ah,-0x5f(%esi)
- 57d:	0c 01                	or     $0x1,%al
- 57f:	66 83 e8 01          	sub    $0x1,%ax
- 583:	66 a3 0c 01 66 a1    	mov    %ax,0xa166010c
- 589:	0c 01                	or     $0x1,%al
- 58b:	66 83 f8 03          	cmp    $0x3,%ax
- 58f:	7f de                	jg     56f <_switch_content+0x1f9>
- 591:	66 a1 30 00 66 8b    	mov    0x8b660030,%ax
- 597:	1e                   	push   %ds
- 598:	24 00                	and    $0x0,%al
- 59a:	66 8b 0e             	mov    (%esi),%cx
- 59d:	2c 00                	sub    $0x0,%al
- 59f:	66 8b 16             	mov    (%esi),%dx
- 5a2:	28 00                	sub    %al,(%eax)
- 5a4:	66 c3                	retw   
- 5a6:	66 c9                	leavew 
- 5a8:	66 c3                	retw   
+ 3b5:	00 00                	add    %al,(%eax)
+ 3b7:	eb 18                	jmp    3d1 <_switch_content+0x62>
+ 3b9:	66 a1 0c 01 67 8f    	mov    0x8f67010c,%ax
+ 3bf:	84 00                	test   %al,(%eax)
+ 3c1:	e4 00                	in     $0x0,%al
+ 3c3:	00 00                	add    %al,(%eax)
+ 3c5:	66 a1 0c 01 66 83    	mov    0x8366010c,%ax
+ 3cb:	c0 01 66             	rolb   $0x66,(%ecx)
+ 3ce:	a3 0c 01 66 a1       	mov    %eax,0xa166010c
+ 3d3:	0c 01                	or     $0x1,%al
+ 3d5:	66 83 f8 09          	cmp    $0x9,%ax
+ 3d9:	7e de                	jle    3b9 <_switch_content+0x4a>
+ 3db:	66 a1 e0 00 66 50    	mov    0x506600e0,%ax
+ 3e1:	66 68 00 00          	pushw  $0x0
+ 3e5:	00 00                	add    %al,(%eax)
+ 3e7:	66 e8 fc ff          	callw  3e7 <_switch_content+0x78>
+ 3eb:	ff                   	(bad)  
+ 3ec:	ff 66 83             	jmp    *-0x7d(%esi)
+ 3ef:	c4 08                	les    (%eax),%ecx
+ 3f1:	66 a1 54 00 66 83    	mov    0x83660054,%ax
+ 3f7:	f8                   	clc    
+ 3f8:	02 0f                	add    (%edi),%cl
+ 3fa:	85 94 00 66 89 3e 14 	test   %edx,0x143e8966(%eax,%eax,1)
+ 401:	00 66 89             	add    %ah,-0x77(%esi)
+ 404:	36 18 00             	sbb    %al,%ss:(%eax)
+ 407:	66 89 2e             	mov    %bp,(%esi)
+ 40a:	1c 00                	sbb    $0x0,%al
+ 40c:	66 89 26             	mov    %sp,(%esi)
+ 40f:	20 00                	and    %al,(%eax)
+ 411:	8c 16                	mov    %ss,(%esi)
+ 413:	00 00                	add    %al,(%eax)
+ 415:	8c 06                	mov    %es,(%esi)
+ 417:	0c 00                	or     $0x0,%al
+ 419:	8c 26                	mov    %fs,(%esi)
+ 41b:	08 00                	or     %al,(%eax)
+ 41d:	8c 2e                	mov    %gs,(%esi)
+ 41f:	04 00                	add    $0x0,%al
+ 421:	66 c7 06 54 00       	movw   $0x54,(%esi)
+ 426:	01 00                	add    %eax,(%eax)
+ 428:	00 00                	add    %al,(%eax)
+ 42a:	66 0f b7 06          	movzww (%esi),%ax
+ 42e:	f0 00 66 0f          	lock add %ah,0xf(%esi)
+ 432:	b7 c0                	mov    $0xc0,%bh
+ 434:	66 a3 10 00 66 0f    	mov    %ax,0xf660010
+ 43a:	b7 06                	mov    $0x6,%bh
+ 43c:	f2 00 66 0f          	repnz add %ah,0xf(%esi)
+ 440:	b7 c0                	mov    $0xc0,%bh
+ 442:	66 a3 34 00 66 0f    	mov    %ax,0xf660034
+ 448:	b7 06                	mov    $0x6,%bh
+ 44a:	f4                   	hlt    
+ 44b:	00 66 0f             	add    %ah,0xf(%esi)
+ 44e:	b7 c0                	mov    $0xc0,%bh
+ 450:	66 a3 38 00 66 0f    	mov    %ax,0xf660038
+ 456:	b7 06                	mov    $0x6,%bh
+ 458:	f6 00 66             	testb  $0x66,(%eax)
+ 45b:	0f b7 c0             	movzwl %ax,%eax
+ 45e:	66 a3 3c 00 66 a1    	mov    %ax,0xa166003c
+ 464:	38 00                	cmp    %al,(%eax)
+ 466:	66 c1 e0 10          	shl    $0x10,%ax
+ 46a:	66 89 c2             	mov    %ax,%dx
+ 46d:	66 a1 34 00 66 09    	mov    0x9660034,%ax
+ 473:	d0 67 66             	shlb   0x66(%edi)
+ 476:	89 45 fc             	mov    %eax,-0x4(%ebp)
+ 479:	66 a1 e0 00 66 50    	mov    0x506600e0,%ax
+ 47f:	66 68 00 00          	pushw  $0x0
+ 483:	00 00                	add    %al,(%eax)
+ 485:	66 e8 fc ff          	callw  485 <_switch_content+0x116>
+ 489:	ff                   	(bad)  
+ 48a:	ff 66 83             	jmp    *-0x7d(%esi)
+ 48d:	c4 08                	les    (%eax),%ecx
+ 48f:	eb 03                	jmp    494 <_switch_content+0x125>
+ 491:	83 c4 02             	add    $0x2,%esp
+ 494:	66 a1 e0 00 67 66    	mov    0x666700e0,%ax
+ 49a:	8d 48 01             	lea    0x1(%eax),%ecx
+ 49d:	66 ba ab aa          	mov    $0xaaab,%dx
+ 4a1:	aa                   	stos   %al,%es:(%edi)
+ 4a2:	2a 66 89             	sub    -0x77(%esi),%ah
+ 4a5:	c8 66 f7 ea          	enter  $0xf766,$0xea
+ 4a9:	66 89 c8             	mov    %cx,%ax
+ 4ac:	66 c1 f8 1f          	sar    $0x1f,%ax
+ 4b0:	66 29 c2             	sub    %ax,%dx
+ 4b3:	66 89 d0             	mov    %dx,%ax
+ 4b6:	66 01 c0             	add    %ax,%ax
+ 4b9:	66 01 d0             	add    %dx,%ax
+ 4bc:	66 01 c0             	add    %ax,%ax
+ 4bf:	66 29 c1             	sub    %ax,%cx
+ 4c2:	66 89 ca             	mov    %cx,%dx
+ 4c5:	66 89 16             	mov    %dx,(%esi)
+ 4c8:	e0 00                	loopne 4ca <_switch_content+0x15b>
+ 4ca:	66 a1 e0 00 66 50    	mov    0x506600e0,%ax
+ 4d0:	66 68 00 00          	pushw  $0x0
+ 4d4:	00 00                	add    %al,(%eax)
+ 4d6:	66 e8 fc ff          	callw  4d6 <_switch_content+0x167>
+ 4da:	ff                   	(bad)  
+ 4db:	ff 66 83             	jmp    *-0x7d(%esi)
+ 4de:	c4 08                	les    (%eax),%ecx
+ 4e0:	66 a1 54 00 66 83    	mov    0x83660054,%ax
+ 4e6:	f8                   	clc    
+ 4e7:	01 75 7b             	add    %esi,0x7b(%ebp)
+ 4ea:	66 a1 5c 00 66 85    	mov    0x8566005c,%ax
+ 4f0:	c0                   	(bad)  
+ 4f1:	75 72                	jne    565 <_switch_content+0x1f6>
+ 4f3:	90                   	nop
+ 4f4:	66 c7 06 54 00       	movw   $0x54,(%esi)
+ 4f9:	02 00                	add    (%eax),%al
+ 4fb:	00 00                	add    %al,(%eax)
+ 4fd:	66 a1 e0 00 66 50    	mov    0x506600e0,%ax
+ 503:	66 68 00 00          	pushw  $0x0
+ 507:	00 00                	add    %al,(%eax)
+ 509:	66 e8 fc ff          	callw  509 <_switch_content+0x19a>
+ 50d:	ff                   	(bad)  
+ 50e:	ff 66 83             	jmp    *-0x7d(%esi)
+ 511:	c4 08                	les    (%eax),%ecx
+ 513:	66 ff 36             	pushw  (%esi)
+ 516:	3c 00                	cmp    $0x0,%al
+ 518:	66 9d                	popfw  
+ 51a:	66 8b 3e             	mov    (%esi),%di
+ 51d:	14 00                	adc    $0x0,%al
+ 51f:	66 8b 36             	mov    (%esi),%si
+ 522:	18 00                	sbb    %al,(%eax)
+ 524:	66 8b 2e             	mov    (%esi),%bp
+ 527:	1c 00                	sbb    $0x0,%al
+ 529:	66 8b 26             	mov    (%esi),%sp
+ 52c:	20 00                	and    %al,(%eax)
+ 52e:	8e 16                	mov    (%esi),%ss
+ 530:	00 00                	add    %al,(%eax)
+ 532:	8e 06                	mov    (%esi),%es
+ 534:	0c 00                	or     $0x0,%al
+ 536:	8e 26                	mov    (%esi),%fs
+ 538:	08 00                	or     %al,(%eax)
+ 53a:	8e 2e                	mov    (%esi),%gs
+ 53c:	04 00                	add    $0x0,%al
+ 53e:	66 a1 10 00 a3 f0    	mov    0xf0a30010,%ax
+ 544:	00 66 a1             	add    %ah,-0x5f(%esi)
+ 547:	34 00                	xor    $0x0,%al
+ 549:	a3 f2 00 66 a1       	mov    %eax,0xa16600f2
+ 54e:	38 00                	cmp    %al,(%eax)
+ 550:	a3 f4 00 66 a1       	mov    %eax,0xa16600f4
+ 555:	3c 00                	cmp    $0x0,%al
+ 557:	a3 f6 00 66 c7       	mov    %eax,0xc76600f6
+ 55c:	06                   	push   %es
+ 55d:	0c 01                	or     $0x1,%al
+ 55f:	09 00                	or     %eax,(%eax)
+ 561:	00 00                	add    %al,(%eax)
+ 563:	eb 1b                	jmp    580 <_switch_content+0x211>
+ 565:	e9 2c ff 66 a1       	jmp    a1670496 <_proc_exit_switch+0xa166fcc2>
+ 56a:	0c 01                	or     $0x1,%al
+ 56c:	67 ff b4 00 e4       	pushl  -0x1c00(%si)
+ 571:	00 00                	add    %al,(%eax)
+ 573:	00 66 a1             	add    %ah,-0x5f(%esi)
+ 576:	0c 01                	or     $0x1,%al
+ 578:	66 83 e8 01          	sub    $0x1,%ax
+ 57c:	66 a3 0c 01 66 a1    	mov    %ax,0xa166010c
+ 582:	0c 01                	or     $0x1,%al
+ 584:	66 83 f8 03          	cmp    $0x3,%ax
+ 588:	7f de                	jg     568 <_switch_content+0x1f9>
+ 58a:	66 a1 30 00 66 8b    	mov    0x8b660030,%ax
+ 590:	1e                   	push   %ds
+ 591:	24 00                	and    $0x0,%al
+ 593:	66 8b 0e             	mov    (%esi),%cx
+ 596:	2c 00                	sub    $0x0,%al
+ 598:	66 8b 16             	mov    (%esi),%dx
+ 59b:	28 00                	sub    %al,(%eax)
+ 59d:	66 c3                	retw   
+ 59f:	66 c9                	leavew 
+ 5a1:	66 c3                	retw   
 
-000005aa <_switch_content_2>:
- 5aa:	66 55                	push   %bp
- 5ac:	66 89 e5             	mov    %sp,%bp
- 5af:	66 83 ec 04          	sub    $0x4,%sp
- 5b3:	0e                   	push   %cs
- 5b4:	1f                   	pop    %ds
- 5b5:	66 a3 30 00 66 89    	mov    %ax,0x89660030
- 5bb:	1e                   	push   %ds
- 5bc:	24 00                	and    $0x0,%al
- 5be:	66 89 0e             	mov    %cx,(%esi)
- 5c1:	2c 00                	sub    $0x0,%al
- 5c3:	66 89 16             	mov    %dx,(%esi)
- 5c6:	28 00                	sub    %al,(%eax)
- 5c8:	66 a1 10 01 66 85    	mov    0x85660110,%ax
- 5ce:	c0 7f 0c 66          	sarb   $0x66,0xc(%edi)
- 5d2:	a1 10 01 66 83       	mov    0x83660110,%eax
- 5d7:	c0 01 66             	rolb   $0x66,(%ecx)
- 5da:	a3 10 01 66 c7       	mov    %eax,0xc7660110
- 5df:	06                   	push   %es
- 5e0:	10 01                	adc    %al,(%ecx)
- 5e2:	00 00                	add    %al,(%eax)
+000005a3 <_switch_content_2>:
+ 5a3:	66 55                	push   %bp
+ 5a5:	66 89 e5             	mov    %sp,%bp
+ 5a8:	66 83 ec 04          	sub    $0x4,%sp
+ 5ac:	0e                   	push   %cs
+ 5ad:	1f                   	pop    %ds
+ 5ae:	66 a3 30 00 66 89    	mov    %ax,0x89660030
+ 5b4:	1e                   	push   %ds
+ 5b5:	24 00                	and    $0x0,%al
+ 5b7:	66 89 0e             	mov    %cx,(%esi)
+ 5ba:	2c 00                	sub    $0x0,%al
+ 5bc:	66 89 16             	mov    %dx,(%esi)
+ 5bf:	28 00                	sub    %al,(%eax)
+ 5c1:	66 a1 10 01 66 85    	mov    0x85660110,%ax
+ 5c7:	c0 7f 0c 66          	sarb   $0x66,0xc(%edi)
+ 5cb:	a1 10 01 66 83       	mov    0x83660110,%eax
+ 5d0:	c0 01 66             	rolb   $0x66,(%ecx)
+ 5d3:	a3 10 01 66 c7       	mov    %eax,0xc7660110
+ 5d8:	06                   	push   %es
+ 5d9:	10 01                	adc    %al,(%ecx)
+ 5db:	00 00                	add    %al,(%eax)
+ 5dd:	00 00                	add    %al,(%eax)
+ 5df:	66 c7 06 14 01       	movw   $0x114,(%esi)
  5e4:	00 00                	add    %al,(%eax)
- 5e6:	66 c7 06 14 01       	movw   $0x114,(%esi)
- 5eb:	00 00                	add    %al,(%eax)
- 5ed:	00 00                	add    %al,(%eax)
- 5ef:	eb 18                	jmp    609 <_switch_content_2+0x5f>
- 5f1:	66 a1 14 01 67 8f    	mov    0x8f670114,%ax
- 5f7:	84 00                	test   %al,(%eax)
- 5f9:	e4 00                	in     $0x0,%al
- 5fb:	00 00                	add    %al,(%eax)
- 5fd:	66 a1 14 01 66 83    	mov    0x83660114,%ax
- 603:	c0 01 66             	rolb   $0x66,(%ecx)
- 606:	a3 14 01 66 a1       	mov    %eax,0xa1660114
- 60b:	14 01                	adc    $0x1,%al
- 60d:	66 83 f8 09          	cmp    $0x9,%ax
- 611:	7e de                	jle    5f1 <_switch_content_2+0x47>
- 613:	66 a1 e0 00 66 50    	mov    0x506600e0,%ax
- 619:	66 68 00 00          	pushw  $0x0
- 61d:	00 00                	add    %al,(%eax)
- 61f:	66 e8 fc ff          	callw  61f <_switch_content_2+0x75>
- 623:	ff                   	(bad)  
- 624:	ff 66 83             	jmp    *-0x7d(%esi)
- 627:	c4 08                	les    (%eax),%ecx
- 629:	66 a1 54 00 66 83    	mov    0x83660054,%ax
- 62f:	f8                   	clc    
- 630:	02 0f                	add    (%edi),%cl
- 632:	85 94 00 66 89 3e 14 	test   %edx,0x143e8966(%eax,%eax,1)
- 639:	00 66 89             	add    %ah,-0x77(%esi)
- 63c:	36 18 00             	sbb    %al,%ss:(%eax)
- 63f:	66 89 2e             	mov    %bp,(%esi)
- 642:	1c 00                	sbb    $0x0,%al
- 644:	66 89 26             	mov    %sp,(%esi)
- 647:	20 00                	and    %al,(%eax)
- 649:	8c 16                	mov    %ss,(%esi)
- 64b:	00 00                	add    %al,(%eax)
- 64d:	8c 06                	mov    %es,(%esi)
- 64f:	0c 00                	or     $0x0,%al
- 651:	8c 26                	mov    %fs,(%esi)
- 653:	08 00                	or     %al,(%eax)
- 655:	8c 2e                	mov    %gs,(%esi)
- 657:	04 00                	add    $0x0,%al
- 659:	66 c7 06 54 00       	movw   $0x54,(%esi)
- 65e:	01 00                	add    %eax,(%eax)
- 660:	00 00                	add    %al,(%eax)
- 662:	66 0f b7 06          	movzww (%esi),%ax
- 666:	f0 00 66 0f          	lock add %ah,0xf(%esi)
- 66a:	b7 c0                	mov    $0xc0,%bh
- 66c:	66 a3 10 00 66 0f    	mov    %ax,0xf660010
- 672:	b7 06                	mov    $0x6,%bh
- 674:	f2 00 66 0f          	repnz add %ah,0xf(%esi)
- 678:	b7 c0                	mov    $0xc0,%bh
- 67a:	66 a3 34 00 66 0f    	mov    %ax,0xf660034
- 680:	b7 06                	mov    $0x6,%bh
- 682:	f4                   	hlt    
- 683:	00 66 0f             	add    %ah,0xf(%esi)
- 686:	b7 c0                	mov    $0xc0,%bh
- 688:	66 a3 38 00 66 0f    	mov    %ax,0xf660038
- 68e:	b7 06                	mov    $0x6,%bh
- 690:	f6 00 66             	testb  $0x66,(%eax)
- 693:	0f b7 c0             	movzwl %ax,%eax
- 696:	66 a3 3c 00 66 a1    	mov    %ax,0xa166003c
- 69c:	38 00                	cmp    %al,(%eax)
- 69e:	66 c1 e0 10          	shl    $0x10,%ax
- 6a2:	66 89 c2             	mov    %ax,%dx
- 6a5:	66 a1 34 00 66 09    	mov    0x9660034,%ax
- 6ab:	d0 67 66             	shlb   0x66(%edi)
- 6ae:	89 45 fc             	mov    %eax,-0x4(%ebp)
- 6b1:	66 a1 e0 00 66 50    	mov    0x506600e0,%ax
- 6b7:	66 68 00 00          	pushw  $0x0
- 6bb:	00 00                	add    %al,(%eax)
- 6bd:	66 e8 fc ff          	callw  6bd <_switch_content_2+0x113>
- 6c1:	ff                   	(bad)  
- 6c2:	ff 66 83             	jmp    *-0x7d(%esi)
- 6c5:	c4 08                	les    (%eax),%ecx
- 6c7:	eb 03                	jmp    6cc <_switch_content_2+0x122>
- 6c9:	83 c4 02             	add    $0x2,%esp
- 6cc:	66 a1 e0 00 67 66    	mov    0x666700e0,%ax
- 6d2:	8d 48 01             	lea    0x1(%eax),%ecx
- 6d5:	66 ba ab aa          	mov    $0xaaab,%dx
- 6d9:	aa                   	stos   %al,%es:(%edi)
- 6da:	2a 66 89             	sub    -0x77(%esi),%ah
- 6dd:	c8 66 f7 ea          	enter  $0xf766,$0xea
- 6e1:	66 89 c8             	mov    %cx,%ax
- 6e4:	66 c1 f8 1f          	sar    $0x1f,%ax
- 6e8:	66 29 c2             	sub    %ax,%dx
- 6eb:	66 89 d0             	mov    %dx,%ax
- 6ee:	66 01 c0             	add    %ax,%ax
- 6f1:	66 01 d0             	add    %dx,%ax
- 6f4:	66 01 c0             	add    %ax,%ax
- 6f7:	66 29 c1             	sub    %ax,%cx
- 6fa:	66 89 ca             	mov    %cx,%dx
- 6fd:	66 89 16             	mov    %dx,(%esi)
- 700:	e0 00                	loopne 702 <_switch_content_2+0x158>
- 702:	66 a1 e0 00 66 50    	mov    0x506600e0,%ax
- 708:	66 68 00 00          	pushw  $0x0
- 70c:	00 00                	add    %al,(%eax)
- 70e:	66 e8 fc ff          	callw  70e <_switch_content_2+0x164>
- 712:	ff                   	(bad)  
- 713:	ff 66 83             	jmp    *-0x7d(%esi)
- 716:	c4 08                	les    (%eax),%ecx
- 718:	66 a1 54 00 66 83    	mov    0x83660054,%ax
- 71e:	f8                   	clc    
- 71f:	01 75 7b             	add    %esi,0x7b(%ebp)
- 722:	66 a1 5c 00 66 85    	mov    0x8566005c,%ax
- 728:	c0                   	(bad)  
- 729:	75 72                	jne    79d <_switch_content_2+0x1f3>
- 72b:	90                   	nop
- 72c:	66 c7 06 54 00       	movw   $0x54,(%esi)
- 731:	02 00                	add    (%eax),%al
- 733:	00 00                	add    %al,(%eax)
- 735:	66 a1 e0 00 66 50    	mov    0x506600e0,%ax
- 73b:	66 68 00 00          	pushw  $0x0
- 73f:	00 00                	add    %al,(%eax)
- 741:	66 e8 fc ff          	callw  741 <_switch_content_2+0x197>
- 745:	ff                   	(bad)  
- 746:	ff 66 83             	jmp    *-0x7d(%esi)
- 749:	c4 08                	les    (%eax),%ecx
- 74b:	66 ff 36             	pushw  (%esi)
- 74e:	3c 00                	cmp    $0x0,%al
- 750:	66 9d                	popfw  
- 752:	66 8b 3e             	mov    (%esi),%di
- 755:	14 00                	adc    $0x0,%al
- 757:	66 8b 36             	mov    (%esi),%si
- 75a:	18 00                	sbb    %al,(%eax)
- 75c:	66 8b 2e             	mov    (%esi),%bp
- 75f:	1c 00                	sbb    $0x0,%al
- 761:	66 8b 26             	mov    (%esi),%sp
- 764:	20 00                	and    %al,(%eax)
- 766:	8e 16                	mov    (%esi),%ss
- 768:	00 00                	add    %al,(%eax)
- 76a:	8e 06                	mov    (%esi),%es
- 76c:	0c 00                	or     $0x0,%al
- 76e:	8e 26                	mov    (%esi),%fs
- 770:	08 00                	or     %al,(%eax)
- 772:	8e 2e                	mov    (%esi),%gs
- 774:	04 00                	add    $0x0,%al
- 776:	66 a1 10 00 a3 f0    	mov    0xf0a30010,%ax
- 77c:	00 66 a1             	add    %ah,-0x5f(%esi)
- 77f:	34 00                	xor    $0x0,%al
- 781:	a3 f2 00 66 a1       	mov    %eax,0xa16600f2
- 786:	38 00                	cmp    %al,(%eax)
- 788:	a3 f4 00 66 a1       	mov    %eax,0xa16600f4
- 78d:	3c 00                	cmp    $0x0,%al
- 78f:	a3 f6 00 66 c7       	mov    %eax,0xc76600f6
- 794:	06                   	push   %es
- 795:	14 01                	adc    $0x1,%al
- 797:	09 00                	or     %eax,(%eax)
- 799:	00 00                	add    %al,(%eax)
- 79b:	eb 1b                	jmp    7b8 <_switch_content_2+0x20e>
- 79d:	e9 2c ff 66 a1       	jmp    a16706ce <_proc_exit_switch+0xa166fef3>
- 7a2:	14 01                	adc    $0x1,%al
- 7a4:	67 ff b4 00 e4       	pushl  -0x1c00(%si)
- 7a9:	00 00                	add    %al,(%eax)
- 7ab:	00 66 a1             	add    %ah,-0x5f(%esi)
- 7ae:	14 01                	adc    $0x1,%al
- 7b0:	66 83 e8 01          	sub    $0x1,%ax
- 7b4:	66 a3 14 01 66 a1    	mov    %ax,0xa1660114
- 7ba:	14 01                	adc    $0x1,%al
- 7bc:	66 83 f8 03          	cmp    $0x3,%ax
- 7c0:	7f de                	jg     7a0 <_switch_content_2+0x1f6>
- 7c2:	66 a1 30 00 66 8b    	mov    0x8b660030,%ax
- 7c8:	1e                   	push   %ds
- 7c9:	24 00                	and    $0x0,%al
- 7cb:	66 8b 0e             	mov    (%esi),%cx
- 7ce:	2c 00                	sub    $0x0,%al
- 7d0:	66 8b 16             	mov    (%esi),%dx
- 7d3:	28 00                	sub    %al,(%eax)
- 7d5:	66 c3                	retw   
- 7d7:	66 c9                	leavew 
- 7d9:	66 c3                	retw   
+ 5e6:	00 00                	add    %al,(%eax)
+ 5e8:	eb 18                	jmp    602 <_switch_content_2+0x5f>
+ 5ea:	66 a1 14 01 67 8f    	mov    0x8f670114,%ax
+ 5f0:	84 00                	test   %al,(%eax)
+ 5f2:	e4 00                	in     $0x0,%al
+ 5f4:	00 00                	add    %al,(%eax)
+ 5f6:	66 a1 14 01 66 83    	mov    0x83660114,%ax
+ 5fc:	c0 01 66             	rolb   $0x66,(%ecx)
+ 5ff:	a3 14 01 66 a1       	mov    %eax,0xa1660114
+ 604:	14 01                	adc    $0x1,%al
+ 606:	66 83 f8 09          	cmp    $0x9,%ax
+ 60a:	7e de                	jle    5ea <_switch_content_2+0x47>
+ 60c:	66 a1 e0 00 66 50    	mov    0x506600e0,%ax
+ 612:	66 68 00 00          	pushw  $0x0
+ 616:	00 00                	add    %al,(%eax)
+ 618:	66 e8 fc ff          	callw  618 <_switch_content_2+0x75>
+ 61c:	ff                   	(bad)  
+ 61d:	ff 66 83             	jmp    *-0x7d(%esi)
+ 620:	c4 08                	les    (%eax),%ecx
+ 622:	66 a1 54 00 66 83    	mov    0x83660054,%ax
+ 628:	f8                   	clc    
+ 629:	02 0f                	add    (%edi),%cl
+ 62b:	85 94 00 66 89 3e 14 	test   %edx,0x143e8966(%eax,%eax,1)
+ 632:	00 66 89             	add    %ah,-0x77(%esi)
+ 635:	36 18 00             	sbb    %al,%ss:(%eax)
+ 638:	66 89 2e             	mov    %bp,(%esi)
+ 63b:	1c 00                	sbb    $0x0,%al
+ 63d:	66 89 26             	mov    %sp,(%esi)
+ 640:	20 00                	and    %al,(%eax)
+ 642:	8c 16                	mov    %ss,(%esi)
+ 644:	00 00                	add    %al,(%eax)
+ 646:	8c 06                	mov    %es,(%esi)
+ 648:	0c 00                	or     $0x0,%al
+ 64a:	8c 26                	mov    %fs,(%esi)
+ 64c:	08 00                	or     %al,(%eax)
+ 64e:	8c 2e                	mov    %gs,(%esi)
+ 650:	04 00                	add    $0x0,%al
+ 652:	66 c7 06 54 00       	movw   $0x54,(%esi)
+ 657:	01 00                	add    %eax,(%eax)
+ 659:	00 00                	add    %al,(%eax)
+ 65b:	66 0f b7 06          	movzww (%esi),%ax
+ 65f:	f0 00 66 0f          	lock add %ah,0xf(%esi)
+ 663:	b7 c0                	mov    $0xc0,%bh
+ 665:	66 a3 10 00 66 0f    	mov    %ax,0xf660010
+ 66b:	b7 06                	mov    $0x6,%bh
+ 66d:	f2 00 66 0f          	repnz add %ah,0xf(%esi)
+ 671:	b7 c0                	mov    $0xc0,%bh
+ 673:	66 a3 34 00 66 0f    	mov    %ax,0xf660034
+ 679:	b7 06                	mov    $0x6,%bh
+ 67b:	f4                   	hlt    
+ 67c:	00 66 0f             	add    %ah,0xf(%esi)
+ 67f:	b7 c0                	mov    $0xc0,%bh
+ 681:	66 a3 38 00 66 0f    	mov    %ax,0xf660038
+ 687:	b7 06                	mov    $0x6,%bh
+ 689:	f6 00 66             	testb  $0x66,(%eax)
+ 68c:	0f b7 c0             	movzwl %ax,%eax
+ 68f:	66 a3 3c 00 66 a1    	mov    %ax,0xa166003c
+ 695:	38 00                	cmp    %al,(%eax)
+ 697:	66 c1 e0 10          	shl    $0x10,%ax
+ 69b:	66 89 c2             	mov    %ax,%dx
+ 69e:	66 a1 34 00 66 09    	mov    0x9660034,%ax
+ 6a4:	d0 67 66             	shlb   0x66(%edi)
+ 6a7:	89 45 fc             	mov    %eax,-0x4(%ebp)
+ 6aa:	66 a1 e0 00 66 50    	mov    0x506600e0,%ax
+ 6b0:	66 68 00 00          	pushw  $0x0
+ 6b4:	00 00                	add    %al,(%eax)
+ 6b6:	66 e8 fc ff          	callw  6b6 <_switch_content_2+0x113>
+ 6ba:	ff                   	(bad)  
+ 6bb:	ff 66 83             	jmp    *-0x7d(%esi)
+ 6be:	c4 08                	les    (%eax),%ecx
+ 6c0:	eb 03                	jmp    6c5 <_switch_content_2+0x122>
+ 6c2:	83 c4 02             	add    $0x2,%esp
+ 6c5:	66 a1 e0 00 67 66    	mov    0x666700e0,%ax
+ 6cb:	8d 48 01             	lea    0x1(%eax),%ecx
+ 6ce:	66 ba ab aa          	mov    $0xaaab,%dx
+ 6d2:	aa                   	stos   %al,%es:(%edi)
+ 6d3:	2a 66 89             	sub    -0x77(%esi),%ah
+ 6d6:	c8 66 f7 ea          	enter  $0xf766,$0xea
+ 6da:	66 89 c8             	mov    %cx,%ax
+ 6dd:	66 c1 f8 1f          	sar    $0x1f,%ax
+ 6e1:	66 29 c2             	sub    %ax,%dx
+ 6e4:	66 89 d0             	mov    %dx,%ax
+ 6e7:	66 01 c0             	add    %ax,%ax
+ 6ea:	66 01 d0             	add    %dx,%ax
+ 6ed:	66 01 c0             	add    %ax,%ax
+ 6f0:	66 29 c1             	sub    %ax,%cx
+ 6f3:	66 89 ca             	mov    %cx,%dx
+ 6f6:	66 89 16             	mov    %dx,(%esi)
+ 6f9:	e0 00                	loopne 6fb <_switch_content_2+0x158>
+ 6fb:	66 a1 e0 00 66 50    	mov    0x506600e0,%ax
+ 701:	66 68 00 00          	pushw  $0x0
+ 705:	00 00                	add    %al,(%eax)
+ 707:	66 e8 fc ff          	callw  707 <_switch_content_2+0x164>
+ 70b:	ff                   	(bad)  
+ 70c:	ff 66 83             	jmp    *-0x7d(%esi)
+ 70f:	c4 08                	les    (%eax),%ecx
+ 711:	66 a1 54 00 66 83    	mov    0x83660054,%ax
+ 717:	f8                   	clc    
+ 718:	01 75 7b             	add    %esi,0x7b(%ebp)
+ 71b:	66 a1 5c 00 66 85    	mov    0x8566005c,%ax
+ 721:	c0                   	(bad)  
+ 722:	75 72                	jne    796 <_switch_content_2+0x1f3>
+ 724:	90                   	nop
+ 725:	66 c7 06 54 00       	movw   $0x54,(%esi)
+ 72a:	02 00                	add    (%eax),%al
+ 72c:	00 00                	add    %al,(%eax)
+ 72e:	66 a1 e0 00 66 50    	mov    0x506600e0,%ax
+ 734:	66 68 00 00          	pushw  $0x0
+ 738:	00 00                	add    %al,(%eax)
+ 73a:	66 e8 fc ff          	callw  73a <_switch_content_2+0x197>
+ 73e:	ff                   	(bad)  
+ 73f:	ff 66 83             	jmp    *-0x7d(%esi)
+ 742:	c4 08                	les    (%eax),%ecx
+ 744:	66 ff 36             	pushw  (%esi)
+ 747:	3c 00                	cmp    $0x0,%al
+ 749:	66 9d                	popfw  
+ 74b:	66 8b 3e             	mov    (%esi),%di
+ 74e:	14 00                	adc    $0x0,%al
+ 750:	66 8b 36             	mov    (%esi),%si
+ 753:	18 00                	sbb    %al,(%eax)
+ 755:	66 8b 2e             	mov    (%esi),%bp
+ 758:	1c 00                	sbb    $0x0,%al
+ 75a:	66 8b 26             	mov    (%esi),%sp
+ 75d:	20 00                	and    %al,(%eax)
+ 75f:	8e 16                	mov    (%esi),%ss
+ 761:	00 00                	add    %al,(%eax)
+ 763:	8e 06                	mov    (%esi),%es
+ 765:	0c 00                	or     $0x0,%al
+ 767:	8e 26                	mov    (%esi),%fs
+ 769:	08 00                	or     %al,(%eax)
+ 76b:	8e 2e                	mov    (%esi),%gs
+ 76d:	04 00                	add    $0x0,%al
+ 76f:	66 a1 10 00 a3 f0    	mov    0xf0a30010,%ax
+ 775:	00 66 a1             	add    %ah,-0x5f(%esi)
+ 778:	34 00                	xor    $0x0,%al
+ 77a:	a3 f2 00 66 a1       	mov    %eax,0xa16600f2
+ 77f:	38 00                	cmp    %al,(%eax)
+ 781:	a3 f4 00 66 a1       	mov    %eax,0xa16600f4
+ 786:	3c 00                	cmp    $0x0,%al
+ 788:	a3 f6 00 66 c7       	mov    %eax,0xc76600f6
+ 78d:	06                   	push   %es
+ 78e:	14 01                	adc    $0x1,%al
+ 790:	09 00                	or     %eax,(%eax)
+ 792:	00 00                	add    %al,(%eax)
+ 794:	eb 1b                	jmp    7b1 <_switch_content_2+0x20e>
+ 796:	e9 2c ff 66 a1       	jmp    a16706c7 <_proc_exit_switch+0xa166fef3>
+ 79b:	14 01                	adc    $0x1,%al
+ 79d:	67 ff b4 00 e4       	pushl  -0x1c00(%si)
+ 7a2:	00 00                	add    %al,(%eax)
+ 7a4:	00 66 a1             	add    %ah,-0x5f(%esi)
+ 7a7:	14 01                	adc    $0x1,%al
+ 7a9:	66 83 e8 01          	sub    $0x1,%ax
+ 7ad:	66 a3 14 01 66 a1    	mov    %ax,0xa1660114
+ 7b3:	14 01                	adc    $0x1,%al
+ 7b5:	66 83 f8 03          	cmp    $0x3,%ax
+ 7b9:	7f de                	jg     799 <_switch_content_2+0x1f6>
+ 7bb:	66 a1 30 00 66 8b    	mov    0x8b660030,%ax
+ 7c1:	1e                   	push   %ds
+ 7c2:	24 00                	and    $0x0,%al
+ 7c4:	66 8b 0e             	mov    (%esi),%cx
+ 7c7:	2c 00                	sub    $0x0,%al
+ 7c9:	66 8b 16             	mov    (%esi),%dx
+ 7cc:	28 00                	sub    %al,(%eax)
+ 7ce:	66 c3                	retw   
+ 7d0:	66 c9                	leavew 
+ 7d2:	66 c3                	retw   
 
-000007db <_proc_exit_switch>:
- 7db:	66 55                	push   %bp
- 7dd:	66 89 e5             	mov    %sp,%bp
- 7e0:	0e                   	push   %cs
- 7e1:	1f                   	pop    %ds
- 7e2:	66 a1 e0 00 67 66    	mov    0x666700e0,%ax
- 7e8:	8d 48 01             	lea    0x1(%eax),%ecx
- 7eb:	66 ba ab aa          	mov    $0xaaab,%dx
- 7ef:	aa                   	stos   %al,%es:(%edi)
- 7f0:	2a 66 89             	sub    -0x77(%esi),%ah
- 7f3:	c8 66 f7 ea          	enter  $0xf766,$0xea
- 7f7:	66 89 c8             	mov    %cx,%ax
- 7fa:	66 c1 f8 1f          	sar    $0x1f,%ax
- 7fe:	66 29 c2             	sub    %ax,%dx
- 801:	66 89 d0             	mov    %dx,%ax
- 804:	66 01 c0             	add    %ax,%ax
- 807:	66 01 d0             	add    %dx,%ax
- 80a:	66 01 c0             	add    %ax,%ax
- 80d:	66 29 c1             	sub    %ax,%cx
- 810:	66 89 ca             	mov    %cx,%dx
- 813:	66 89 16             	mov    %dx,(%esi)
- 816:	e0 00                	loopne 818 <_proc_exit_switch+0x3d>
- 818:	66 a1 e0 00 66 50    	mov    0x506600e0,%ax
- 81e:	66 68 00 00          	pushw  $0x0
- 822:	00 00                	add    %al,(%eax)
- 824:	66 e8 fc ff          	callw  824 <_proc_exit_switch+0x49>
- 828:	ff                   	(bad)  
- 829:	ff 66 83             	jmp    *-0x7d(%esi)
- 82c:	c4 08                	les    (%eax),%ecx
- 82e:	66 a1 54 00 66 83    	mov    0x83660054,%ax
- 834:	f8                   	clc    
- 835:	01 75 7b             	add    %esi,0x7b(%ebp)
- 838:	66 a1 5c 00 66 85    	mov    0x8566005c,%ax
- 83e:	c0                   	(bad)  
- 83f:	75 72                	jne    8b3 <_proc_exit_switch+0xd8>
- 841:	90                   	nop
- 842:	66 c7 06 54 00       	movw   $0x54,(%esi)
- 847:	02 00                	add    (%eax),%al
- 849:	00 00                	add    %al,(%eax)
- 84b:	66 a1 e0 00 66 50    	mov    0x506600e0,%ax
- 851:	66 68 00 00          	pushw  $0x0
- 855:	00 00                	add    %al,(%eax)
- 857:	66 e8 fc ff          	callw  857 <_proc_exit_switch+0x7c>
- 85b:	ff                   	(bad)  
- 85c:	ff 66 83             	jmp    *-0x7d(%esi)
- 85f:	c4 08                	les    (%eax),%ecx
- 861:	66 ff 36             	pushw  (%esi)
- 864:	3c 00                	cmp    $0x0,%al
- 866:	66 9d                	popfw  
- 868:	66 8b 3e             	mov    (%esi),%di
- 86b:	14 00                	adc    $0x0,%al
- 86d:	66 8b 36             	mov    (%esi),%si
- 870:	18 00                	sbb    %al,(%eax)
- 872:	66 8b 2e             	mov    (%esi),%bp
- 875:	1c 00                	sbb    $0x0,%al
- 877:	66 8b 26             	mov    (%esi),%sp
- 87a:	20 00                	and    %al,(%eax)
- 87c:	8e 16                	mov    (%esi),%ss
- 87e:	00 00                	add    %al,(%eax)
- 880:	8e 06                	mov    (%esi),%es
- 882:	0c 00                	or     $0x0,%al
- 884:	8e 26                	mov    (%esi),%fs
- 886:	08 00                	or     %al,(%eax)
- 888:	8e 2e                	mov    (%esi),%gs
- 88a:	04 00                	add    $0x0,%al
- 88c:	66 a1 3c 00 a3 f6    	mov    0xf6a3003c,%ax
- 892:	00 66 a1             	add    %ah,-0x5f(%esi)
- 895:	38 00                	cmp    %al,(%eax)
- 897:	a3 f4 00 66 a1       	mov    %eax,0xa16600f4
- 89c:	34 00                	xor    $0x0,%al
- 89e:	a3 f2 00 66 a1       	mov    %eax,0xa16600f2
- 8a3:	10 00                	adc    %al,(%eax)
- 8a5:	a3 f0 00 66 c7       	mov    %eax,0xc76600f0
- 8aa:	06                   	push   %es
- 8ab:	18 01                	sbb    %al,(%ecx)
- 8ad:	09 00                	or     %eax,(%eax)
- 8af:	00 00                	add    %al,(%eax)
- 8b1:	eb 1b                	jmp    8ce <_proc_exit_switch+0xf3>
- 8b3:	e9 2c ff 66 a1       	jmp    a16707e4 <_proc_exit_switch+0xa1670009>
- 8b8:	18 01                	sbb    %al,(%ecx)
- 8ba:	67 ff b4 00 e4       	pushl  -0x1c00(%si)
- 8bf:	00 00                	add    %al,(%eax)
- 8c1:	00 66 a1             	add    %ah,-0x5f(%esi)
- 8c4:	18 01                	sbb    %al,(%ecx)
- 8c6:	66 83 e8 01          	sub    $0x1,%ax
- 8ca:	66 a3 18 01 66 a1    	mov    %ax,0xa1660118
- 8d0:	18 01                	sbb    %al,(%ecx)
- 8d2:	66 83 f8 03          	cmp    $0x3,%ax
- 8d6:	7f de                	jg     8b6 <_proc_exit_switch+0xdb>
- 8d8:	66 a1 30 00 66 8b    	mov    0x8b660030,%ax
- 8de:	1e                   	push   %ds
- 8df:	24 00                	and    $0x0,%al
- 8e1:	66 8b 0e             	mov    (%esi),%cx
- 8e4:	2c 00                	sub    $0x0,%al
- 8e6:	66 8b 16             	mov    (%esi),%dx
- 8e9:	28 00                	sub    %al,(%eax)
- 8eb:	66 c3                	retw   
- 8ed:	66 c9                	leavew 
- 8ef:	66 c3                	retw   
+000007d4 <_proc_exit_switch>:
+ 7d4:	66 55                	push   %bp
+ 7d6:	66 89 e5             	mov    %sp,%bp
+ 7d9:	0e                   	push   %cs
+ 7da:	1f                   	pop    %ds
+ 7db:	66 a1 e0 00 67 66    	mov    0x666700e0,%ax
+ 7e1:	8d 48 01             	lea    0x1(%eax),%ecx
+ 7e4:	66 ba ab aa          	mov    $0xaaab,%dx
+ 7e8:	aa                   	stos   %al,%es:(%edi)
+ 7e9:	2a 66 89             	sub    -0x77(%esi),%ah
+ 7ec:	c8 66 f7 ea          	enter  $0xf766,$0xea
+ 7f0:	66 89 c8             	mov    %cx,%ax
+ 7f3:	66 c1 f8 1f          	sar    $0x1f,%ax
+ 7f7:	66 29 c2             	sub    %ax,%dx
+ 7fa:	66 89 d0             	mov    %dx,%ax
+ 7fd:	66 01 c0             	add    %ax,%ax
+ 800:	66 01 d0             	add    %dx,%ax
+ 803:	66 01 c0             	add    %ax,%ax
+ 806:	66 29 c1             	sub    %ax,%cx
+ 809:	66 89 ca             	mov    %cx,%dx
+ 80c:	66 89 16             	mov    %dx,(%esi)
+ 80f:	e0 00                	loopne 811 <_proc_exit_switch+0x3d>
+ 811:	66 a1 e0 00 66 50    	mov    0x506600e0,%ax
+ 817:	66 68 00 00          	pushw  $0x0
+ 81b:	00 00                	add    %al,(%eax)
+ 81d:	66 e8 fc ff          	callw  81d <_proc_exit_switch+0x49>
+ 821:	ff                   	(bad)  
+ 822:	ff 66 83             	jmp    *-0x7d(%esi)
+ 825:	c4 08                	les    (%eax),%ecx
+ 827:	66 a1 54 00 66 83    	mov    0x83660054,%ax
+ 82d:	f8                   	clc    
+ 82e:	01 75 7b             	add    %esi,0x7b(%ebp)
+ 831:	66 a1 5c 00 66 85    	mov    0x8566005c,%ax
+ 837:	c0                   	(bad)  
+ 838:	75 72                	jne    8ac <_proc_exit_switch+0xd8>
+ 83a:	90                   	nop
+ 83b:	66 c7 06 54 00       	movw   $0x54,(%esi)
+ 840:	02 00                	add    (%eax),%al
+ 842:	00 00                	add    %al,(%eax)
+ 844:	66 a1 e0 00 66 50    	mov    0x506600e0,%ax
+ 84a:	66 68 00 00          	pushw  $0x0
+ 84e:	00 00                	add    %al,(%eax)
+ 850:	66 e8 fc ff          	callw  850 <_proc_exit_switch+0x7c>
+ 854:	ff                   	(bad)  
+ 855:	ff 66 83             	jmp    *-0x7d(%esi)
+ 858:	c4 08                	les    (%eax),%ecx
+ 85a:	66 ff 36             	pushw  (%esi)
+ 85d:	3c 00                	cmp    $0x0,%al
+ 85f:	66 9d                	popfw  
+ 861:	66 8b 3e             	mov    (%esi),%di
+ 864:	14 00                	adc    $0x0,%al
+ 866:	66 8b 36             	mov    (%esi),%si
+ 869:	18 00                	sbb    %al,(%eax)
+ 86b:	66 8b 2e             	mov    (%esi),%bp
+ 86e:	1c 00                	sbb    $0x0,%al
+ 870:	66 8b 26             	mov    (%esi),%sp
+ 873:	20 00                	and    %al,(%eax)
+ 875:	8e 16                	mov    (%esi),%ss
+ 877:	00 00                	add    %al,(%eax)
+ 879:	8e 06                	mov    (%esi),%es
+ 87b:	0c 00                	or     $0x0,%al
+ 87d:	8e 26                	mov    (%esi),%fs
+ 87f:	08 00                	or     %al,(%eax)
+ 881:	8e 2e                	mov    (%esi),%gs
+ 883:	04 00                	add    $0x0,%al
+ 885:	66 a1 3c 00 a3 f6    	mov    0xf6a3003c,%ax
+ 88b:	00 66 a1             	add    %ah,-0x5f(%esi)
+ 88e:	38 00                	cmp    %al,(%eax)
+ 890:	a3 f4 00 66 a1       	mov    %eax,0xa16600f4
+ 895:	34 00                	xor    $0x0,%al
+ 897:	a3 f2 00 66 a1       	mov    %eax,0xa16600f2
+ 89c:	10 00                	adc    %al,(%eax)
+ 89e:	a3 f0 00 66 c7       	mov    %eax,0xc76600f0
+ 8a3:	06                   	push   %es
+ 8a4:	18 01                	sbb    %al,(%ecx)
+ 8a6:	09 00                	or     %eax,(%eax)
+ 8a8:	00 00                	add    %al,(%eax)
+ 8aa:	eb 1b                	jmp    8c7 <_proc_exit_switch+0xf3>
+ 8ac:	e9 2c ff 66 a1       	jmp    a16707dd <_proc_exit_switch+0xa1670009>
+ 8b1:	18 01                	sbb    %al,(%ecx)
+ 8b3:	67 ff b4 00 e4       	pushl  -0x1c00(%si)
+ 8b8:	00 00                	add    %al,(%eax)
+ 8ba:	00 66 a1             	add    %ah,-0x5f(%esi)
+ 8bd:	18 01                	sbb    %al,(%ecx)
+ 8bf:	66 83 e8 01          	sub    $0x1,%ax
+ 8c3:	66 a3 18 01 66 a1    	mov    %ax,0xa1660118
+ 8c9:	18 01                	sbb    %al,(%ecx)
+ 8cb:	66 83 f8 03          	cmp    $0x3,%ax
+ 8cf:	7f de                	jg     8af <_proc_exit_switch+0xdb>
+ 8d1:	66 a1 30 00 66 8b    	mov    0x8b660030,%ax
+ 8d7:	1e                   	push   %ds
+ 8d8:	24 00                	and    $0x0,%al
+ 8da:	66 8b 0e             	mov    (%esi),%cx
+ 8dd:	2c 00                	sub    $0x0,%al
+ 8df:	66 8b 16             	mov    (%esi),%dx
+ 8e2:	28 00                	sub    %al,(%eax)
+ 8e4:	66 c3                	retw   
+ 8e6:	66 c9                	leavew 
+ 8e8:	66 c3                	retw   
 
 Disassembly of section .data:
 
@@ -842,11 +840,11 @@ Disassembly of section .bss:
   fc:	00 00                	add    %al,(%eax)
 	...
 
-00000100 <ret_addr.1410>:
+00000100 <ret_addr.1415>:
  100:	00 00                	add    %al,(%eax)
 	...
 
-00000104 <tmp.1411>:
+00000104 <tmp.1410>:
  104:	00 00                	add    %al,(%eax)
 	...
 
@@ -942,18 +940,18 @@ Disassembly of section .eh_frame:
   5d:	00 00                	add    %al,(%eax)
   5f:	00 5e 01             	add    %bl,0x1(%esi)
   62:	00 00                	add    %al,(%eax)
-  64:	53                   	push   %ebx
+  64:	4c                   	dec    %esp
   65:	01 00                	add    %eax,(%eax)
   67:	00 00                	add    %al,(%eax)
   69:	42                   	inc    %edx
   6a:	0e                   	push   %cs
   6b:	08 85 02 43 0d 05    	or     %al,0x50d4302(%ebp)
-  71:	03 4c 01 c5          	add    -0x3b(%ecx,%eax,1),%ecx
-  75:	0c 04                	or     $0x4,%al
+  71:	03 45 01             	add    0x1(%ebp),%eax
+  74:	c5 0c 04             	lds    (%esp,%eax,1),%ecx
   77:	04 1c                	add    $0x1c,%al
   79:	00 00                	add    %al,(%eax)
   7b:	00 7c 00 00          	add    %bh,0x0(%eax,%eax,1)
-  7f:	00 b1 02 00 00 3e    	add    %dh,0x3e000002(%ecx)
+  7f:	00 aa 02 00 00 3e    	add    %ch,0x3e000002(%edx)
   85:	00 00                	add    %al,(%eax)
   87:	00 00                	add    %al,(%eax)
   89:	42                   	inc    %edx
@@ -966,7 +964,7 @@ Disassembly of section .eh_frame:
   9a:	00 00                	add    %al,(%eax)
   9c:	9c                   	pushf  
   9d:	00 00                	add    %al,(%eax)
-  9f:	00 ef                	add    %ch,%bh
+  9f:	00 e8                	add    %ch,%al
   a1:	02 00                	add    (%eax),%al
   a3:	00 87 00 00 00 00    	add    %al,0x0(%edi)
   a9:	42                   	inc    %edx
@@ -975,7 +973,7 @@ Disassembly of section .eh_frame:
   b1:	02 80 c5 0c 04 04    	add    0x4040cc5(%eax),%al
   b7:	00 1c 00             	add    %bl,(%eax,%eax,1)
   ba:	00 00                	add    %al,(%eax)
-  bc:	bc 00 00 00 76       	mov    $0x76000000,%esp
+  bc:	bc 00 00 00 6f       	mov    $0x6f000000,%esp
   c1:	03 00                	add    (%eax),%eax
   c3:	00 34 02             	add    %dh,(%edx,%eax,1)
   c6:	00 00                	add    %al,(%eax)
@@ -986,7 +984,7 @@ Disassembly of section .eh_frame:
   d9:	00 00                	add    %al,(%eax)
   db:	00 dc                	add    %bl,%ah
   dd:	00 00                	add    %al,(%eax)
-  df:	00 aa 05 00 00 31    	add    %ch,0x31000005(%edx)
+  df:	00 a3 05 00 00 31    	add    %ah,0x31000005(%ebx)
   e5:	02 00                	add    (%eax),%al
   e7:	00 00                	add    %al,(%eax)
   e9:	42                   	inc    %edx
@@ -999,7 +997,7 @@ Disassembly of section .eh_frame:
   f9:	00 00                	add    %al,(%eax)
   fb:	00 fc                	add    %bh,%ah
   fd:	00 00                	add    %al,(%eax)
-  ff:	00 db                	add    %bl,%bl
+  ff:	00 d4                	add    %dl,%ah
  101:	07                   	pop    %es
  102:	00 00                	add    %al,(%eax)
  104:	16                   	push   %ss

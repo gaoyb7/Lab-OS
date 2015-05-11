@@ -2,11 +2,13 @@
 #include "stdio.h"
 #include "process.h"
 
-char *str = "sdsadsd;";
+char *str = "ssdsadasddsadsd;";
 int tot = 0;
 
 void main() {
     static int fpid;
+    printf("Origin String: %s\n", str);
+    fpid = 121;
     fpid = fork();
     if (fpid == -1) {
         printf("Error in fork!\n");
@@ -17,5 +19,6 @@ void main() {
     } else {
         printf("I am the child process!\n");
         while (str[tot] != 0) ++tot;
+        //tot = 10;
     }
 }

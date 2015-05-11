@@ -2,6 +2,7 @@
 #include "stdint.h"
 
 static int8_t row = 1, col = 70, step = 1;
+static int tot = 30000000, tmp;
 
 int main() {
     while (1) {

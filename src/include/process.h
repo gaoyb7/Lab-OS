@@ -11,7 +11,7 @@
 #define PCB_ADDR 0x00000600
 #define PROC_ADDR 0x20000500
 #define PROC_SIZE 0x04000000
-#define PROC_TIME 1
+#define PROC_TIME 3
 
 #include "stdint.h"
 
