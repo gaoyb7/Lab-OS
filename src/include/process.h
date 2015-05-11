@@ -6,7 +6,7 @@
 #define PROC_RUN 2
 #define PROC_BLOCKED 3
 
-#define MAX_PROC_NUM 6
+#define MAX_PROC_NUM 8
 #define PID_NUM_ADDR 0x00000500
 #define PCB_ADDR 0x00000600
 #define PROC_ADDR 0x20000500

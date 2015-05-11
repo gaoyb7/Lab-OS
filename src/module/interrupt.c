@@ -87,7 +87,7 @@ int _do_fork() {
         //printf("%x %x\n", cur_pcb.ss, pcb_tmp.ss);
         stack_cpy(cur_pcb.ss << 16, pcb_tmp.ss << 16, 0x500); 
         save_pcb(&pcb_tmp, pcb_id);
-        _print_pcb(&pcb_tmp);
+        //_print_pcb(&pcb_tmp);
         __asm__ volatile("movl %0, %%eax;" : : "m"(pcb_tmp.pid) :);
     }
     //printf("haha\n");
