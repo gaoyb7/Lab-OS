@@ -28,6 +28,7 @@ int main() {
         p = 0;
 
         while (p < cmd_len) {
+            printf("%d\n", fork());
             for (i = p; i < cmd_len && cmd_buff[i] != ';'; ++i);
             load_user_program(cmd_buff + p, i - p);
             //asm("pushw %ds; int $0x68; int $0x71; popw %ds;");

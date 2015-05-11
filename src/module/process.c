@@ -33,6 +33,12 @@ void wait() {
     _REC_DS_;
 }
 
+int fork() {
+    static int pid;
+    __asm__ volatile("int $0x75; movl %%eax, %0;" : : "m"(pid) :);
+    return pid;
+}
+
 void schedule_prog(char *proc_name, uint16_t proc_size, uint16_t LBA, uint16_t flags) {
     _FIX_DS_;
     static int pid_count;

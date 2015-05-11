@@ -41,5 +41,6 @@ void load_ISR() {
     build_ISR(0x72, proc_exit_switch);
     build_ISR(0x73, do_exit);
     build_ISR(0x74, do_wait);
+    build_ISR(0x75, do_fork);
     //build_ISR(0x68, syscall);
 }

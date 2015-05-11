@@ -29,7 +29,7 @@ void _timer_demo() {
     }
 }
 
-int _do_fork() {
+void _do_fork() {
     _FIX_DS_;
     static int pcb_id;
     static PCB pcb_tmp_2;
@@ -40,7 +40,11 @@ int _do_fork() {
     }
 
     if (pcb_id >= MAX_PROC_NUM) {
-        load_pcb(&pcb_tmp, cur_proc);
+        //load_pcb(&pcb_tmp, cur_proc);
+        __asm__ volatile("movl $-1, %eax;");
+    } else {
+        //load_pcb(&pcb_tmp, cur_proc);
+        __asm__ volatile("movl $100, %eax;");
     }
     _REC_DS_;
 }
