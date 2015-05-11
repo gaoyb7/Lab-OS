@@ -41,6 +41,14 @@ void _kill_proc() {
 static uint16_t stack[11];
 
 void _switch_content() {
+    __asm__ volatile(
+                "movl %%eax, %0;"
+                "movl %%ebx, %1;"
+                "movl %%ecx, %2;"
+                "movl %%edx, %3;"
+                : : "m"(cur_pcb.ax), "m"(cur_pcb.bx), "m"(cur_pcb.cx), "m"(cur_pcb.dx) :
+                );
+
     static int counter = 0;
     static int i;
 
@@ -58,13 +66,6 @@ void _switch_content() {
     load_pcb(&cur_pcb, cur_proc);
     if (cur_pcb.stat == PROC_RUN) {
         __asm__ volatile(
-                "movl %%eax, %0;"
-                "movl %%ebx, %1;"
-                "movl %%ecx, %2;"
-                "movl %%edx, %3;"
-                : : "m"(cur_pcb.ax), "m"(cur_pcb.bx), "m"(cur_pcb.cx), "m"(cur_pcb.dx) :
-                );
-        __asm__ volatile(
                 "movl %%edi, %0;"
                 "movl %%esi, %1;"
                 "movl %%ebp, %2;"
@@ -100,14 +101,9 @@ void _switch_content() {
         //if (cur_pcb.stat == PROC_READY) break;
     }
 
-    __asm__ volatile("pushl %0; popf;" : : "m"(cur_pcb.flags));
-    __asm__ volatile(
-            "movl %0, %%eax;"
-            "movl %1, %%ebx;"
-            "movl %2, %%ecx;"
-            "movl %3, %%edx;"
-            : : "m"(cur_pcb.ax), "m"(cur_pcb.bx), "m"(cur_pcb.cx), "m"(cur_pcb.dx) :
-            );
+    cur_pcb.stat = PROC_RUN;
+    save_pcb(&cur_pcb, cur_proc);
+
     __asm__ volatile(
             "movl %0, %%edi;"
             "movl %1, %%esi;"
@@ -131,14 +127,26 @@ void _switch_content() {
     for (i = 9; i >= 4; --i)
         __asm__ volatile("pushw %0" : : "m"(stack[i]));
 
-    cur_pcb.stat = PROC_RUN;
-    save_pcb(&cur_pcb, cur_proc);
-
-    __asm__ volatile("ret;");
+    __asm__ volatile("pushl %0; popf;" : : "m"(cur_pcb.flags));
+    __asm__ volatile(
+            "movl %0, %%eax;"
+            "movl %1, %%ebx;"
+            "movl %2, %%ecx;"
+            "movl %3, %%edx;"
+            "ret;"
+            : : "m"(cur_pcb.ax), "m"(cur_pcb.bx), "m"(cur_pcb.cx), "m"(cur_pcb.dx) :
+            );
 }
 
 
 void _switch_content_2() {
+    __asm__ volatile(
+                "movl %%eax, %0;"
+                "movl %%ebx, %1;"
+                "movl %%ecx, %2;"
+                "movl %%edx, %3;"
+                : : "m"(cur_pcb.ax), "m"(cur_pcb.bx), "m"(cur_pcb.cx), "m"(cur_pcb.dx) :
+                );
     static int counter = 0;
     static int i;
 
@@ -156,13 +164,6 @@ void _switch_content_2() {
     load_pcb(&cur_pcb, cur_proc);
     if (cur_pcb.stat == PROC_RUN) {
         __asm__ volatile(
-                "movl %%eax, %0;"
-                "movl %%ebx, %1;"
-                "movl %%ecx, %2;"
-                "movl %%edx, %3;"
-                : : "m"(cur_pcb.ax), "m"(cur_pcb.bx), "m"(cur_pcb.cx), "m"(cur_pcb.dx) :
-                );
-        __asm__ volatile(
                 "movl %%edi, %0;"
                 "movl %%esi, %1;"
                 "movl %%ebp, %2;"
@@ -198,14 +199,9 @@ void _switch_content_2() {
         //if (cur_pcb.stat == PROC_READY) break;
     }
 
-    __asm__ volatile("pushl %0; popf;" : : "m"(cur_pcb.flags));
-    __asm__ volatile(
-            "movl %0, %%eax;"
-            "movl %1, %%ebx;"
-            "movl %2, %%ecx;"
-            "movl %3, %%edx;"
-            : : "m"(cur_pcb.ax), "m"(cur_pcb.bx), "m"(cur_pcb.cx), "m"(cur_pcb.dx) :
-            );
+    cur_pcb.stat = PROC_RUN;
+    save_pcb(&cur_pcb, cur_proc);
+
     __asm__ volatile(
             "movl %0, %%edi;"
             "movl %1, %%esi;"
@@ -229,10 +225,15 @@ void _switch_content_2() {
     for (i = 9; i >= 4; --i)
         __asm__ volatile("pushw %0" : : "m"(stack[i]));
 
-    cur_pcb.stat = PROC_RUN;
-    save_pcb(&cur_pcb, cur_proc);
-
-    __asm__ volatile("ret;");
+    __asm__ volatile("pushl %0; popf;" : : "m"(cur_pcb.flags));
+    __asm__ volatile(
+            "movl %0, %%eax;"
+            "movl %1, %%ebx;"
+            "movl %2, %%ecx;"
+            "movl %3, %%edx;"
+            "ret;"
+            : : "m"(cur_pcb.ax), "m"(cur_pcb.bx), "m"(cur_pcb.cx), "m"(cur_pcb.dx) :
+            );
 }
 
 void _proc_exit_switch() {
@@ -245,14 +246,6 @@ void _proc_exit_switch() {
     cur_pcb.stat = PROC_RUN;
     save_pcb(&cur_pcb, cur_proc);
 
-    __asm__ volatile("pushl %0; popf;" : : "m"(cur_pcb.flags));
-    __asm__ volatile(
-            "movl %0, %%eax;"
-            "movl %1, %%ebx;"
-            "movl %2, %%ecx;"
-            "movl %3, %%edx;"
-            : : "m"(cur_pcb.ax), "m"(cur_pcb.bx), "m"(cur_pcb.cx), "m"(cur_pcb.dx) :
-            );
     __asm__ volatile(
             "movl %0, %%edi;"
             "movl %1, %%esi;"
@@ -277,5 +270,13 @@ void _proc_exit_switch() {
     for (i = 9; i >= 4; --i)
         __asm__ volatile("pushw %0" : : "m"(stack[i]));
 
-    __asm__ volatile("ret;");
+    __asm__ volatile("pushl %0; popf;" : : "m"(cur_pcb.flags));
+    __asm__ volatile(
+            "movl %0, %%eax;"
+            "movl %1, %%ebx;"
+            "movl %2, %%ecx;"
+            "movl %3, %%edx;"
+            "ret;"
+            : : "m"(cur_pcb.ax), "m"(cur_pcb.bx), "m"(cur_pcb.cx), "m"(cur_pcb.dx) :
+            );
 }
