@@ -1,0 +1,4 @@
+    org 0x100
+start:
+    jmp 0xf000:0xfff0
+
