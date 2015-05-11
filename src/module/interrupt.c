@@ -3,8 +3,10 @@
 #include "stdlib.h"
 #include "stdio.h"
 
+#define _FIX_ __asm__ volatile("pushw %cs; popw %ds;");
 #define _FIX_DS_ __asm__ volatile("pushw %ds; pushw %cs; popw %ds;")
 #define _REC_DS_ __asm__ volatile("popw %ds;")
+#define _FIX_ __asm__ volatile("pushw %cs; popw %ds;");
 
 void _kb_demo() {
     static int8_t kb_stat;
@@ -28,19 +30,34 @@ void _timer_demo() {
     }
 }
 
+void _do_wait() {
+    _FIX_DS_;
+
+    _REC_DS_;
+}
+
 void _kill_proc() {
     _FIX_DS_;
     cur_pcb.stat = PROC_EXIT;
     save_pcb(&cur_pcb, cur_proc);
-    load_pcb(&pcb_tmp, 0);
-    pcb_tmp.wait = 0;
-    save_pcb(&pcb_tmp, 0);
+    //if (cur_pcb.ppid >= 0 && cur_pcb.ppid < MAX_PROC_NUM) {
+    //    load_pcb(&pcb_tmp, cur_pcb.ppid);
+    //    if (pcb_tmp.stat == PROC_BLOCKED)
+    //        pcb_tmp.stat = PROC_READY;
+    //    save_pcb(&pcb_tmp, cur_pcb.ppid);
+    //}
+    if (cur_pcb.ppid >= 0 && cur_pcb.ppid < MAX_PROC_NUM) {
+        load_pcb(&pcb_tmp, cur_pcb.ppid);
+        pcb_tmp.wait = 0;
+        save_pcb(&pcb_tmp, cur_pcb.ppid);
+    }
     _REC_DS_;
 }
 
 static uint16_t stack[11];
 
 void _switch_content() {
+    _FIX_;
     __asm__ volatile(
                 "movl %%eax, %0;"
                 "movl %%ebx, %1;"
@@ -140,6 +157,7 @@ void _switch_content() {
 
 
 void _switch_content_2() {
+    _FIX_;
     __asm__ volatile(
                 "movl %%eax, %0;"
                 "movl %%ebx, %1;"
@@ -237,9 +255,11 @@ void _switch_content_2() {
 }
 
 void _proc_exit_switch() {
+    _FIX_;
     while (1) {
         cur_proc = (cur_proc + 1) % MAX_PROC_NUM;
         load_pcb(&cur_pcb, cur_proc);
+        //if (cur_pcb.stat == PROC_READY) break;
         if (cur_pcb.stat == PROC_READY && cur_pcb.wait == 0) break;
     }
 

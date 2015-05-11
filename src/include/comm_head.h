@@ -11,6 +11,10 @@ __asm__("call main\n");
 __asm__("popw %es;");
 __asm__("popw %ds;");
 __asm__("int $0x72;");
+//__asm__("infi_loop:;");
+//__asm__("xor %ax, %ax;");
+//__asm__("int $0x16;");
+//__asm__("jmp infi_loop;");
 __asm__("int $0x73;");
 //__asm__("lret\n");
 

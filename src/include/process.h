@@ -4,6 +4,7 @@
 #define PROC_EXIT 0
 #define PROC_READY 1
 #define PROC_RUN 2
+#define PROC_BLOCKED 3
 
 #define MAX_PROC_NUM 6
 #define PCB_ADDR 0x00000500
