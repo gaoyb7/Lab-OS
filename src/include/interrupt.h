@@ -28,7 +28,7 @@ void do_exit(char ch);
 void _do_wait();
 void do_wait();
 
-void _do_fork();
-void do_fork();
+int _do_fork();
+int do_fork();
 
 #endif

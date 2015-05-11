@@ -26,8 +26,8 @@ const struct prog_table program_table[NUM_OF_PROG] = {
     {"rep2", 115, 5, 0},
     {"rep3", 120, 5, 0},
     {"rep4", 125, 5, 0},
-    {"top", 130, 10, 1},
-    {"kill", 140, 10, 1}
+    {"top", 130, 20, 1},
+    {"chp", 150, 20, 1}
 };
 
 #endif

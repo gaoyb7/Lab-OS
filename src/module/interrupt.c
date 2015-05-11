@@ -29,10 +29,11 @@ void _timer_demo() {
     }
 }
 
-void _do_fork() {
-    _FIX_DS_;
-    static int pcb_id;
-    static PCB pcb_tmp_2;
+int _do_fork() {
+    //_FIX_DS_;
+    static int pcb_id, tmp;
+    //__asm__ volatile("pushw %%cs; popw %0;" : : "m"(tmp) : );
+    //printf("My cs: %x\n", tmp);
     for (pcb_id = 0; pcb_id < MAX_PROC_NUM; ++pcb_id) {
         load_pcb(&pcb_tmp, pcb_id);
         if (pcb_tmp.stat == PROC_EXIT)
@@ -40,25 +41,67 @@ void _do_fork() {
     }
 
     if (pcb_id >= MAX_PROC_NUM) {
-        //load_pcb(&pcb_tmp, cur_proc);
         __asm__ volatile("movl $-1, %eax;");
+        //printf("haha\n");
     } else {
-        //load_pcb(&pcb_tmp, cur_proc);
-        __asm__ volatile("movl $100, %eax;");
+        //printf("ok\n");
+        __asm__ volatile(
+                "movl %%esp, %0;"
+                "movl %%edi, %1;"
+                "movl %%esi, %2;"
+                "movl %%ebp, %3;"
+                "movl %%eax, %4;"
+                "movl %%ebx, %5;"
+                "movl %%ecx, %6;"
+                "movl %%edx, %7;"
+                : : "m"(pcb_tmp.sp), "m"(pcb_tmp.di), "m"(pcb_tmp.si), "m"(pcb_tmp.bp), \
+                "m"(pcb_tmp.ax), "m"(pcb_tmp.bx), "m"(pcb_tmp.cx), "m"(pcb_tmp.dx) :
+                );
+        __asm__ volatile(
+                "movw %%ss, %0;"
+                "movw %%es, %1;"
+                "movw %%fs, %2;"
+                "movw %%gs, %3;"
+                "movw %%cs, %4;"
+                "movw %%ds, %5;"
+                : : "m"(pcb_tmp.ss), "m"(pcb_tmp.es), "m"(pcb_tmp.fs), \
+                    "m"(pcb_tmp.gs), "m"(pcb_tmp.cs), "m"(pcb_tmp.ds) :
+                );
+
+        pcb_tmp.pid = get_pid();
+        pcb_tmp.ppid = cur_proc;
+        pcb_tmp.wait = 0;
+
+        static uint16_t ret_addr;
+        __asm__ volatile("pushw child_proc; popw %0;" : : "m"(ret_addr) :);
+        pcb_tmp.ip = ret_addr;
+        pcb_tmp.ip = cur_pcb.ip;
+        pcb_tmp.flags = cur_pcb.flags;
+        pcb_tmp.stat = PROC_READY;
+        pcb_tmp.name[0] = 0;
+        pcb_tmp.ax = 0;
+        pcb_tmp.ss = (PROC_ADDR >> 16) + pcb_id * (PROC_SIZE >> 16);
+        //pcb_tmp.sp += 2;
+        //pcb_tmp.cs = pcb_tmp.ds = pcb_tmp.es;
+        //pcb_tmp.ip = pcb_tmp.sp = 0x500;
+        //printf("%x %x\n", cur_pcb.ss, pcb_tmp.ss);
+        stack_cpy(cur_pcb.ss << 16, pcb_tmp.ss << 16, 0x500); 
+        save_pcb(&pcb_tmp, pcb_id);
+        //_print_pcb(&pcb_tmp);
+        __asm__ volatile("movl %0, %%eax;" : : "m"(pcb_tmp.pid) :);
     }
-    _REC_DS_;
+    __asm__ volatile("child_proc:;");
+    //if (cur_proc == 2) printf("haha\n");
+    //_REC_DS_;
 }
 
 void _do_wait() {
-    _FIX_DS_;
     load_pcb(&cur_pcb, cur_proc);
     cur_pcb.wait = 1;
     save_pcb(&cur_pcb, cur_proc);
-    _REC_DS_;
 }
 
 void _do_exit(char ch) {
-    _FIX_DS_;
     cur_pcb.stat = PROC_EXIT;
     save_pcb(&cur_pcb, cur_proc);
     if (cur_pcb.ppid >= 0 && cur_pcb.ppid < MAX_PROC_NUM) {
@@ -67,7 +110,6 @@ void _do_exit(char ch) {
         pcb_tmp.ax = ch;
         save_pcb(&pcb_tmp, cur_pcb.ppid);
     }
-    _REC_DS_;
 }
 
 static uint16_t stack[11];
@@ -75,12 +117,12 @@ static uint16_t stack[11];
 void _switch_content() {
     _FIX_;
     __asm__ volatile(
-                "movl %%eax, %0;"
-                "movl %%ebx, %1;"
-                "movl %%ecx, %2;"
-                "movl %%edx, %3;"
-                : : "m"(cur_pcb.ax), "m"(cur_pcb.bx), "m"(cur_pcb.cx), "m"(cur_pcb.dx) :
-                );
+            "movl %%eax, %0;"
+            "movl %%ebx, %1;"
+            "movl %%ecx, %2;"
+            "movl %%edx, %3;"
+            : : "m"(cur_pcb.ax), "m"(cur_pcb.bx), "m"(cur_pcb.cx), "m"(cur_pcb.dx) :
+            );
 
     static int counter = 0;
     static int i;
@@ -121,7 +163,7 @@ void _switch_content() {
 
         int address = cur_pcb.cs << 16 | cur_pcb.ip;
         //printf("%x\n", address);
-        
+
         save_pcb(&cur_pcb, cur_proc);
     } else
         __asm__ volatile("add $2, %sp;");
@@ -175,12 +217,12 @@ void _switch_content() {
 void _switch_content_2() {
     _FIX_;
     __asm__ volatile(
-                "movl %%eax, %0;"
-                "movl %%ebx, %1;"
-                "movl %%ecx, %2;"
-                "movl %%edx, %3;"
-                : : "m"(cur_pcb.ax), "m"(cur_pcb.bx), "m"(cur_pcb.cx), "m"(cur_pcb.dx) :
-                );
+            "movl %%eax, %0;"
+            "movl %%ebx, %1;"
+            "movl %%ecx, %2;"
+            "movl %%edx, %3;"
+            : : "m"(cur_pcb.ax), "m"(cur_pcb.bx), "m"(cur_pcb.cx), "m"(cur_pcb.dx) :
+            );
     static int counter = 0;
     static int i;
 
@@ -220,7 +262,7 @@ void _switch_content_2() {
 
         int address = cur_pcb.cs << 16 | cur_pcb.ip;
         //printf("%x\n", address);
-        
+
         save_pcb(&cur_pcb, cur_proc);
     } else
         __asm__ volatile("add $2, %sp;");

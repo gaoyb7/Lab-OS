@@ -17,13 +17,23 @@ void save_pcb(PCB *cur_pcb, int id) {
     _REC_DS_;
 }
 
-int next_pid() {
+int get_pid() {
     _FIX_DS_;
     static int *pid;
     _read_mem((void *)pid, PID_NUM_ADDR, sizeof(int));
     ++(*pid);
     _write_mem(PID_NUM_ADDR, (void *)pid, sizeof(int));
     return *pid - 1;
+    _REC_DS_;
+}
+
+void stack_cpy(int source_addr, int dest_addr, int size) {
+    _FIX_DS_;
+    static char block[1];
+    while (size--) {
+        _read_mem((void *)block, source_addr++, sizeof(char));
+        _write_mem(dest_addr++, (void *)block, sizeof(char));
+    }
     _REC_DS_;
 }
 
@@ -34,9 +44,9 @@ void wait() {
 }
 
 int fork() {
-    static int pid;
-    __asm__ volatile("int $0x75; movl %%eax, %0;" : : "m"(pid) :);
-    return pid;
+    //static int pid;
+    //__asm__ volatile("int $0x75; movl %%eax, %0;" : : "m"(pid) :);
+    __asm__ volatile("int $0x75;");
 }
 
 void schedule_prog(char *proc_name, uint16_t proc_size, uint16_t LBA, uint16_t flags) {
@@ -69,7 +79,7 @@ void schedule_prog(char *proc_name, uint16_t proc_size, uint16_t LBA, uint16_t f
 
     cur_pcb.cs = cur_pcb.ds = cur_pcb.es = cur_pcb.ss = address >> 16;
     cur_pcb.ip = cur_pcb.sp = address & 0xffff;
-    cur_pcb.pid = next_pid();
+    cur_pcb.pid = get_pid();
     cur_pcb.wait = 0;
     cur_pcb.ppid = flags ? 0: -1;
     __asm__ volatile("pushf; popl %%eax;" : "=a"(cur_pcb.flags) : : );
