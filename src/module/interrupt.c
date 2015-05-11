@@ -29,6 +29,22 @@ void _timer_demo() {
     }
 }
 
+int _do_fork() {
+    _FIX_DS_;
+    static int pcb_id;
+    static PCB pcb_tmp_2;
+    for (pcb_id = 0; pcb_id < MAX_PROC_NUM; ++pcb_id) {
+        load_pcb(&pcb_tmp, pcb_id);
+        if (pcb_tmp.stat == PROC_EXIT)
+            break;
+    }
+
+    if (pcb_id >= MAX_PROC_NUM) {
+        load_pcb(&pcb_tmp, cur_proc);
+    }
+    _REC_DS_;
+}
+
 void _do_wait() {
     _FIX_DS_;
     load_pcb(&cur_pcb, cur_proc);
