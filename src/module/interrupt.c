@@ -72,8 +72,8 @@ int _do_fork() {
 
         static uint16_t ret_addr;
         //__asm__ volatile(".intel_syntax noprefix; mov ax, child_proc; mov %0, ax; .att_syntax prefix;" : : "m"(ret_addr) :);
-        //pcb_tmp.ip = ret_addr;
-        pcb_tmp.ip = cur_pcb.ip;
+        pcb_tmp.ip = 0x500;
+        //pcb_tmp.ip = cur_pcb.ip;
         pcb_tmp.flags = cur_pcb.flags;
         pcb_tmp.stat = PROC_READY;
         pcb_tmp.name[0] = 0;
