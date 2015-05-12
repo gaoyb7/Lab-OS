@@ -2,7 +2,7 @@
 #include "stdio.h"
 #include "process.h"
 
-char *str = "ssdsadasddsadsd;";
+char *str = "129djwqhdsajd128dw9i39ie93i8494urjoiew98kdkd";
 int tot = 0;
 
 void main() {
@@ -15,10 +15,11 @@ void main() {
     } else if (fpid) {
         wait();
         printf("I am the parent process!\n");
-        printf("%d\n", tot);
+        printf("Count result: %d characters.\n", tot);
+        //printf("%d\n", tot);
     } else {
         printf("I am the child process!\n");
         while (str[tot] != 0) ++tot;
-        //tot = 10;
+        //printf("Count result: %d characters.\n\n", tot);
     }
 }

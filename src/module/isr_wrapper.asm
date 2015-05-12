@@ -57,28 +57,6 @@ _origin_%1 resw 2
     iret
 %endmacro
 
-%macro ISR_WRAPPER_EXTRA 1
-[global %1_extra]
-_origin_extra_%1 resw2
-%1_extra:
-    push ds
-    mov ax, cs
-    mov ds, ax
-
-    pushf
-    cli
-    call far [_origin_extra_%1]
-    call dword _%1
-
-    push eax
-    mov al, 0x20
-    out 0x20,al
-    pop eax
-
-    pop ds
-    iret
-%endmacro
-
 ISR_WRAPPER timer_demo
 ISR_WRAPPER kb_demo
 ISR_WRAPPER do_wait

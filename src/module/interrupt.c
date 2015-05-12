@@ -42,9 +42,7 @@ int _do_fork() {
 
     if (pcb_id >= MAX_PROC_NUM) {
         __asm__ volatile("movl $-1, %eax;");
-        //printf("haha\n");
     } else {
-        //printf("ok\n");
         __asm__ volatile(
                 "movl %%esp, %0;"
                 "movl %%edi, %1;"
@@ -91,7 +89,7 @@ int _do_fork() {
         __asm__ volatile("movl %0, %%eax;" : : "m"(pcb_tmp.pid) :);
     }
     //printf("haha\n");
-    __asm__ volatile(".intel_syntax noprefix; child_proc:; .att_syntax prefix;");
+    //__asm__ volatile(".intel_syntax noprefix; child_proc:; .att_syntax prefix;");
     _REC_DS_;
 }
 
