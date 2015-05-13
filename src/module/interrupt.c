@@ -26,7 +26,6 @@ void _timer_demo() {
 }
 
 int _do_fork() {
-    asm("cli;");
     static int pcb_id, tmp;
     for (pcb_id = 0; pcb_id < MAX_PROC_NUM; ++pcb_id) {
         load_pcb(&pcb_tmp, pcb_id);
@@ -65,7 +64,7 @@ int _do_fork() {
         pcb_tmp.wait = 0;
 
         static uint16_t ret_addr;
-        pcb_tmp.ip = 0xdc6;
+        pcb_tmp.ip = 0x396;
         pcb_tmp.flags = cur_pcb.flags;
         pcb_tmp.stat = PROC_READY;
         pcb_tmp.name[0] = 0;
@@ -77,7 +76,7 @@ int _do_fork() {
         //_print_pcb(&pcb_tmp);
         __asm__ volatile("movl %0, %%eax;" : : "m"(pcb_tmp.pid) :);
     }
-    asm("sti");
+    //__asm__ volatile("movl %eax, %eax;");
 }
 
 void _do_wait() {

@@ -45,7 +45,7 @@ boot.bin: boot.o
 boot.o: boot.asm
 	$(AS) $(ASFLAGS) -o $@ $^
 
-kernel.bin: kernel.o isr_wrapper.o stdio.o stdlib.o interrupt.o utils.o process.o syscall.o
+kernel.bin: kernel.o interrupt.o isr_wrapper.o stdio.o stdlib.o utils.o process.o syscall.o
 	$(LD) $(LDFLAGS) -Ttext 0x0000 --oformat binary -o $@ $^
 
 kernel.o: kernel.c $(INC)/prog_table.h $(INC)/interrupt.h $(INC)/syscall.h

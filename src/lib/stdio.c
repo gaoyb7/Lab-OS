@@ -18,6 +18,21 @@ void putch(char ch) {
             );
 }
 
+void put_color_ch(char ch, uint16_t attr) {
+    __asm__ volatile(
+            "int $0x10;"
+            : : "a"((0x09 << 8) + ch), "b"(attr), "c"(1) :
+            );
+}
+
+void put_color_str(char *str, uint16_t attr) {
+    while (*str) {
+        put_color_ch(*str, attr);
+        putch(*str);
+        ++str;
+    }
+}
+
 void puts(char *s) {
     while (*s) {
         if (*s == '\n')
