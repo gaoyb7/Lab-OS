@@ -13,6 +13,7 @@ const char *msg =
 "=========================================\n"
 "stdio_demo     - Test stdio library\n"
 "syscall_demo   - Test syscall library\n"
+"cc             - Char counter demo\n"
 "rep[1-4]       - For multiprocess test\n";
 
 int main() {

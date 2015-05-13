@@ -28,7 +28,7 @@ all: clean kernel user_program
 	dd if=rep3.com of=$(DISK) seek=120 conv=notrunc
 	dd if=rep4.com of=$(DISK) seek=125 conv=notrunc
 	dd if=top.com of=$(DISK) seek=130 conv=notrunc
-	dd if=chp.com of=$(DISK) seek=150 conv=notrunc
+	dd if=cc.com of=$(DISK) seek=150 conv=notrunc
 
 kernel: kernel.bin boot.bin
 	dd if=/dev/zero of=$(DISK) count=2880
@@ -36,7 +36,7 @@ kernel: kernel.bin boot.bin
 	dd if=kernel.bin of=$(DISK) seek=1 conv=notrunc
 	printf '\x55\xaa' | dd of=$(DISK) bs=1 seek=510 count=2 conv=notrunc
 
-user_program: reboot.com time.com date.com help.com clear.com stdio_demo.com rep1.com rep2.com rep3.com rep4.com sh.com top.com chp.com syscall_demo.com
+user_program: reboot.com time.com date.com help.com clear.com stdio_demo.com rep1.com rep2.com rep3.com rep4.com sh.com top.com cc.com syscall_demo.com
 
 #kernel
 boot.bin: boot.o
@@ -94,8 +94,8 @@ sh.o: $(PROG)/sh.c $(INC)/stdio.h $(INC)/stdlib.h
 sh.com: sh.o stdio.o stdlib.o utils.o process.o
 top.o: $(PROG)/top.c $(INC)/stdio.h $(INC)/process.h
 top.com: top.o stdio.o process.o utils.o stdlib.o
-chp.o: $(PROG)/chp.c $(INC)/stdio.h $(INC)/process.h
-chp.com: chp.o stdio.o process.o utils.o stdlib.o
+cc.o: $(PROG)/cc.c $(INC)/stdio.h $(INC)/process.h
+cc.com: cc.o stdio.o process.o utils.o stdlib.o
 kill.o: $(PROG)/kill.c $(INC)/process.h
 kill.com: kill.o stdio.o process.o utils.o stdlib.o
 rep1.o: $(PROG)/rep1.c 

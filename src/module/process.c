@@ -6,51 +6,38 @@
 #define _REC_DS_ __asm__ volatile("popw %ds;")
 
 void load_pcb(PCB *cur_pcb, int id) {
-    _FIX_DS_;
     _read_mem((void *)cur_pcb, PCB_ADDR + id * sizeof(PCB), sizeof(PCB));
-    _REC_DS_;
 }
 
 void save_pcb(PCB *cur_pcb, int id) {
-    _FIX_DS_;
     _write_mem(PCB_ADDR + id * sizeof(PCB), (void *)cur_pcb, sizeof(PCB));
-    _REC_DS_;
 }
 
 int get_pid() {
-    _FIX_DS_;
     static int *pid;
     _read_mem((void *)pid, PID_NUM_ADDR, sizeof(int));
     ++(*pid);
     _write_mem(PID_NUM_ADDR, (void *)pid, sizeof(int));
     return *pid - 1;
-    _REC_DS_;
 }
 
 void stack_cpy(int source_addr, int dest_addr, int size) {
-    _FIX_DS_;
     static char block[1];
     while (size--) {
         _read_mem((void *)block, source_addr++, sizeof(char));
         _write_mem(dest_addr++, (void *)block, sizeof(char));
     }
-    _REC_DS_;
 }
 
 void wait() {
-    _FIX_DS_;
     __asm__ volatile("int $0x74; int $0x71;");
-    _REC_DS_;
 }
 
 int fork() {
-    //static int pid;
-    //__asm__ volatile("int $0x75; movl %%eax, %0;" : : "m"(pid) :);
     __asm__ volatile("int $0x75;");
 }
 
 void schedule_prog(char *proc_name, uint16_t proc_size, uint16_t LBA, uint16_t flags) {
-    _FIX_DS_;
     static int pid_count;
     static PCB cur_pcb, pcb_tmp;
     
@@ -92,7 +79,6 @@ void schedule_prog(char *proc_name, uint16_t proc_size, uint16_t LBA, uint16_t f
 
     cur_pcb.stat = PROC_READY;
     save_pcb(&cur_pcb, pid_count);
-    _REC_DS_;
 }
 
 void _print_pcb(PCB *cnt) {

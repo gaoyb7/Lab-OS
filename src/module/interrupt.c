@@ -3,10 +3,6 @@
 #include "stdlib.h"
 #include "stdio.h"
 
-#define _FIX_ __asm__ volatile("pushw %cs; popw %ds;");
-#define _FIX_DS_ __asm__ volatile("pushw %ds; pushw %cs; popw %ds;")
-#define _REC_DS_ __asm__ volatile("popw %ds;")
-
 void _kb_demo() {
     static int8_t kb_stat;
     if (kb_stat < 2) set_pos_char(0xc0, 0x07, 0, 79);
@@ -30,10 +26,8 @@ void _timer_demo() {
 }
 
 int _do_fork() {
-    _FIX_DS_;
+    asm("cli;");
     static int pcb_id, tmp;
-    //__asm__ volatile("pushw %%cs; popw %0;" : : "m"(tmp) : );
-    //printf("My cs: %x\n", tmp);
     for (pcb_id = 0; pcb_id < MAX_PROC_NUM; ++pcb_id) {
         load_pcb(&pcb_tmp, pcb_id);
         if (pcb_tmp.stat == PROC_EXIT)
@@ -71,26 +65,19 @@ int _do_fork() {
         pcb_tmp.wait = 0;
 
         static uint16_t ret_addr;
-        //__asm__ volatile(".intel_syntax noprefix; mov ax, child_proc; mov %0, ax; .att_syntax prefix;" : : "m"(ret_addr) :);
-        pcb_tmp.ip = 0x500;
-        //pcb_tmp.ip = cur_pcb.ip;
+        pcb_tmp.ip = 0xdc6;
         pcb_tmp.flags = cur_pcb.flags;
         pcb_tmp.stat = PROC_READY;
         pcb_tmp.name[0] = 0;
         pcb_tmp.ax = 0;
         pcb_tmp.ss = (PROC_ADDR >> 16) + pcb_id * (PROC_SIZE >> 16);
         pcb_tmp.sp += 2;
-        //pcb_tmp.cs = pcb_tmp.ds = pcb_tmp.es;
-        //pcb_tmp.ip = pcb_tmp.sp = 0x500;
-        //printf("%x %x\n", cur_pcb.ss, pcb_tmp.ss);
         stack_cpy(cur_pcb.ss << 16, pcb_tmp.ss << 16, 0x500); 
         save_pcb(&pcb_tmp, pcb_id);
         //_print_pcb(&pcb_tmp);
         __asm__ volatile("movl %0, %%eax;" : : "m"(pcb_tmp.pid) :);
     }
-    //printf("haha\n");
-    //__asm__ volatile(".intel_syntax noprefix; child_proc:; .att_syntax prefix;");
-    _REC_DS_;
+    asm("sti");
 }
 
 void _do_wait() {
@@ -113,7 +100,6 @@ void _do_exit(char ch) {
 static uint16_t stack[11];
 
 void _switch_content() {
-    _FIX_;
     __asm__ volatile(
             "movl %%eax, %0;"
             "movl %%ebx, %1;"
@@ -213,7 +199,6 @@ void _switch_content() {
 
 
 void _switch_content_2() {
-    _FIX_;
     __asm__ volatile(
             "movl %%eax, %0;"
             "movl %%ebx, %1;"
@@ -311,7 +296,6 @@ void _switch_content_2() {
 }
 
 void _proc_exit_switch() {
-    _FIX_;
     while (1) {
         cur_proc = (cur_proc + 1) % MAX_PROC_NUM;
         load_pcb(&cur_pcb, cur_proc);
