@@ -20,8 +20,8 @@ all: clean kernel user_program
 	dd if=date.com of=$(DISK) seek=40 conv=notrunc
 	dd if=help.com of=$(DISK) seek=50 conv=notrunc
 	dd if=clear.com of=$(DISK) seek=60 conv=notrunc
-	dd if=syscall_demo.com of=$(DISK) seek=70 conv=notrunc
-	dd if=stdio_demo.com of=$(DISK) seek=80 conv=notrunc
+	dd if=syscall_test.com of=$(DISK) seek=70 conv=notrunc
+	dd if=stdio_test.com of=$(DISK) seek=80 conv=notrunc
 	dd if=sh.com of=$(DISK) seek=90 conv=notrunc
 	dd if=rep1.com of=$(DISK) seek=110 conv=notrunc
 	dd if=rep2.com of=$(DISK) seek=115 conv=notrunc
@@ -36,7 +36,7 @@ kernel: kernel.bin boot.bin
 	dd if=kernel.bin of=$(DISK) seek=1 conv=notrunc
 	printf '\x55\xaa' | dd of=$(DISK) bs=1 seek=510 count=2 conv=notrunc
 
-user_program: reboot.com time.com date.com help.com clear.com stdio_demo.com rep1.com rep2.com rep3.com rep4.com sh.com top.com fork_test.com syscall_demo.com
+user_program: reboot.com time.com date.com help.com clear.com stdio_test.com rep1.com rep2.com rep3.com rep4.com sh.com top.com fork_test.com syscall_test.com
 
 #kernel
 boot.bin: boot.o
@@ -86,10 +86,10 @@ help.o: $(PROG)/help.c $(INC)/stdio.h
 help.com: help.o stdio.o
 clear.o: $(PROG)/clear.c $(INC)/stdio.h
 clear.com: clear.o
-syscall_demo.o: $(PROG)/syscall_demo.c $(INC)/syscall.h
-syscall_demo.com: syscall_demo.o syscall.o
-stdio_demo.o: $(PROG)/stdio_demo.c $(INC)/stdio.h
-stdio_demo.com: stdio_demo.o stdio.o stdlib.o
+syscall_test.o: $(PROG)/syscall_test.c $(INC)/syscall.h
+syscall_test.com: syscall_test.o syscall.o
+stdio_test.o: $(PROG)/stdio_test.c $(INC)/stdio.h
+stdio_test.com: stdio_test.o stdio.o stdlib.o
 sh.o: $(PROG)/sh.c $(INC)/stdio.h $(INC)/stdlib.h
 sh.com: sh.o stdio.o stdlib.o utils.o process.o
 top.o: $(PROG)/top.c $(INC)/stdio.h $(INC)/process.h
