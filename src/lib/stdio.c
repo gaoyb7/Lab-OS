@@ -27,7 +27,8 @@ void put_color_ch(char ch, uint16_t attr) {
 
 void put_color_str(char *str, uint16_t attr) {
     while (*str) {
-        put_color_ch(*str, attr);
+        put_color_ch(' ', attr);
+        if (*str == '\n') putch('\r');
         putch(*str);
         ++str;
     }
