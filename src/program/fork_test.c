@@ -13,14 +13,14 @@ void main() {
     pid = fork();
     if (pid) {
         printf("\nFork success!\n");
-        printf("I'm the parent process\n");
+        printf("I'm the parent process.\n");
         printf("The PID of child process is %d\n", pid);
         printf("Now wait for child process to count the charactors of origin string\n", 0xe8);
         wait();
         printf("\nCount result: %d\n", tot);
     } else {
         printf("\nI'm the child process.\n");
-        while (str[tot]) ++tot;
         printf("Count finished, I'm going to exiting now.\n");
+        while (str[tot]) ++tot;
     }
 }

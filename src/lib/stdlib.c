@@ -1,13 +1,13 @@
 #include "stdlib.h"
 
-inline void clear() {
+void clear() {
     __asm__ volatile(
             "int $0x10;"
             : : "a"(3) :
             );
 }
 
-inline char get_cur_char() {
+char get_cur_char() {
     char ch;
     __asm__ volatile(
             "int $0x10;"
@@ -16,14 +16,14 @@ inline char get_cur_char() {
     return ch;
 }
 
-inline void set_cur_char(unsigned char ch) {
+void set_cur_char(unsigned char ch) {
     __asm__ volatile(
             "int $0x10;"
             : : "a"((0x09 << 8) + ch), "b"(0x07), "c"(0x01)
             );
 }
 
-inline uint16_t get_cur_pos() {
+uint16_t get_cur_pos() {
     uint16_t pos;
     __asm__ volatile(
             "int $0x10;"
@@ -32,28 +32,28 @@ inline uint16_t get_cur_pos() {
     return pos;
 }
 
-inline void set_cur_pos(uint16_t pos) {
+void set_cur_pos(uint16_t pos) {
     __asm__ volatile(
             "int $0x10;"
             : : "a"(0x02 << 8), "b"(0x00), "d"(pos) :
             );
 }
 
-inline void sleep(uint16_t time) {
+void sleep(uint16_t time) {
     __asm__ volatile(
             "int $0x15;"
             : : "a"(0x86 << 8), "c"(time), "d"(0) :
             );
 }
 
-inline void _putch(char ch) {
+void _putch(char ch) {
     __asm__ volatile(
             "int $0x10;"
             : : "a"((0x0e << 8) + ch), "b"(0x00) :
             );
 }
 
-inline void load_prog(uint16_t segment, uint16_t offset, uint8_t count, uint16_t LBA, uint8_t drive_id) {
+void load_prog(uint16_t segment, uint16_t offset, uint8_t count, uint16_t LBA, uint8_t drive_id) {
     uint8_t SPT, HPC, cylinder, head, sector;
     uint16_t SPT_tmp, HPC_tmp;
     __asm__ volatile(
@@ -91,7 +91,7 @@ int8_t strncmp(const char *stra, const char *strb, uint16_t len) {
     return 0;
 }
 
-inline void memcpy(void *dest, void *source, int size) {
+void memcpy(void *dest, void *source, int size) {
     while (size--) {
         *(char *)dest++ = *(char *)source++;
     }

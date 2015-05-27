@@ -2,9 +2,6 @@
 #include "stdio.h"
 #include "process.h"
 
-#define _FIX_DS_ __asm__ volatile("pushw %ds; pushw %cs; popw %ds;")
-#define _REC_DS_ __asm__ volatile("popw %ds;")
-
 void load_pcb(PCB *cur_pcb, int id) {
     _read_mem((void *)cur_pcb, PCB_ADDR + id * sizeof(PCB), sizeof(PCB));
 }
