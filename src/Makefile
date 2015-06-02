@@ -2,7 +2,8 @@ LD=ld
 LDFLAGS=-N -melf_i386 -nostdlib
 AS=nasm
 ASFLAGS=-f elf
-CC=gcc
+CC=i386-elf-gcc
+#CC=gcc
 CFLAGS=-m16 -nostdlib -mpreferred-stack-boundary=2 -ffreestanding -I./include
 INC=include
 PROG=program
@@ -89,7 +90,7 @@ clear.com: clear.o
 syscall_test.o: $(PROG)/syscall_test.c $(INC)/syscall.h
 syscall_test.com: syscall_test.o syscall.o
 stdio_test.o: $(PROG)/stdio_test.c $(INC)/stdio.h
-stdio_test.com: stdio_test.o stdio.o stdlib.o
+stdio_test.com: stdio_test.o stdio.o
 sh.o: $(PROG)/sh.c $(INC)/stdio.h $(INC)/stdlib.h
 sh.com: sh.o stdio.o stdlib.o utils.o process.o
 top.o: $(PROG)/top.c $(INC)/stdio.h $(INC)/process.h

@@ -31,4 +31,7 @@ void do_wait();
 int _do_fork();
 int do_fork();
 
+void _fortest(int x);
+void fortest(int x);
+
 #endif

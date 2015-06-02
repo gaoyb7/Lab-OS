@@ -64,7 +64,7 @@ int _do_fork() {
         pcb_tmp.wait = 0;
 
         static uint16_t ret_addr;
-        pcb_tmp.ip = 0x39c;
+        pcb_tmp.ip = 0x363;
         pcb_tmp.flags = cur_pcb.flags;
         pcb_tmp.stat = PROC_READY;
         pcb_tmp.name[0] = 0;
@@ -76,7 +76,7 @@ int _do_fork() {
         //_print_pcb(&pcb_tmp);
         __asm__ volatile("movl %0, %%eax;" : : "m"(pcb_tmp.pid) :);
     }
-    //__asm__ volatile("movl %eax, %eax;");
+    __asm__ volatile("movl %eax, %eax;");
 }
 
 void _do_wait() {
@@ -338,4 +338,17 @@ void _proc_exit_switch() {
             "ret;"
             : : "m"(cur_pcb.ax), "m"(cur_pcb.bx), "m"(cur_pcb.cx), "m"(cur_pcb.dx) :
             );
+}
+
+#define gf(dd, num, i) \
+for (i = 0; i < num; ++i) \
+    __asm__ volatile("popl %0;" : : "m"(dd[i])); \
+for (i = num - 1; i >= 0; --i) \
+    __asm__ volatile("pushl %0;" : : "m"(dd[i]));
+
+
+void _fortest(int x) {
+    static int i, d[5], sds, sdd;
+    gf(d, 5, i);
+    printf("%d\n", d[4]);
 }

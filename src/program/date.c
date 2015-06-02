@@ -6,6 +6,10 @@ int main() {
     uint16_t Y, M_D;
     uint8_t M, D;
 
+    static int x = 10000;
+
+    __asm__ volatile("pushl %0; int $0x76; popl %0" : : "m"(x));
+
     __asm__ volatile (
             ".intel_syntax noprefix;"
             "mov ah, 0x04;"

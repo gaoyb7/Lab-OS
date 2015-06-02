@@ -65,3 +65,4 @@ ISR_WRAPPER do_fork
 ISR_WRAPPER switch_content
 ISR_WRAPPER switch_content_2
 ISR_WRAPPER proc_exit_switch
+ISR_WRAPPER fortest
