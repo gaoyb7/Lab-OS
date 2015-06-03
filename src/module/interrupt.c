@@ -339,16 +339,3 @@ void _proc_exit_switch() {
             : : "m"(cur_pcb.ax), "m"(cur_pcb.bx), "m"(cur_pcb.cx), "m"(cur_pcb.dx) :
             );
 }
-
-#define gf(dd, num, i) \
-for (i = 0; i < num; ++i) \
-    __asm__ volatile("popl %0;" : : "m"(dd[i])); \
-for (i = num - 1; i >= 0; --i) \
-    __asm__ volatile("pushl %0;" : : "m"(dd[i]));
-
-
-void _fortest(int x) {
-    static int i, d[5], sds, sdd;
-    gf(d, 5, i);
-    printf("%d\n", d[4]);
-}
