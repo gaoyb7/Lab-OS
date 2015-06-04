@@ -1,7 +1,30 @@
 [BITS 16]
 
-kernel_segment equ 0x1000
-kernel_offset equ 0x0000
+	jmp short start
+	nop
+
+	BS_OEMName	    db  'GAOYB7  '
+	BPB_BytsPerSec	dw  0x0200
+	BPB_SecPerClus	db  0x01
+	BPB_RsvdSecCnt	dw  0x01
+	BPB_NumFATs	    db  0x02
+	BPB_RootEntCnt	dw  0xe0
+	BPB_TotSec16	dw  0x0b40
+	BPB_Media		db  0xf0
+	BPB_FATSz16	    dw  0x09
+	BPB_SecPerTrk	dw  0x12
+	BPB_NumHeads	dw  0x02
+	BPB_HiddSec		dd  0x00
+	BPB_TotSec32	dd  0x00
+	BS_DrvNum		db  0x00
+	BS_Reserved1	db  0x00
+	BS_BootSig		db  0x29
+	BS_VolID		dd  0x00
+	BS_VolLab		db  'STEAM_OS   '
+	BS_FileSysType	db  'FAT12   '
+
+    kernel_segment equ 0x1000
+    kernel_offset equ 0x0000
 
 start:
     xor ax, ax
@@ -42,13 +65,23 @@ read_char:
     int 0x16
     ret
 
+;read_disk:
+;    mov ax, kernel_segment
+;    mov es, ax
+;    mov bx, kernel_offset
+;    mov ax, 0x0227
+;    mov cx, 0x0002
+;    mov dx, 0x0000
+;    int 0x13
+;    ret
+
 read_disk:
     mov ax, kernel_segment
     mov es, ax
     mov bx, kernel_offset
     mov ax, 0x0227
-    mov cx, 0x0002
-    mov dx, 0x0000
+    mov cx, 0x0011
+    mov dx, 0x0100
     int 0x13
     ret
 

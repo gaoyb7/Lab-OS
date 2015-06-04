@@ -19,15 +19,15 @@ const struct prog_table program_table[NUM_OF_PROG] = {
     {"date", 40, 10, 1},
     {"help", 50, 10, 1},
     {"clear", 60, 10, 1},
-    {"syscall_test", 70, 10, 1},
-    {"stdio_test", 80, 10, 1},
+    {"syscall", 70, 10, 1},
+    {"stdio", 80, 10, 1},
     {"sh", 90, 20, 0},
     {"rep1", 110, 5, 0},
     {"rep2", 115, 5, 0},
     {"rep3", 120, 5, 0},
     {"rep4", 125, 5, 0},
     {"top", 130, 20, 1},
-    {"fork_test", 150, 20, 1}
+    {"fork", 150, 20, 1}
 };
 
 #endif
