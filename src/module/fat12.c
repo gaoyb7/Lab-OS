@@ -62,7 +62,6 @@ int file_name_match(File_entry_t *file, char *file_name) {
 int get_file_fat_entry(char *file_name) {
     static int sec_count, sec_cnt, found, i, j;
     static File_entry_t *file;
-    get_fat();
     sec_count = total_cluster(directory);
     sec_cnt = directory;
     found = -1;
@@ -92,7 +91,6 @@ int get_file_fat_entry(char *file_name) {
 }
 
 void load_file(int cl, int address) {
-    get_fat();
     int tot = 0;
     while (0 < cl && cl < 0xff0) {
         _read_sector(address, cl + 31, 1);
@@ -203,7 +201,6 @@ void ls() {
     static uint16_t sec_cnt;
     sec_cnt = directory;
 
-    get_fat();
     sec_count = total_cluster(sec_cnt);
     printf("Name         Attrib   Size\n");
     printf("--------------------------\n");
@@ -218,10 +215,10 @@ void ls() {
         for (j = 0; j < FILE_ENT_PER_SEC; ++j) {
             file = &dir_tmp.data[j];
             if (file->name[0] == 0) continue;
-            printf("%s %s %x %x\n", show_file_name(file, file_name),\
+            printf("%s %s %x\n", show_file_name(file, file_name),\
                     show_file_attrib(file, file_attr), \
-                    file->file_length, \
-                    file->start_cluster);
+                    file->file_length);
+                    //file->start_cluster);
         }
     }
 }

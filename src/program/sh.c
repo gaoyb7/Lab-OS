@@ -16,6 +16,7 @@ char cc, ss[10];
 uint16_t cmd_len;
 
 int main() {
+    get_fat();
     while (1) {
         puts(cmd_flag);
         cmd_len = read_cmd();

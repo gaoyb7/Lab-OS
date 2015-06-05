@@ -85,7 +85,7 @@ stdlib.o: lib/stdlib.c include/stdlib.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
 %.com: %.o
-	$(LD) $(LDFLAGS) -Ttext 0x0f00 --oformat binary -o $@ $^
+	$(LD) $(LDFLAGS) -Ttext 0x0500 --oformat binary -o $@ $^
 
 reboot.com: program/reboot.asm
 	$(AS) -o $@ $^
