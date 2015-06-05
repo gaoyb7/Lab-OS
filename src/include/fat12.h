@@ -14,6 +14,13 @@
 #define FLOPPY_SPT          18
 #define FLOPPY_HPC          2
 
+#define FILE_READ_ONLY      0x01
+#define FILE_HIDDEN         0x02
+#define FILE_SYSTEM         0x04
+#define FILE_VOLUME_ID      0x08
+#define FILE_DIRECTORY      0x10
+#define FILE_ARCHIVE        0x20
+
 // Boot sector
 typedef struct Boot_sector {
     uint8_t         bootjmp[3];
@@ -93,10 +100,7 @@ int get_file_fat_entry(char *file_name);
 void to_date(Date_t *d, uint16_t date);
 void to_time(Time_t *t, uint16_t time);
 void load_file(int cl, int address);
-char *pwd();
 void ls();
 int cd(char *path);
-int cat(char *str);
-int rm(char *file_name);
 
 #endif

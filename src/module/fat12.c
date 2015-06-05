@@ -3,7 +3,7 @@
 Boot_sector_t bootsector;
 Dir_entry_t dir_tmp;
 FAT_t fat;
-uint16_t directory = 0;
+int directory = 0;
 
 void get_fat() {
     read_sector(&fat, 1, FAT_SEC_COUNT);
@@ -33,7 +33,7 @@ uint16_t total_cluster(uint16_t start) {
 }
 
 int file_name_match(File_entry_t *file, char *file_name) {
-    static char buff_a[12], buff_b[12];
+    static char buff_a[13], buff_b[13];
     int i, file_name_len;
 
     file_name_len = __builtin_strlen(file_name);
@@ -47,6 +47,7 @@ int file_name_match(File_entry_t *file, char *file_name) {
             buff_b[i] = file_name[i];
     }
     for (i = file_name_len; i < 12; ++i) buff_b[i] = ' ';
+    buff_a[12] = buff_b[12] = 0;
 
     for (i = 0; i < 12; ++i)
         if (buff_a[i] != buff_b[i])
@@ -59,19 +60,27 @@ int get_file_fat_entry(char *file_name) {
     File_entry_t *file;
     sec_count = total_cluster(directory);
     sec_cnt = directory;
+
     for (i = 0; i < sec_count; ++i) {
-        if (found > 0) break;
         if (directory == 0)
-            read_sector(&dir_tmp, sec_cnt + 19, 1);
+            read_sector(&dir_tmp, i + 19, 1);
         else
             read_sector(&dir_tmp, sec_cnt + 31, 1);
+
+        if (directory != 0)
+            sec_cnt = next_sector(sec_cnt);
+
         for (j = 0; j < FILE_ENT_PER_SEC; ++j) {
             file = &dir_tmp.data[j];
+            if (file->name[0] == 0) continue;
             if (file_name_match(file, file_name) == 1) {
                 found = file->start_cluster;
+                if ((file->attribute & FILE_DIRECTORY) != 0)
+                    found = -found;
                 break;
             }
         }
+        if (found != -1) break;
     }
     return found;
 }
@@ -101,9 +110,14 @@ void to_time(Time_t *t, uint16_t time) {
 
 char* show_file_name(File_entry_t *file, char *str) {
     int i, cnt = 0;
+    for (i = 0; i < 13; ++i) str[i] = 0;
     for (i = 0; i < 8; ++i)
         if (file->name[i] != 0 && file->name[i] != ' ')
             str[cnt++] = file->name[i];
+    if (file->attribute & FILE_DIRECTORY) {
+        for (i = cnt; i < 12; ++i)
+            str[i] = ' ';
+    }
     str[cnt++] = '.';
     for (i = 0; i < 3; ++i)
         if (file->extension[i] != 0 && file->extension[i] != ' ')
@@ -192,12 +206,13 @@ void ls() {
             read_sector(&dir_tmp, i + 19, 1);
         else
             read_sector(&dir_tmp, sec_cnt + 31, 1);
+
         if (directory != 0)
             sec_cnt = next_sector(sec_cnt);
         for (j = 0; j < FILE_ENT_PER_SEC; ++j) {
             file = &dir_tmp.data[j];
             if (file->name[0] == 0) continue;
-            printf("%s %s %d %d\n", show_file_name(file, file_name),\
+            printf("%s %s %x %x\n", show_file_name(file, file_name),\
                     show_file_attrib(file, file_attr), \
                     file->file_length, \
                     file->start_cluster);
@@ -206,5 +221,9 @@ void ls() {
 }
 
 int cd(char *path) {
-
+    int dir;
+    dir = get_file_fat_entry(path);
+    if (dir == -1 || dir > 0) return 0;
+    directory = -dir;
+    return 1;
 }

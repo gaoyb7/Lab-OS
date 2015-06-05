@@ -20,11 +20,13 @@ char *welcome_msg =
 void load_ISR();
 void fat12_test();
 
+int tmp;
+
 int main() {
     clear();
     printf("%s\n", welcome_msg);
     load_ISR();
-    //fat12_test();
+    fat12_info();
     schedule_prog("sh.com", 0);
     getch();
 }
@@ -42,12 +44,11 @@ void load_ISR() {
     //build_ISR(0x68, syscall);
 }
 
-void fat12_test() {
+void fat12_info() {
     printf("Size of Boot_sector_t: %d\n", sizeof(Boot_sector_t));
     printf("Size of File_entry_t: %d\n", sizeof(File_entry_t));
     printf("Size of Sector_t: %d\n", sizeof(Sector_t));
     printf("Size of Dir_entry_t: %d\n", sizeof(Dir_entry_t));
     printf("Size of FAT_t: %d\n", sizeof(FAT_t));
-    printf("++++ File list ++++\n");
     printf("\n");
 }
