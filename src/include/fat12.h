@@ -3,14 +3,16 @@
 
 #include <stdint.h>
 
-#define FILE_ENTRY_ADDR 19
-#define FAT_ENTRY_ADDR  1
-#define FAT_PHYS_SIZE   9
-#define FAT_BOOT_SECTOR 0
-#define FAT_SECTOR_SIZE 512
-#define EOF_FAT12       0xFF8
-#define FLOPPY_SPT      18
-#define FLOPPY_HPC      2
+#define DIR_ENT_ADDR        19
+#define DIR_ENT_SEC_COUNT   14
+#define FILE_ENT_PER_SEC    32
+#define FAT_ADDR            1
+#define FAT_SEC_COUNT       9       
+#define FAT_BOOT_SECTOR     0
+#define SECTOR_SIZE         512
+#define EOF_FAT12           0xFF8
+#define FLOPPY_SPT          18
+#define FLOPPY_HPC          2
 
 // Boot sector
 typedef struct Boot_sector {
@@ -52,7 +54,7 @@ typedef struct File_entry {
 
 // Sector buffer
 typedef struct Sector {
-    uint8_t data[FAT_SECTOR_SIZE];
+    uint8_t data[SECTOR_SIZE];
 } __attribute__((packed)) Sector_t;
 
 // Attribute type
@@ -82,27 +84,28 @@ typedef struct Time {
     int second;
 } __attribute__((packed)) Time_t;
 
-// Sector directory type
-typedef struct Sector_dir {
-    File_entry_t data[FAT_SECTOR_SIZE / sizeof(File_entry_t)];
-} __attribute__((packed)) Sector_dir_t;
+// Directory entry structure
+typedef struct Dir_entry {
+    File_entry_t data[SECTOR_SIZE / sizeof(File_entry_t)];
+} __attribute__((packed)) Dir_entry_t;
 
 // Physical FAT structure
 typedef struct FAT {
-    uint8_t data[FAT_SECTOR_SIZE * FAT_PHYS_SIZE];
+    uint8_t data[SECTOR_SIZE * FAT_SEC_COUNT];
 } __attribute__((packed)) FAT_t;
 
-// Logical transposition of the FAT structure
-typedef struct Logic_FAT {
-    uint16_t data[FAT_SECTOR_SIZE * FAT_PHYS_SIZE * 8 / 12];
-} __attribute__ ((packed)) Logic_FAT_t;
-
-
+char* show_file_attrib(File_entry_t *file, char *str);
+char* show_file_name(File_entry_t *file, char *str);
 void read_sector(void *ptr, uint16_t LBA, uint16_t count);
-void read_file(Sector_t *buffer, int start, int c);
-int read_fat();
-int load_file(char *str, uint8_t *buffer);
-int get_file_size(char *file_name);
+void _read_sector(int address, uint16_t LBA, uint16_t count);
+void get_fat();
+uint16_t get_fat_entry(uint16_t id);
+uint16_t next_sector(uint16_t cnt);
+uint16_t total_cluster(uint16_t start);
+int get_file_fat_entry(char *file_name);
+void to_date(Date_t *d, uint16_t date);
+void to_time(Time_t *t, uint16_t time);
+void load_file(int cl, int address);
 char *pwd();
 void ls();
 int cd(char *path);

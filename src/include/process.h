@@ -35,7 +35,7 @@ void save_pcb(PCB *pcb, int id);
 
 void _print_pcb(PCB *pcb);
 
-void schedule_prog(char *proc_name, uint16_t proc_size, uint16_t LBA, uint16_t flags);
+int schedule_prog(char *proc_name, uint16_t flags);
 
 void wait();
 

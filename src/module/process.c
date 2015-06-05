@@ -1,5 +1,6 @@
 #include "stdlib.h"
 #include "stdio.h"
+#include "fat12.h"
 #include "process.h"
 
 void load_pcb(PCB *cur_pcb, int id) {
@@ -34,8 +35,8 @@ int fork() {
     __asm__ volatile("int $0x75;");
 }
 
-void schedule_prog(char *proc_name, uint16_t proc_size, uint16_t LBA, uint16_t flags) {
-    static int pid_count;
+int schedule_prog(char *proc_name, uint16_t flags) {
+    static int pid_count, start_fat;
     static PCB cur_pcb, pcb_tmp;
     
     /*
@@ -54,12 +55,14 @@ void schedule_prog(char *proc_name, uint16_t proc_size, uint16_t LBA, uint16_t f
 
     if (pid_count >= MAX_PROC_NUM) {
         printf("= =!\n");
-        return;
+        return 0;
     }
 
     static int address;
     address = PROC_ADDR + pid_count * PROC_SIZE;
-    load_prog(address >> 16, address & 0xffff, proc_size, LBA, 0);
+    start_fat = get_file_fat_entry(proc_name);
+    if (start_fat == -1) return 0;
+    load_file(start_fat, address);
 
     cur_pcb.cs = cur_pcb.ds = cur_pcb.es = cur_pcb.ss = address >> 16;
     cur_pcb.ip = cur_pcb.sp = address & 0xffff;
@@ -76,6 +79,7 @@ void schedule_prog(char *proc_name, uint16_t proc_size, uint16_t LBA, uint16_t f
 
     cur_pcb.stat = PROC_READY;
     save_pcb(&cur_pcb, pid_count);
+    return 1;
 }
 
 void _print_pcb(PCB *cnt) {

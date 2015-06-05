@@ -11,7 +11,7 @@ const char *msg =
 "sh             - Shell\n"
 "top            - Show current process\n"
 "=========================================\n"
-"stdio          - Test stdio library\n"
+"io_test        - Test stdio library\n"
 "syscall        - Test syscall library\n"
 "fork           - Test fork function\n"
 "rep[1-4]       - For multiprocess test\n";

@@ -19,16 +19,15 @@ const char *welcome_msg=
 
 void show_msg();
 void load_ISR();
-void load_and_run_shell();
-Sector_dir_t Sdata;
+Dir_entry_t Sdata;
 void fat12_test();
-void read_sector(void *ptr, uint16_t LBA, uint16_t count);
 
 int main() {
+    printf("haha\n");
     show_msg();
     load_ISR();
     fat12_test();
-    schedule_prog("sh", 20, 90, 0);
+    schedule_prog("sh.com", 0);
     getch();
 }
 
@@ -53,21 +52,18 @@ void fat12_test() {
     printf("Size of Boot_sector_t: %d\n", sizeof(Boot_sector_t));
     printf("Size of File_entry_t: %d\n", sizeof(File_entry_t));
     printf("Size of Sector_t: %d\n", sizeof(Sector_t));
-    printf("Size of Sector_dir_t: %d\n", sizeof(Sector_dir_t));
+    printf("Size of Dir_entry_t: %d\n", sizeof(Dir_entry_t));
     printf("Size of FAT_t: %d\n", sizeof(FAT_t));
-    printf("Size of Logic_FAT_t: %d\n", sizeof(Logic_FAT_t));
-    printf("--------------------------------\n");
     printf("++++ File list ++++\n");
-    static int i = 0;
+    static int i = 0, ds;
     static char name[12], attr[10];
     static File_entry_t file;
-    read_sector(&Sdata, FILE_ENTRY_ADDR, 1);
+    read_sector(&Sdata, DIR_ENT_ADDR, 1);
     while (1) {
         file = Sdata.data[i];
         if (file.name[0] == 0) break;
         printf("%s %s %d %d\n", show_file_name(&file, name), show_file_attrib(&file, attr), file.start_cluster, file.file_length);
         ++i;
     }
-    get_fat();
-    printf("%d %d\n", total_cluster(3));
+    printf("\n");
 }

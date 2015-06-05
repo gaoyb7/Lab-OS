@@ -1,29 +1,27 @@
 LD=ld
-LDFLAGS=-N -melf_i386
+LDFLAGS=-N -melf_i386 -nostdlib
 AS=nasm
 ASFLAGS=-f elf
-CC=i386-elf-gcc
-#CC=gcc
-CFLAGS=-m16 -mpreferred-stack-boundary=2 -ffreestanding -I./include
-INC=include
-PROG=program
+#CC=i386-elf-gcc
+CC=gcc
+CFLAGS=-m16 -nostdlib -mpreferred-stack-boundary=2 -ffreestanding -I./include
 DISK=disk.img
-PROG_LIST=reboot.com time.com date.com help.com clear.com stdio.com rep1.com rep2.com rep3.com rep4.com sh.com top.com fork.com
+PROG_LIST=reboot.com time.com date.com help.com clear.com io_test.com rep1.com rep2.com rep3.com rep4.com sh.com top.com fork.com
 
 fs_ver: clean kernel.bin boot.bin user_program
 	sudo -u gaoyb7 dd if=/dev/zero of=$(DISK) count=2880
 	dd if=boot.bin of=$(DISK) conv=notrunc  
 	printf '\x55\xaa' | dd of=$(DISK) bs=1 seek=510 count=2 conv=notrunc
 	mount -o loop,fat=12 -t msdos $(DISK) ./img
+	#cp kernel.bin sh.com ./img
 	cp kernel.bin $(PROG_LIST) ./img
-	mkdir ./img/prog
-	sudo umount ./img
+	umount ./img
 
 test: all
 	qemu -fda disk.img -m 32
 
 run:
-	qemu -fda disk.img -m 32
+	qemu-system-i386 -fda disk.img -m 32
 
 all: clean kernel user_program
 	dd if=reboot.com of=$(DISK) seek=20 conv=notrunc
@@ -59,17 +57,17 @@ boot.o: boot.asm
 kernel.bin: kernel.o interrupt.o isr_wrapper.o stdio.o stdlib.o utils.o process.o syscall.o fat12.o
 	$(LD) $(LDFLAGS) -Ttext 0x0000 --oformat binary -o $@ $^
 
-kernel.o: kernel.c $(INC)/prog_table.h $(INC)/interrupt.h $(INC)/syscall.h
+kernel.o: kernel.c include/interrupt.h include/syscall.h
 	$(CC) $(CFLAGS) -c $^
 
 #module
 %.o: module/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
-interrupt.o: module/interrupt.c $(INC)/interrupt.h $(INC)/stdlib.h
-process.o: module/process.c $(INC)/process.h
-syscall.o: module/syscall.c $(INC)/syscall.h
-fat12.o: module/fat12.c $(INC)/fat12.h
+interrupt.o: module/interrupt.c include/interrupt.h include/stdlib.h
+process.o: module/process.c include/process.h
+syscall.o: module/syscall.c include/syscall.h
+fat12.o: module/fat12.c include/fat12.h
 isr_wrapper.o: module/isr_wrapper.asm
 	$(AS) $(ASFLAGS) -o $@ $^
 
@@ -77,46 +75,46 @@ isr_wrapper.o: module/isr_wrapper.asm
 %.o: lib/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 	
-stdio.o: lib/stdio.c $(INC)/stdio.h
-stdlib.o: lib/stdlib.c $(INC)/stdlib.h
+stdio.o: lib/stdio.c include/stdio.h
+stdlib.o: lib/stdlib.c include/stdlib.h
 
 #user_program
-%.o: $(PROG)/%.c
+%.o: program/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 %.com: %.o
 	$(LD) $(LDFLAGS) -Ttext 0x0500 --oformat binary -o $@ $^
 
-reboot.com: $(PROG)/reboot.asm
+reboot.com: program/reboot.asm
 	$(AS) -o $@ $^
 
-time.o: $(PROG)/time.c $(INC)/stdio.h
+time.o: program/time.c include/stdio.h
 time.com: time.o stdio.o
-date.o: $(PROG)/date.c $(INC)/stdio.h
+date.o: program/date.c include/stdio.h
 date.com: date.o stdio.o
-help.o: $(PROG)/help.c $(INC)/stdio.h
+help.o: program/help.c include/stdio.h
 help.com: help.o stdio.o
-clear.o: $(PROG)/clear.c $(INC)/stdio.h
+clear.o: program/clear.c include/stdio.h
 clear.com: clear.o
-syscall.o: $(PROG)/syscall.c $(INC)/syscall.h
+syscall.o: program/syscall.c include/syscall.h
 syscall.com: syscall.o syscall.o
-stdio.o: $(PROG)/stdio.c $(INC)/stdio.h
-stdio.com: stdio.o stdio.o
-sh.o: $(PROG)/sh.c $(INC)/stdio.h $(INC)/stdlib.h
-sh.com: sh.o stdio.o stdlib.o utils.o process.o
-top.o: $(PROG)/top.c $(INC)/stdio.h $(INC)/process.h
-top.com: top.o stdio.o process.o utils.o stdlib.o
-fork.o: $(PROG)/fork.c $(INC)/stdio.h $(INC)/process.h
-fork.com: fork.o stdio.o process.o utils.o stdlib.o
-kill.o: $(PROG)/kill.c $(INC)/process.h
-kill.com: kill.o stdio.o process.o utils.o stdlib.o
-rep1.o: $(PROG)/rep1.c 
+io_test.o: program/io_test.c include/stdio.h
+io_test.com: stdio.o io_test.o
+sh.o: program/sh.c include/stdio.h include/stdlib.h
+sh.com: sh.o stdio.o stdlib.o utils.o process.o fat12.o
+top.o: program/top.c include/stdio.h include/process.h
+top.com: top.o stdio.o process.o utils.o stdlib.o fat12.o
+fork.o: program/fork.c include/stdio.h include/process.h
+fork.com: fork.o stdio.o process.o utils.o stdlib.o fat12.o
+kill.o: program/kill.c include/process.h
+kill.com: kill.o stdio.o process.o utils.o stdlib.o fat12.o
+rep1.o: program/rep1.c 
 rep1.com: rep1.o utils.o
-rep2.o: $(PROG)/rep1.c 
+rep2.o: program/rep1.c 
 rep2.com: rep2.o utils.o
-rep3.o: $(PROG)/rep1.c 
+rep3.o: program/rep1.c 
 rep3.com: rep3.o utils.o
-rep4.o: $(PROG)/rep1.c 
+rep4.o: program/rep1.c 
 rep4.com: rep4.o utils.o
 
 #others
@@ -127,6 +125,6 @@ clean:
 	rm -f *.o
 	rm -f *.com
 	rm -f *.bin
-	rm -f $(INC)/*.gch
+	rm -f include/*.gch
 	rm -f *.s
 	rm -f bochsout.txt

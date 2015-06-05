@@ -3,6 +3,12 @@
 #include "stdlib.h"
 #include "stdio.h"
 
+#define get_stack(stack, num, p) \
+for (p = 0; p < num; ++p) \
+    __asm__ volatile("popl %0;" : : "m"(stack[p])); \
+for (p = num - 1; p >= 0; --p) \
+    __asm__ volatile("pushl %0;" : : "m"(stack[p]));
+
 void _kb_demo() {
     static int8_t kb_stat;
     if (kb_stat < 2) set_pos_char(0xc0, 0x07, 0, 79);
@@ -64,7 +70,7 @@ int _do_fork() {
         pcb_tmp.wait = 0;
 
         static uint16_t ret_addr;
-        pcb_tmp.ip = 0x363;
+        pcb_tmp.ip = 0x534;
         pcb_tmp.flags = cur_pcb.flags;
         pcb_tmp.stat = PROC_READY;
         pcb_tmp.name[0] = 0;
