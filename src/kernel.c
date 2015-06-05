@@ -65,7 +65,9 @@ void fat12_test() {
     while (1) {
         file = Sdata.data[i];
         if (file.name[0] == 0) break;
-        printf("%s %s\n", show_file_name(&file, name), show_file_attrib(&file, attr));
+        printf("%s %s %d %d\n", show_file_name(&file, name), show_file_attrib(&file, attr), file.start_cluster, file.file_length);
         ++i;
     }
+    get_fat();
+    printf("%d %d\n", total_cluster(3));
 }

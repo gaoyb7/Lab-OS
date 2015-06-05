@@ -98,6 +98,7 @@ typedef struct Logic_FAT {
 } __attribute__ ((packed)) Logic_FAT_t;
 
 
+void read_sector(void *ptr, uint16_t LBA, uint16_t count);
 void read_file(Sector_t *buffer, int start, int c);
 int read_fat();
 int load_file(char *str, uint8_t *buffer);
