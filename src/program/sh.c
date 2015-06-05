@@ -11,6 +11,7 @@ char cmd[CMD_BUFFER_LEN];
 uint16_t read_cmd();
 void load_user_program(char *, uint16_t);
 int is_builtin_func(char *cmd);
+int is_spec_prog(char *cmd);
 
 char cc, ss[10];
 uint16_t cmd_len;
@@ -59,10 +60,7 @@ void load_user_program(char *cmd, uint16_t len) {
         --len;
     }
 
-    if (is_builtin_func(cmd) == 1) {
-        return;
-    }
-
+    if (is_builtin_func(cmd) == 1) return;
 
     if (cmd[len - 1] == '&') {
         flag = 0;
@@ -85,10 +83,7 @@ void load_user_program(char *cmd, uint16_t len) {
         cmd[len] = 0;
     }
 
-    if (strncmp(cmd, "sh.com", 6) == 0) {
-        printf("Error: Can not run two shell at the same time!\n");
-        return;
-    }
+    if (is_spec_prog(cmd) == 1) return;
 
     if (schedule_prog(cmd, flag) == 0) {
         puts("Command not found: ");
@@ -101,6 +96,17 @@ void load_user_program(char *cmd, uint16_t len) {
     }
 }
 
+int is_spec_prog(char *cmd) {
+    if (strcmp(cmd, "sh.com") == 0) {
+        printf("Error: can not run two shell at the same time.\n");
+        return 1;
+    } else if (strcmp(cmd, "kernel.bin") == 0) {
+        printf("Error: Permission denied.\n");
+        return 1;
+    }
+    return 0;
+}
+
 int is_builtin_func(char *cmd) {
     int len;
     len = __builtin_strlen(cmd);
@@ -109,7 +115,7 @@ int is_builtin_func(char *cmd) {
             printf("cd: no such directory %s\n", cmd + 3);
         }
         return 1;
-    } else if (cmd[0] == 'l' && cmd[1] == 's' && cmd[2] == 0) {
+    } else if (strcmp(cmd, "ls") == 0) {
         ls();
         return 1;
     }

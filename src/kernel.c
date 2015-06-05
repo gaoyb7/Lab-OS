@@ -26,7 +26,7 @@ int main() {
     clear();
     printf("%s\n", welcome_msg);
     load_ISR();
-    fat12_info();
+    //fat12_info();
     get_fat();
     schedule_prog("sh.com", 0);
     getch();

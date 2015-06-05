@@ -83,11 +83,23 @@ void load_prog(uint16_t segment, uint16_t offset, uint8_t count, uint16_t LBA, u
             );
 }
 
-int8_t strncmp(const char *stra, const char *strb, uint16_t len) {
-    char i;
-    for (i = 0; i < len; ++i)
-        if (*(stra++) != *(strb++))
-            return 1;
+int strncmp(char *stra, char *strb, int len) {
+    int i;
+    for (i = 0; i < len; ++i) {
+        if (*stra < *strb) return -1;
+        if (*stra > *strb) return 1;
+        stra++; strb++;
+    }
+    return 0;
+}
+
+int strcmp(char *stra, char *strb) {
+    while (1) {
+        if (*stra == 0 && *strb == 0) return 0;
+        if (*stra < *strb) return -1;
+        if (*stra > *strb) return 1;
+        stra++; strb++;
+    }
     return 0;
 }
 

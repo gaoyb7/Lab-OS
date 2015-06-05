@@ -25,7 +25,7 @@ void sleep(uint16_t time);
 
 void load_prog(uint16_t segment, uint16_t offset, uint8_t sectors, uint16_t LBA, uint8_t drive_id);
 
-int8_t strncmp(const char *stra, const char *strb, unsigned short len);
+int strncmp(char *stra, char *strb, int len);
 
 #endif
 

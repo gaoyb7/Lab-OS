@@ -13,39 +13,13 @@ fs_ver: clean kernel.bin boot.bin user_program
 	dd if=boot.bin of=$(DISK) conv=notrunc  
 	printf '\x55\xaa' | dd of=$(DISK) bs=1 seek=510 count=2 conv=notrunc
 	mount -o loop,fat=12 -t msdos $(DISK) ./img
-	#cp kernel.bin $(PROG_LIST) ./img
-	cp kernel.bin sh.com date.com ./img
+	cp kernel.bin sh.com ./img
 	mkdir ./img/prog
 	cp $(PROG_LIST) ./img/prog
 	umount ./img
 
-test: all
-	qemu -fda disk.img -m 32
-
 run:
 	qemu-system-i386 -fda disk.img -m 32
-
-all: clean kernel user_program
-	dd if=reboot.com of=$(DISK) seek=20 conv=notrunc
-	dd if=time.com of=$(DISK) seek=30 conv=notrunc
-	dd if=date.com of=$(DISK) seek=40 conv=notrunc
-	dd if=help.com of=$(DISK) seek=50 conv=notrunc
-	dd if=clear.com of=$(DISK) seek=60 conv=notrunc
-	dd if=syscall.com of=$(DISK) seek=70 conv=notrunc
-	dd if=stdio.com of=$(DISK) seek=80 conv=notrunc
-	dd if=sh.com of=$(DISK) seek=90 conv=notrunc
-	dd if=rep1.com of=$(DISK) seek=110 conv=notrunc
-	dd if=rep2.com of=$(DISK) seek=115 conv=notrunc
-	dd if=rep3.com of=$(DISK) seek=120 conv=notrunc
-	dd if=rep4.com of=$(DISK) seek=125 conv=notrunc
-	dd if=top.com of=$(DISK) seek=130 conv=notrunc
-	dd if=fork.com of=$(DISK) seek=150 conv=notrunc
-
-kernel: kernel.bin boot.bin
-	dd if=/dev/zero of=$(DISK) count=2880
-	dd if=boot.bin of=$(DISK) conv=notrunc  
-	dd if=kernel.bin of=$(DISK) seek=1 conv=notrunc
-	printf '\x55\xaa' | dd of=$(DISK) bs=1 seek=510 count=2 conv=notrunc
 
 user_program: $(PROG_LIST)
 
