@@ -57,19 +57,6 @@ typedef struct Sector {
     uint8_t data[SECTOR_SIZE];
 } __attribute__((packed)) Sector_t;
 
-// Attribute type
-/*
-typedef struct Attrib {
-    bool READ_ONLY;
-    bool HIDDEN;
-    bool SYSTEM;
-    bool VOLUME_ID;
-    bool DIRECTORY;
-    bool ARCHIVE;
-    uint8_t _RESERVED;
-} __attribute__((packed)) Attrib_t;
-*/
-
 // Date type
 typedef struct Date {
     int year;

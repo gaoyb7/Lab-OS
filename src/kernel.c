@@ -12,33 +12,27 @@ __asm__("jmp $0x1000, $main\n");
 #include "stdlib.h"
 #include "fat12.h"
 
-const char *welcome_msg=
+char *welcome_msg =
 "Steam OS v5.0\n"
 "Copyright (c) 2015 Gaoyb7.\n"
-"Type 'help' for more information.\n\n";
+"Type 'help' for more information.\n";
 
-void show_msg();
 void load_ISR();
-Dir_entry_t Sdata;
 void fat12_test();
 
 int main() {
-    printf("haha\n");
-    show_msg();
+    clear();
+    printf("%s\n", welcome_msg);
     load_ISR();
-    fat12_test();
+    //fat12_test();
     schedule_prog("sh.com", 0);
     getch();
 }
 
-void show_msg() {
-    clear();
-    puts(welcome_msg);
-}
-
 void load_ISR() {
-    build_ISR(0x08, timer_demo);
-    build_ISR(0x09, kb_demo);
+    //build_ISR(0x08, timer_demo);
+    //build_ISR(0x09, kb_demo);
+    build_ISR(0x09, timer_demo);
     build_ISR(0x1c, switch_content);
     build_ISR(0x71, switch_content_2);
     build_ISR(0x72, proc_exit_switch);
@@ -55,15 +49,5 @@ void fat12_test() {
     printf("Size of Dir_entry_t: %d\n", sizeof(Dir_entry_t));
     printf("Size of FAT_t: %d\n", sizeof(FAT_t));
     printf("++++ File list ++++\n");
-    static int i = 0, ds;
-    static char name[12], attr[10];
-    static File_entry_t file;
-    read_sector(&Sdata, DIR_ENT_ADDR, 1);
-    while (1) {
-        file = Sdata.data[i];
-        if (file.name[0] == 0) break;
-        printf("%s %s %d %d\n", show_file_name(&file, name), show_file_attrib(&file, attr), file.start_cluster, file.file_length);
-        ++i;
-    }
     printf("\n");
 }

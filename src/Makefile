@@ -13,8 +13,10 @@ fs_ver: clean kernel.bin boot.bin user_program
 	dd if=boot.bin of=$(DISK) conv=notrunc  
 	printf '\x55\xaa' | dd of=$(DISK) bs=1 seek=510 count=2 conv=notrunc
 	mount -o loop,fat=12 -t msdos $(DISK) ./img
-	#cp kernel.bin sh.com ./img
-	cp kernel.bin $(PROG_LIST) ./img
+	#cp kernel.bin $(PROG_LIST) ./img
+	cp kernel.bin sh.com date.com ./img
+	mkdir ./img/prog
+	cp $(PROG_LIST) ./img/prog
 	umount ./img
 
 test: all
@@ -109,9 +111,9 @@ fork.com: fork.o stdio.o process.o utils.o stdlib.o fat12.o
 kill.o: program/kill.c include/process.h
 kill.com: kill.o stdio.o process.o utils.o stdlib.o fat12.o
 rep1.o: program/rep1.c 
-rep1.com: rep1.o utils.o
+rep1.com: rep1.o utils.o stdio.o
 rep2.o: program/rep1.c 
-rep2.com: rep2.o utils.o
+rep2.com: rep2.o utils.o stdio.o
 rep3.o: program/rep1.c 
 rep3.com: rep3.o utils.o
 rep4.o: program/rep1.c 

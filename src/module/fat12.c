@@ -1,15 +1,12 @@
 #include "fat12.h"
 
 Boot_sector_t bootsector;
-Dir_entry_t dir_ent[DIR_ENT_SEC_COUNT];
+Dir_entry_t dir_tmp;
 FAT_t fat;
+uint16_t directory = 0;
 
 void get_fat() {
     read_sector(&fat, 1, FAT_SEC_COUNT);
-}
-
-void get_dir_entry(int id) {
-    read_sector(&dir_ent[id], DIR_ENT_ADDR + id, 1);
 }
 
 uint16_t get_fat_entry(uint16_t id) {
@@ -28,19 +25,21 @@ uint16_t next_sector(uint16_t cnt) {
 
 uint16_t total_cluster(uint16_t start) {
     uint16_t c = 1, cl = start;
+    if (start == 0) 
+        return DIR_ENT_SEC_COUNT;
     while (cl = next_sector(cl), 0 < cl && cl < 0xff0) c++;
     if (cl == 0) --c;
     return c;
 }
 
-int file_name_match(File_entry_t file, char *file_name) {
+int file_name_match(File_entry_t *file, char *file_name) {
     static char buff_a[12], buff_b[12];
     int i, file_name_len;
 
     file_name_len = __builtin_strlen(file_name);
     if (file_name_len > 12) return 0;
 
-    show_file_name(&file, buff_a);
+    show_file_name(file, buff_a);
     for (i = 0; i < file_name_len; ++i) {
         if ('a' <= file_name[i] && file_name[i] <= 'z')
             buff_b[i] = file_name[i] - 'a' + 'A';
@@ -56,15 +55,23 @@ int file_name_match(File_entry_t file, char *file_name) {
 }
 
 int get_file_fat_entry(char *file_name) {
-    int i, j, found = -1;
-    for (i = 0; i < DIR_ENT_SEC_COUNT; ++i) {
+    int sec_count, sec_cnt, found = -1, i, j;
+    File_entry_t *file;
+    sec_count = total_cluster(directory);
+    sec_cnt = directory;
+    for (i = 0; i < sec_count; ++i) {
         if (found > 0) break;
-        get_dir_entry(i);
-        for (j = 0; j < FILE_ENT_PER_SEC; ++j)
-            if (file_name_match(dir_ent[i].data[j], file_name) == 1) {
-                found = dir_ent[i].data[j].start_cluster;
+        if (directory == 0)
+            read_sector(&dir_tmp, sec_cnt + 19, 1);
+        else
+            read_sector(&dir_tmp, sec_cnt + 31, 1);
+        for (j = 0; j < FILE_ENT_PER_SEC; ++j) {
+            file = &dir_tmp.data[j];
+            if (file_name_match(file, file_name) == 1) {
+                found = file->start_cluster;
                 break;
             }
+        }
     }
     return found;
 }
@@ -146,7 +153,7 @@ void read_sector(void *ptr, uint16_t LBA, uint16_t count) {
                 "c"(((uint16_t)cylinder << 8) + sector), \
                 "d"((uint16_t)head << 8) : "di", "si"
             );
-    _read_mem(ptr, 0x40000000, count * 512);
+    _read_mem(ptr, 0x40000000, count * SECTOR_SIZE);
     asm volatile("sti;");
 }
 
@@ -167,4 +174,37 @@ void _read_sector(int address, uint16_t LBA, uint16_t count) {
                 : "si"
             );
     asm volatile("sti;");
+}
+
+void ls() {
+    static char file_name[12], file_attr[10];
+    File_entry_t *file;
+    int sec_count = 0, i, j;
+    uint16_t sec_cnt;
+    sec_cnt = directory;
+
+    get_fat();
+    sec_count = total_cluster(sec_cnt);
+    printf("Name         Attrib   Size\n");
+    printf("--------------------------\n");
+    for (i = 0; i < sec_count; ++i) {
+        if (directory == 0)
+            read_sector(&dir_tmp, i + 19, 1);
+        else
+            read_sector(&dir_tmp, sec_cnt + 31, 1);
+        if (directory != 0)
+            sec_cnt = next_sector(sec_cnt);
+        for (j = 0; j < FILE_ENT_PER_SEC; ++j) {
+            file = &dir_tmp.data[j];
+            if (file->name[0] == 0) continue;
+            printf("%s %s %d %d\n", show_file_name(file, file_name),\
+                    show_file_attrib(file, file_attr), \
+                    file->file_length, \
+                    file->start_cluster);
+        }
+    }
+}
+
+int cd(char *path) {
+
 }

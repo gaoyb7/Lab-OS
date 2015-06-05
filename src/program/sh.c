@@ -23,13 +23,16 @@ int main() {
         if (cmd_len == 0)
             continue;
 
-        static uint16_t i, p;
+        static uint16_t i, j, p, len;
         char flag = 1;
         p = 0;
 
         while (p < cmd_len) {
             for (i = p; i < cmd_len && cmd_buff[i] != ';'; ++i);
-            load_user_program(cmd_buff + p, i - p);
+            len = i - p;
+            for (j = 0; p < i; ++j, ++p) 
+                cmd[j] = cmd_buff[p];
+            load_user_program(cmd, len);
             p = i + 1;
             puts("\n");
         }
@@ -44,11 +47,41 @@ uint16_t read_cmd() {
 }
 
 void load_user_program(char *cmd, uint16_t len) {
+    static uint16_t i;
+    uint8_t has_run = 0, flag = 1, has_ext = 0;
+
     while (len && cmd[len - 1] == ' ') --len; 
-    cmd[len] = ' ';
+    cmd[len] = 0;
+
     while (len && cmd[0] == ' ') {
         ++cmd;
         --len;
+    }
+
+    if (strncmp(cmd, "ls", 2) == 0) {
+        ls();
+        return;
+    }
+
+    if (cmd[len - 1] == '&') {
+        flag = 0;
+        --len;
+        while (len && cmd[len - 1] == ' ') --len; 
+        cmd[len] = 0;
+    }
+
+    for (i = 0; i < len; ++i)
+        if (cmd[i] == '.') {
+            has_ext = 1;
+            break;
+        }
+
+    if (has_ext == 0) {
+        cmd[len++] = '.';
+        cmd[len++] = 'c';
+        cmd[len++] = 'o';
+        cmd[len++] = 'm';
+        cmd[len] = 0;
     }
 
     if (strncmp(cmd, "sh.com", 6) == 0) {
@@ -56,13 +89,13 @@ void load_user_program(char *cmd, uint16_t len) {
         return;
     }
 
-    uint16_t i;
-    uint8_t has_run = 0, flags = 1;
-    if (schedule_prog(cmd, 1) == 0) {
+    if (schedule_prog(cmd, flag) == 0) {
         puts("Command not found: ");
         puts(cmd);
         puts("\n");
     } else {
-        if (flags == 1) wait();
+        if (flag == 1) {
+            wait();
+        }
     }
 }
