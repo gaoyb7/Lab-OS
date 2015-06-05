@@ -10,7 +10,7 @@ char cmd[CMD_BUFFER_LEN];
 
 uint16_t read_cmd();
 void load_user_program(char *, uint16_t);
-void run_prog(uint16_t segment, uint16_t offset);
+int is_builtin_func(char *cmd);
 
 char cc, ss[10];
 uint16_t cmd_len;
@@ -58,10 +58,10 @@ void load_user_program(char *cmd, uint16_t len) {
         --len;
     }
 
-    if (strncmp(cmd, "ls", 2) == 0) {
-        ls();
+    if (is_builtin_func(cmd) == 1) {
         return;
     }
+
 
     if (cmd[len - 1] == '&') {
         flag = 0;
@@ -98,4 +98,19 @@ void load_user_program(char *cmd, uint16_t len) {
             wait();
         }
     }
+}
+
+int is_builtin_func(char *cmd) {
+    int len;
+    len = __builtin_strlen(cmd);
+    if (cmd[0] == 'c' && cmd[1] == 'd' && cmd[2] == ' ') {
+        if (!cd(cmd + 3)) {
+            printf("cd: no such directory %s\n", cmd + 3);
+        }
+        return 1;
+    } else if (cmd[0] == 'l' && cmd[1] == 's' && cmd[2] == 0) {
+        ls();
+        return 1;
+    }
+    return 0;
 }

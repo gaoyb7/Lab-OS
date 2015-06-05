@@ -77,7 +77,7 @@ int _do_fork() {
         pcb_tmp.ax = 0;
         pcb_tmp.ss = (PROC_ADDR >> 16) + pcb_id * (PROC_SIZE >> 16);
         pcb_tmp.sp += 2;
-        stack_cpy(cur_pcb.ss << 16, pcb_tmp.ss << 16, 0x500); 
+        stack_cpy(cur_pcb.ss << 16, pcb_tmp.ss << 16, PROC_ADDR & 0xffff); 
         save_pcb(&pcb_tmp, pcb_id);
         //_print_pcb(&pcb_tmp);
         __asm__ volatile("movl %0, %%eax;" : : "m"(pcb_tmp.pid) :);

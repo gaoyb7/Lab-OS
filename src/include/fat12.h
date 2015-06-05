@@ -5,7 +5,7 @@
 
 #define DIR_ENT_ADDR        19
 #define DIR_ENT_SEC_COUNT   14
-#define FILE_ENT_PER_SEC    32
+#define FILE_ENT_PER_SEC    16
 #define FAT_ADDR            1
 #define FAT_SEC_COUNT       9       
 #define FAT_BOOT_SECTOR     0

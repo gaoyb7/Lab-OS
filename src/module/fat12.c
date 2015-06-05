@@ -3,10 +3,14 @@
 Boot_sector_t bootsector;
 Dir_entry_t dir_tmp;
 FAT_t fat;
-int directory = 0;
+uint16_t directory = 0;
 
 void get_fat() {
     read_sector(&fat, 1, FAT_SEC_COUNT);
+}
+
+int get_director() {
+    return directory;
 }
 
 uint16_t get_fat_entry(uint16_t id) {
@@ -34,7 +38,7 @@ uint16_t total_cluster(uint16_t start) {
 
 int file_name_match(File_entry_t *file, char *file_name) {
     static char buff_a[13], buff_b[13];
-    int i, file_name_len;
+    static int i, file_name_len;
 
     file_name_len = __builtin_strlen(file_name);
     if (file_name_len > 12) return 0;
@@ -56,10 +60,12 @@ int file_name_match(File_entry_t *file, char *file_name) {
 }
 
 int get_file_fat_entry(char *file_name) {
-    int sec_count, sec_cnt, found = -1, i, j;
-    File_entry_t *file;
+    static int sec_count, sec_cnt, found, i, j;
+    static File_entry_t *file;
+    get_fat();
     sec_count = total_cluster(directory);
     sec_cnt = directory;
+    found = -1;
 
     for (i = 0; i < sec_count; ++i) {
         if (directory == 0)
@@ -191,10 +197,10 @@ void _read_sector(int address, uint16_t LBA, uint16_t count) {
 }
 
 void ls() {
-    static char file_name[12], file_attr[10];
-    File_entry_t *file;
-    int sec_count = 0, i, j;
-    uint16_t sec_cnt;
+    static char file_name[13], file_attr[10];
+    static File_entry_t *file;
+    static int sec_count = 0, i, j;
+    static uint16_t sec_cnt;
     sec_cnt = directory;
 
     get_fat();
@@ -221,9 +227,10 @@ void ls() {
 }
 
 int cd(char *path) {
-    int dir;
+    static int dir;
     dir = get_file_fat_entry(path);
     if (dir == -1 || dir > 0) return 0;
-    directory = -dir;
+    dir = -dir;
+    directory = dir;
     return 1;
 }
