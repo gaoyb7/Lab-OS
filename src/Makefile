@@ -15,6 +15,7 @@ fs_ver: clean kernel.bin boot.bin user_program
 	mount -o loop,fat=12 -t msdos $(DISK) ./img
 	cp kernel.bin sh.com ./img
 	mkdir ./img/prog
+	mkdir -p ./img/d1/d2/d3/d4
 	cp $(PROG_LIST) ./img/prog
 	umount ./img
 

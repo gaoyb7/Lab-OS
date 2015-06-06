@@ -4,22 +4,22 @@
 #include "stdlib.h"
 #define CMD_BUFFER_LEN 512
 
-const char *cmd_flag=">> ";
+const char *cmd_flag=">>";
 char cmd_buff[CMD_BUFFER_LEN];
 char cmd[CMD_BUFFER_LEN];
+char cnt_dir[13];
 
 uint16_t read_cmd();
 void load_user_program(char *, uint16_t);
 int is_builtin_func(char *cmd);
 int is_spec_prog(char *cmd);
 
-char cc, ss[10];
 uint16_t cmd_len;
 
 int main() {
     get_fat();
     while (1) {
-        puts(cmd_flag);
+        printf("%s %s ", show_cnt_dir(cnt_dir), cmd_flag);
         cmd_len = read_cmd();
 
         if (cmd_len == 0)

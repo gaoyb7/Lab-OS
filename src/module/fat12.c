@@ -4,6 +4,8 @@ Boot_sector_t bootsector;
 Dir_entry_t dir_tmp;
 FAT_t fat;
 uint16_t directory = 0;
+char cnt_dir[512];
+int cnt_dir_len;
 
 void get_fat() {
     read_sector(&fat, 1, FAT_SEC_COUNT);
@@ -38,7 +40,7 @@ uint16_t total_cluster(uint16_t start) {
 
 int file_name_match(File_entry_t *file, char *file_name) {
     static char buff_a[13], buff_b[13];
-    static int i, file_name_len;
+    int i, file_name_len;
 
     file_name_len = __builtin_strlen(file_name);
     if (file_name_len > 12) return 0;
@@ -60,8 +62,8 @@ int file_name_match(File_entry_t *file, char *file_name) {
 }
 
 int get_file_fat_entry(char *file_name) {
-    static int sec_count, sec_cnt, found, i, j;
-    static File_entry_t *file;
+    int sec_count, sec_cnt, found, i, j;
+    File_entry_t *file;
     sec_count = total_cluster(directory);
     sec_cnt = directory;
     found = -1;
@@ -196,9 +198,9 @@ void _read_sector(int address, uint16_t LBA, uint16_t count) {
 
 void ls() {
     static char file_name[13], file_attr[10];
-    static File_entry_t *file;
-    static int sec_count = 0, i, j;
-    static uint16_t sec_cnt;
+    File_entry_t *file;
+    int sec_count = 0, i, j;
+    uint16_t sec_cnt;
     sec_cnt = directory;
 
     sec_count = total_cluster(sec_cnt);
@@ -223,11 +225,38 @@ void ls() {
     }
 }
 
+char* show_cnt_dir(char *dir) {
+    if (directory == 0) {
+        dir[0] = '/';
+        dir[1] = 0;
+        cnt_dir_len = 1;
+    } else
+        dir = cnt_dir;
+    return dir;
+}
+
 int cd(char *path) {
-    static int dir;
+    int dir, i;
     dir = get_file_fat_entry(path);
     if (dir == -1 || dir > 0) return 0;
-    dir = -dir;
-    directory = dir;
+    if (directory == 0) {
+        cnt_dir[0] = '/';
+        cnt_dir[1] = 0;
+        cnt_dir_len = 1;
+    }
+    if (strcmp(path, "..") == 0) {
+        --cnt_dir_len;
+        while (cnt_dir_len && cnt_dir[cnt_dir_len - 1] != '/') 
+            --cnt_dir_len;
+        cnt_dir[cnt_dir_len] = 0;
+    } else if (strcmp(path, ".") != 0) {
+        for (i = 0; path[i]; ++i) {
+            cnt_dir[cnt_dir_len++] = path[i];
+            if ('a' <= path[i] && path[i] <= 'z')
+                cnt_dir[cnt_dir_len - 1] = path[i] - 'a' + 'A';
+        }
+        cnt_dir[cnt_dir_len++] = '/'; cnt_dir[cnt_dir_len] = 0;
+    }
+    directory = -dir;
     return 1;
 }
