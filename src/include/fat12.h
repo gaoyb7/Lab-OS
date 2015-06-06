@@ -88,18 +88,20 @@ typedef struct FAT {
     uint8_t data[SECTOR_SIZE * FAT_SEC_COUNT];
 } __attribute__((packed)) FAT_t;
 
-char* show_file_attrib(File_entry_t *file, char *str);
-char* show_file_name(File_entry_t *file, char *str);
-void read_sector(void *ptr, uint16_t LBA, uint16_t count);
-void _read_sector(int address, uint16_t LBA, uint16_t count);
 void get_fat();
+int get_director();
 uint16_t get_fat_entry(uint16_t id);
 uint16_t next_sector(uint16_t cnt);
 uint16_t total_cluster(uint16_t start);
+int file_name_match(File_entry_t *file, char *file_name);
 int get_file_fat_entry(char *file_name);
+void load_file(int cl, int address);
 void to_date(Date_t *d, uint16_t date);
 void to_time(Time_t *t, uint16_t time);
-void load_file(int cl, int address);
+char* show_file_name(File_entry_t *file, char *str);
+char* show_file_attrib(File_entry_t *file, char *str);
+void read_sector(void *ptr, uint16_t LBA, uint16_t count);
+void _read_sector(int address, uint16_t LBA, uint16_t count);
 void ls();
 int cd(char *path);
 

@@ -215,7 +215,7 @@ void ls() {
         for (j = 0; j < FILE_ENT_PER_SEC; ++j) {
             file = &dir_tmp.data[j];
             if (file->name[0] == 0) continue;
-            printf("%s %s %x\n", show_file_name(file, file_name),\
+            printf("%s %s %d\n", show_file_name(file, file_name),\
                     show_file_attrib(file, file_attr), \
                     file->file_length);
                     //file->start_cluster);

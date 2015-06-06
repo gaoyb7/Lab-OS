@@ -33,7 +33,7 @@ int main() {
 }
 
 void load_ISR() {
-    build_ISR(0x08, timer_demo);
+    //build_ISR(0x08, timer_demo);
     build_ISR(0x09, kb_demo);
     //build_ISR(0x09, timer_demo);
     build_ISR(0x1c, switch_content);
