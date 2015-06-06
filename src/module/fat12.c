@@ -102,18 +102,6 @@ void load_file(int cl, int address) {
     }
 }
 
-void to_date(Date_t *d, uint16_t date) {
-    d->year = (date >> 9) & 0xfffffff;
-    d->month = (date >> 5) & 0xffff;
-    d->day = (date >> 0) & 0xfffff;
-}
-
-void to_time(Time_t *t, uint16_t time) {
-    t->hour = (time >> 11) & 0xfffff;
-    t->minute = (time >> 5) & 0xffffff;
-    t->second = (time >> 0) & 0xfffff;
-}
-
 char* show_file_name(File_entry_t *file, char *str) {
     int i, cnt = 0;
     for (i = 0; i < 13; ++i) str[i] = 0;
@@ -135,6 +123,24 @@ char* show_file_name(File_entry_t *file, char *str) {
     return str;
 }
 
+Date_t to_date(uint16_t date) {
+    Date_t d;
+    d.year = date / 512;
+    d.month = (date - d.year * 512) / 32;
+    d.day = date - d.year * 512 - d.month * 32;
+    d.year += 1980;
+    return d;
+}
+
+Time_t to_time(uint16_t time) {
+    Time_t t;
+    t.hour = time / 2048;
+    t.minute = (time - t.hour * 2048) / 32;
+    t.second = (time - t.hour * 2048 - t.minute * 32) * 2;
+    return t;
+}
+
+
 char* show_file_attrib(File_entry_t *file, char *str) {
     uint8_t attr = file->attribute;
     if (attr & 0x08) {
@@ -153,8 +159,35 @@ char* show_file_attrib(File_entry_t *file, char *str) {
     str[4] = 's';
     str[5] = (attr & 0x04) ? '+' : '-';
     str[6] = 'a';
-    str[7] = (attr & 0x08) ? '+' : '-';
+    str[7] = (attr & 0x20) ? '+' : '-';
     str[8] = 0;
+    return str;
+}
+
+char *show_file_time(File_entry_t *file, char *str) {
+    Time_t t = to_time(file->time);
+    str[0] = t.hour / 10 + '0';
+    str[1] = t.hour % 10 + '0';
+    str[2] = ':';
+    str[3] = t.minute / 10 + '0';
+    str[4] = t.minute % 10 + '0';
+    str[5] = 0;
+    return str;
+}
+
+char *show_file_date(File_entry_t *file, char *str) {
+    Date_t d = to_date(file->date);
+    str[0] = d.year / 1000 + '0';
+    str[1] = d.year / 100 % 10 + '0';
+    str[2] = d.year / 10 % 10 + '0';
+    str[3] = d.year % 10 + '0';
+    str[4] = '-';
+    str[5] = d.month / 10 + '0';
+    str[6] = d.month % 10 + '0';
+    str[7] = '-';
+    str[8] = d.day / 10 + '0';
+    str[9] = d.day % 10 + '0';
+    str[10] = 0;
     return str;
 }
 
@@ -197,15 +230,15 @@ void _read_sector(int address, uint16_t LBA, uint16_t count) {
 }
 
 void ls() {
-    static char file_name[13], file_attr[10];
+    static char file_name[13], file_attr[10], file_time[6], file_date[12];
     File_entry_t *file;
     int sec_count = 0, i, j;
     uint16_t sec_cnt;
     sec_cnt = directory;
 
     sec_count = total_cluster(sec_cnt);
-    printf("Name         Attrib   Size\n");
-    printf("--------------------------\n");
+    printf("Name         Attrib   Time  Date       Size\n");
+    printf("-------------------------------------------\n");
     for (i = 0; i < sec_count; ++i) {
         if (directory == 0)
             read_sector(&dir_tmp, i + 19, 1);
@@ -217,8 +250,10 @@ void ls() {
         for (j = 0; j < FILE_ENT_PER_SEC; ++j) {
             file = &dir_tmp.data[j];
             if (file->name[0] == 0) continue;
-            printf("%s %s %d\n", show_file_name(file, file_name),\
+            printf("%s %s %s %s %d\n", show_file_name(file, file_name),\
                     show_file_attrib(file, file_attr), \
+                    show_file_time(file, file_time), \
+                    show_file_date(file, file_date), \
                     file->file_length);
             //file->start_cluster);
         }
