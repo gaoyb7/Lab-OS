@@ -4,10 +4,10 @@
 #include "stdlib.h"
 #define CMD_BUFFER_LEN 512
 
-const char *cmd_flag=">>";
+const char *cmd_flag="#";
 char cmd_buff[CMD_BUFFER_LEN];
 char cmd[CMD_BUFFER_LEN];
-char cnt_dir[13];
+char cnt_dir[512];
 
 uint16_t read_cmd();
 void load_user_program(char *, uint16_t);

@@ -5,7 +5,7 @@ Dir_entry_t dir_tmp;
 FAT_t fat;
 uint16_t directory = 0;
 char cnt_dir[512];
-int cnt_dir_len;
+int cnt_dir_len = 1;
 
 void get_fat() {
     read_sector(&fat, 1, FAT_SEC_COUNT);
@@ -170,8 +170,8 @@ void read_sector(void *ptr, uint16_t LBA, uint16_t count) {
             "int $0x13;"
             "popw %%es;"
             : : "a"((0x02 << 8) + count), "b"(0x0000), \
-                "c"(((uint16_t)cylinder << 8) + sector), \
-                "d"((uint16_t)head << 8) : "di", "si"
+            "c"(((uint16_t)cylinder << 8) + sector), \
+            "d"((uint16_t)head << 8) : "di", "si"
             );
     _read_mem(ptr, 0x40000000, count * SECTOR_SIZE);
     asm volatile("sti;");
@@ -188,10 +188,10 @@ void _read_sector(int address, uint16_t LBA, uint16_t count) {
             "int $0x13;"
             "popw %%es;"
             : : "a"((0x02 << 8) + count), "b"(address & 0xffff), \
-                "c"(((uint16_t)cylinder << 8) + sector), \
-                "d"((uint16_t)head << 8), \
-                "D"(address >> 16)
-                : "si"
+            "c"(((uint16_t)cylinder << 8) + sector), \
+            "d"((uint16_t)head << 8), \
+            "D"(address >> 16)
+            : "si"
             );
     asm volatile("sti;");
 }
@@ -220,18 +220,22 @@ void ls() {
             printf("%s %s %d\n", show_file_name(file, file_name),\
                     show_file_attrib(file, file_attr), \
                     file->file_length);
-                    //file->start_cluster);
+            //file->start_cluster);
         }
     }
 }
 
 char* show_cnt_dir(char *dir) {
+    int i;
     if (directory == 0) {
         dir[0] = '/';
         dir[1] = 0;
         cnt_dir_len = 1;
-    } else
-        dir = cnt_dir;
+    } else {
+        for (i = 0; i < cnt_dir_len; ++i)
+            dir[i] = cnt_dir[i];
+        dir[cnt_dir_len] = 0;
+    }
     return dir;
 }
 
@@ -239,14 +243,9 @@ int cd(char *path) {
     int dir, i;
     dir = get_file_fat_entry(path);
     if (dir == -1 || dir > 0) return 0;
-    if (directory == 0) {
-        cnt_dir[0] = '/';
-        cnt_dir[1] = 0;
-        cnt_dir_len = 1;
-    }
     if (strcmp(path, "..") == 0) {
         --cnt_dir_len;
-        while (cnt_dir_len && cnt_dir[cnt_dir_len - 1] != '/') 
+        while (cnt_dir_len && cnt_dir[cnt_dir_len - 1] != '/')
             --cnt_dir_len;
         cnt_dir[cnt_dir_len] = 0;
     } else if (strcmp(path, ".") != 0) {
