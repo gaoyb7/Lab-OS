@@ -19,7 +19,7 @@ uint16_t cmd_len;
 int main() {
     get_fat();
     while (1) {
-        printf("%s %s ", show_cnt_dir(cnt_dir), cmd_flag);
+        printf("%s %s ", pwd(cnt_dir), cmd_flag);
         cmd_len = read_cmd();
 
         if (cmd_len == 0)
@@ -111,9 +111,12 @@ int is_builtin_func(char *cmd) {
     int len;
     len = __builtin_strlen(cmd);
     if (cmd[0] == 'c' && cmd[1] == 'd' && cmd[2] == ' ') {
-        if (!cd(cmd + 3)) {
+        if (!cd(cmd + 3))
             printf("cd: no such directory %s\n", cmd + 3);
-        }
+        return 1;
+    } else if (cmd[0] == 'c' && cmd[1] == 'a' && cmd[2] =='t' && cmd[3] == ' ') {
+        if (!cat(cmd + 4))
+            printf("cat: no such file %s\n", cmd + 4);
         return 1;
     } else if (strcmp(cmd, "ls") == 0) {
         ls();

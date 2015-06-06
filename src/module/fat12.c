@@ -1,6 +1,7 @@
 #include "fat12.h"
 
 Boot_sector_t bootsector;
+Sector_t sec_tmp;
 Dir_entry_t dir_tmp;
 FAT_t fat;
 uint16_t directory = 0;
@@ -229,6 +230,41 @@ void _read_sector(int address, uint16_t LBA, uint16_t count) {
     asm volatile("sti;");
 }
 
+void print_sector(Sector_t *sec) {
+    int i, cnt = 0;
+    char ch;
+    for (i = 0; i < SECTOR_SIZE; ++i) {
+        if (sec->data[i] == 0) break;
+        if (sec->data[i] == '\r' || sec->data[i] == '\n') {
+            printf("\n");
+            ++cnt;
+            /*
+            if (cnt == 20) {
+                cnt = 0;
+                printf("--- More ---");
+                while (ch = getch(), ch != '\r');
+                printf("\n");
+            }
+            */
+        }
+        else printf("%c", sec->data[i]);
+    }
+}
+
+char* pwd(char *dir) {
+    int i;
+    if (directory == 0) {
+        dir[0] = '/';
+        dir[1] = 0;
+        cnt_dir_len = 1;
+    } else {
+        for (i = 0; i < cnt_dir_len; ++i)
+            dir[i] = cnt_dir[i];
+        dir[cnt_dir_len] = 0;
+    }
+    return dir;
+}
+
 void ls() {
     static char file_name[13], file_attr[10], file_time[6], file_date[12];
     File_entry_t *file;
@@ -255,23 +291,8 @@ void ls() {
                     show_file_time(file, file_time), \
                     show_file_date(file, file_date), \
                     file->file_length);
-            //file->start_cluster);
         }
     }
-}
-
-char* show_cnt_dir(char *dir) {
-    int i;
-    if (directory == 0) {
-        dir[0] = '/';
-        dir[1] = 0;
-        cnt_dir_len = 1;
-    } else {
-        for (i = 0; i < cnt_dir_len; ++i)
-            dir[i] = cnt_dir[i];
-        dir[cnt_dir_len] = 0;
-    }
-    return dir;
 }
 
 int cd(char *path) {
@@ -292,5 +313,18 @@ int cd(char *path) {
         cnt_dir[cnt_dir_len++] = '/'; cnt_dir[cnt_dir_len] = 0;
     }
     directory = -dir;
+    return 1;
+}
+
+int cat(char *file_name) {
+    int sec_cnt, sec_count, i;
+    sec_cnt = get_file_fat_entry(file_name);
+    if (sec_cnt <= 0) return 0;
+    sec_count = total_cluster(sec_cnt);
+    for (i = 0; i < sec_count; ++i) {
+        read_sector(&sec_tmp, sec_cnt + 31, 1);
+        sec_cnt = next_sector(sec_cnt);
+        print_sector(&sec_tmp);
+    }
     return 1;
 }

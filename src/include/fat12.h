@@ -100,9 +100,14 @@ Date_t to_date(uint16_t date);
 Time_t to_time(uint16_t time);
 char* show_file_name(File_entry_t *file, char *str);
 char* show_file_attrib(File_entry_t *file, char *str);
+char *show_file_time(File_entry_t *file, char *str);
+char *show_file_date(File_entry_t *file, char *str);
 void read_sector(void *ptr, uint16_t LBA, uint16_t count);
 void _read_sector(int address, uint16_t LBA, uint16_t count);
+char* pwd(char *dir);
 void ls();
 int cd(char *path);
+int cat(char *file_name);
+
 
 #endif
