@@ -103,6 +103,38 @@ int strcmp(char *stra, char *strb) {
     return 0;
 }
 
+void strncpy(char *stra, char *strb, int len) {
+    while (len--)
+        *strb++ = *stra++;
+    *strb = 0;
+}
+
+/*
+void strcat(char *stra, char *strb) {
+    int len = __builtin_strlen(stra);
+    stra += len;
+    while (*strb)
+        *stra++ = *strb++;
+    *stra = 0;
+}
+
+void to_upper(char *str) {
+    while (*str) {
+        if ('a' <= *str && *str <= 'z')
+            *str = *str - 'a' + 'A';
+        ++str;
+    }
+}
+
+void to_lower(char *str) {
+    while (*str) {
+        if ('a' <= *str && *str <= 'z')
+            *str = *str - 'A' + 'a';
+        ++str;
+    }
+}
+*/
+
 void memcpy(void *dest, void *source, int size) {
     while (size--) {
         *(char *)dest++ = *(char *)source++;

@@ -25,16 +25,13 @@ int main() {
         if (cmd_len == 0)
             continue;
 
-        static uint16_t i, j, p, len;
-        char flag = 1;
+        static uint16_t i, j, p;
         p = 0;
 
         while (p < cmd_len) {
             for (i = p; i < cmd_len && cmd_buff[i] != ';'; ++i);
-            len = i - p;
-            for (j = 0; p < i; ++j, ++p) 
-                cmd[j] = cmd_buff[p];
-            load_user_program(cmd, len);
+            strncpy(cmd_buff + p, cmd, i - p);
+            load_user_program(cmd, i - p);
             p = i + 1;
             puts("\n");
         }
@@ -49,6 +46,7 @@ uint16_t read_cmd() {
 }
 
 void load_user_program(char *cmd, uint16_t len) {
+    //printf("%s\n", cmd);
     static uint16_t i;
     uint8_t has_run = 0, flag = 1, has_ext = 0;
 
@@ -120,6 +118,9 @@ int is_builtin_func(char *cmd) {
         return 1;
     } else if (strcmp(cmd, "ls") == 0) {
         ls();
+        return 1;
+    } else if (strcmp(cmd, "pwd") == 0) {
+        printf("%s\n", pwd(cnt_dir));
         return 1;
     }
     return 0;

@@ -94,12 +94,11 @@ int get_file_fat_entry(char *file_name) {
 }
 
 void load_file(int cl, int address) {
-    int tot = 0;
-    while (0 < cl && cl < 0xff0) {
+    int tot = total_cluster(cl);
+    while (tot--) {
         _read_sector(address, cl + 31, 1);
         address += SECTOR_SIZE;
         cl = next_sector(cl);
-        ++tot;
     }
 }
 
@@ -193,6 +192,7 @@ char *show_file_date(File_entry_t *file, char *str) {
 }
 
 void read_sector(void *ptr, uint16_t LBA, uint16_t count) {
+    //printf("count %d\n", count);
     asm volatile("cli; pushw %es;");
     uint8_t cylinder = LBA / (FLOPPY_SPT * FLOPPY_HPC);
     uint8_t head = (LBA / FLOPPY_SPT) % FLOPPY_HPC;
@@ -210,6 +210,27 @@ void read_sector(void *ptr, uint16_t LBA, uint16_t count) {
     _read_mem(ptr, 0x40000000, count * SECTOR_SIZE);
     asm volatile("sti;");
 }
+
+/*
+void write_sector(void *ptr, uint16_t LBA, uint16_t count) {
+    asm volatile("cli; pushw %es;");
+    uint8_t cylinder = LBA / (FLOPPY_SPT * FLOPPY_HPC);
+    uint8_t head = (LBA / FLOPPY_SPT) % FLOPPY_HPC;
+    uint8_t sector = LBA % FLOPPY_SPT + 1;
+
+    _write_mem(0x40000000, ptr, count * SECTOR_SIZE);
+    __asm__ volatile(
+            "movw $0x4000, %%di;"
+            "movw %%di, %%es;"
+            "int $0x13;"
+            "popw %%es;"
+            : : "a"((0x03 << 8) + count), "b"(0x0000), \
+            "c"(((uint16_t)cylinder << 8) + sector), \
+            "d"((uint16_t)head << 8) : "di", "si"
+            );
+    asm volatile("sti;");
+}
+*/
 
 void _read_sector(int address, uint16_t LBA, uint16_t count) {
     asm volatile("cli; pushw %es;");
@@ -286,11 +307,12 @@ void ls() {
         for (j = 0; j < FILE_ENT_PER_SEC; ++j) {
             file = &dir_tmp.data[j];
             if (file->name[0] == 0) continue;
-            printf("%s %s %s %s %d\n", show_file_name(file, file_name),\
+            printf("%s %s %s %s %d %d\n", show_file_name(file, file_name),\
                     show_file_attrib(file, file_attr), \
                     show_file_time(file, file_time), \
                     show_file_date(file, file_date), \
-                    file->file_length);
+                    file->file_length, \
+                    file->start_cluster);
         }
     }
 }
