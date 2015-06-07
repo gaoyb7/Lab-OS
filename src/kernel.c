@@ -6,7 +6,6 @@ __asm__("jmp $0x1000, $main\n");
 
 #include "interrupt.h"
 #include "stdint.h"
-//#include "syscall.h"
 #include "process.h"
 #include "stdio.h"
 #include "stdlib.h"
@@ -23,11 +22,12 @@ void fat12_test();
 int tmp;
 
 int main() {
-    clear();
+    //clear();
     printf("%s\n", welcome_msg);
     load_ISR();
     //fat12_info();
     get_fat();
+    cd("prog");
     schedule_prog("sh.com", 0);
     getch();
 }

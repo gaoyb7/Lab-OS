@@ -2,21 +2,25 @@ LD=ld
 LDFLAGS=-N -melf_i386 -nostdlib
 AS=nasm
 ASFLAGS=-f elf
-#CC=i386-elf-gcc
-CC=gcc
+CC=i386-elf-gcc
+#CC=gcc
 CFLAGS=-m16 -nostdlib -mpreferred-stack-boundary=2 -ffreestanding -I./include
 DISK=disk.img
-PROG_LIST=reboot.com time.com date.com help.com clear.com io_test.com rep1.com rep2.com rep3.com rep4.com sh.com top.com fork.com
+PROG_LIST=reboot.com time.com date.com help.com clear.com io_test.com rep1.com rep2.com sh.com top.com fork.com
 
 fs_ver: clean kernel.bin boot.bin user_program
 	sudo -u gaoyb7 dd if=/dev/zero of=$(DISK) count=2880
 	dd if=boot.bin of=$(DISK) conv=notrunc  
 	printf '\x55\xaa' | dd of=$(DISK) bs=1 seek=510 count=2 conv=notrunc
 	mount -o loop,fat=12 -t msdos $(DISK) ./img
-	cp kernel.bin sh.com ./img
+	cp kernel.bin ./img
 	mkdir ./img/prog
 	mkdir -p ./img/d1/d2/d3/d4
 	cp $(PROG_LIST) ./img/prog
+	cp date.com ./img/date2.com
+	cp date.com ./img/date3.com
+	cp date.com ./img/date4.com
+	cp date.com ./img/date5.com
 	umount ./img
 
 run:

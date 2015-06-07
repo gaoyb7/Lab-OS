@@ -95,7 +95,7 @@ uint16_t next_sector(uint16_t cnt);
 uint16_t total_cluster(uint16_t start);
 int file_name_match(File_entry_t *file, char *file_name);
 int get_file_fat_entry(char *file_name);
-void load_file(int cl, int address);
+void load_file(uint16_t cl, int address);
 Date_t to_date(uint16_t date);
 Time_t to_time(uint16_t time);
 char* show_file_name(File_entry_t *file, char *str);
