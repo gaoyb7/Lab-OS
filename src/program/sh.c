@@ -46,7 +46,6 @@ uint16_t read_cmd() {
 }
 
 void load_user_program(char *cmd, uint16_t len) {
-    //printf("%s\n", cmd);
     static uint16_t i;
     uint8_t has_run = 0, flag = 1, has_ext = 0;
 
