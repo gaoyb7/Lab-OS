@@ -114,8 +114,13 @@ int is_builtin_func(char *cmd) {
             printf("cp: missing destination file operand after '%s'\n", cmd + 3);
             return 1;
         }
+
         cmd[tmp + 3] = 0;
         cp(cmd + 3, cmd + tmp + 4);
+        return 1;
+
+    } else if (strncmp(cmd, "ECHO ", 5) == 0) {
+        printf("%s\n", cmd + 5);
         return 1;
 
     } else if (strcmp(cmd, "LS") == 0) {
