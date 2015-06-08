@@ -61,7 +61,7 @@ void load_user_program(char *cmd, int len) {
         cmd[len] = 0;
     }
 
-    if (strchr(cmd, '.') == 0)
+    if (strchr(cmd, '.') == -1)
         strcat(cmd, ".COM");
 
     if (is_spec_prog(cmd) == 1) 
@@ -90,22 +90,32 @@ int is_spec_prog(char *cmd) {
 }
 
 int is_builtin_func(char *cmd) {
-    int len;
+    int len, tmp;
     len = __builtin_strlen(cmd);
 
     //printf("%s\n", cmd);
     if (strncmp(cmd, "CD ", 3) == 0) {
         if (!cd(cmd + 3))
-            printf("cd: no such directory %s\n", cmd + 3);
+            printf("cd: no such directory '%s'\n", cmd + 3);
         return 1;
 
     } else if (strncmp(cmd, "CAT ", 4) == 0) {
         if (!cat(cmd + 4))
-            printf("cat: no such file %s\n", cmd + 4);
+            printf("cat: file not found '%s'\n", cmd + 4);
         return 1;
 
     } else if (strncmp(cmd, "RM ", 3) == 0) {
         rm(cmd + 3);
+        return 1;
+
+    } else if (strncmp(cmd, "CP ", 3) == 0) {
+        tmp = strchr(cmd + 3, ' ');
+        if (tmp == -1) {
+            printf("cp: missing destination file operand after '%s'\n", cmd + 3);
+            return 1;
+        }
+        cmd[tmp + 3] = 0;
+        cp(cmd + 3, cmd + tmp + 4);
         return 1;
 
     } else if (strcmp(cmd, "LS") == 0) {
@@ -120,6 +130,7 @@ int is_builtin_func(char *cmd) {
         clear();
         return 1;
     }
+
     return 0;
 }
 

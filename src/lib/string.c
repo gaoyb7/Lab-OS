@@ -33,11 +33,12 @@ void strcpy(char *stra, char *strb) {
 }
 
 int strchr(char *str, char cc) {
+    int cnt = 0;
     while (*str) {
-        if (*str == cc) return 1;
-        ++str;
+        if (*str == cc) return cnt;
+        ++str; ++cnt;
     }
-    return 0;
+    return -1;
 }
 
 void strcat(char *stra, char *strb) {

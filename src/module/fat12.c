@@ -380,10 +380,10 @@ int rm(char *file_name) {
     file_start_cl = get_file_fat_entry(file_name, 1);
 
     if (file_start_cl == -1) {
-        printf("Error: file not found %s\n", file_name);
+        printf("rm: file not found '%s'\n", file_name);
         return 0;
     } else if (file_start_cl == 0 || file_start_cl < -1) {
-        printf("Error: %s is a directory\n", file_name);
+        printf("rm: '%s' is a directory\n", file_name);
         return 0;
     }
 
@@ -391,4 +391,10 @@ int rm(char *file_name) {
     //printf("%d\n", get_fat_entry(file_start_cl));
 
     return 1;
+}
+
+int cp(char *src, char *dst) {
+    printf("SRC_FILE:|%s|     DST_FILE:|%s|\n", src, dst);
+    int file_start_cl;
+    file_start_cl = get_file_fat_entry(src, 0);
 }
