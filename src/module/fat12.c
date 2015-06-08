@@ -316,11 +316,8 @@ int cd(char *path) {
             --cnt_dir_len;
         cnt_dir[cnt_dir_len] = 0;
     } else if (strcmp(path, ".") != 0) {
-        for (i = 0; path[i]; ++i) {
+        for (i = 0; path[i]; ++i)
             cnt_dir[cnt_dir_len++] = path[i];
-            if ('a' <= path[i] && path[i] <= 'z')
-                cnt_dir[cnt_dir_len - 1] = path[i] - 'a' + 'A';
-        }
         cnt_dir[cnt_dir_len++] = '/'; cnt_dir[cnt_dir_len] = 0;
     }
     directory = -dir;
