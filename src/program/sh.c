@@ -92,20 +92,31 @@ int is_spec_prog(char *cmd) {
 int is_builtin_func(char *cmd) {
     int len;
     len = __builtin_strlen(cmd);
+
+    //printf("%s\n", cmd);
     if (strncmp(cmd, "CD ", 3) == 0) {
         if (!cd(cmd + 3))
             printf("cd: no such directory %s\n", cmd + 3);
         return 1;
+
     } else if (strncmp(cmd, "CAT ", 4) == 0) {
         if (!cat(cmd + 4))
             printf("cat: no such file %s\n", cmd + 4);
         return 1;
+
+    } else if (strncmp(cmd, "RM ", 3) == 0) {
+        if (!rm(cmd + 3)) 
+            printf("rm: no such file %s\n", cmd + 3);
+        return 1;
+
     } else if (strcmp(cmd, "LS") == 0) {
         ls();
         return 1;
+
     } else if (strcmp(cmd, "PWD") == 0) {
         printf("%s\n", pwd(cnt_dir));
         return 1;
+
     } else if (strcmp(cmd, "CLEAR") == 0) {
         clear();
         return 1;

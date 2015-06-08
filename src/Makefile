@@ -18,6 +18,7 @@ fs_ver: clean kernel.bin boot.bin user_program
 	mkdir -p ./img/d1/d2/d3/d4
 	cp $(PROG_LIST) ./img/prog
 	cp hello.txt ./img
+	cp hello.txt ./img/a.txt
 	umount ./img
 
 run:

@@ -19,4 +19,6 @@ void to_lower(char *str);
 
 int del_blank(char *str);
 
+void memset(char *addr, char val, int size);
+
 #endif

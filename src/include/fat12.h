@@ -80,13 +80,12 @@ typedef struct Time {
 
 // Directory entry structure
 typedef struct Dir_entry {
-    //File_entry_t data[SECTOR_SIZE / sizeof(File_entry_t)];
-    File_entry_t data[16];
+    File_entry_t data[SECTOR_SIZE / sizeof(File_entry_t)];
 } __attribute__((packed)) Dir_entry_t;
 
 // Physical FAT structure
 typedef struct FAT {
-    uint8_t data[4608];
+    uint8_t data[SECTOR_SIZE * FAT_SEC_COUNT];
 } __attribute__((packed)) FAT_t;
 
 void get_fat();
@@ -95,7 +94,7 @@ uint16_t get_fat_entry(uint16_t id);
 uint16_t next_sector(uint16_t cnt);
 uint16_t total_cluster(uint16_t start);
 int file_name_match(File_entry_t *file, char *file_name);
-int get_file_fat_entry(char *file_name);
+int get_file_fat_entry(char *file_name, int flag);
 void load_file(uint16_t cl, int address);
 Date_t to_date(uint16_t date);
 Time_t to_time(uint16_t time);
@@ -105,6 +104,7 @@ char *show_file_time(File_entry_t *file, char *str);
 char *show_file_date(File_entry_t *file, char *str);
 void read_sector(void *ptr, uint16_t LBA, uint16_t count);
 void _read_sector(int address, uint16_t LBA, uint16_t count);
+void write_sector(void *ptr, uint16_t LBA, uint16_t count);
 char* pwd(char *dir);
 void ls();
 int cd(char *path);

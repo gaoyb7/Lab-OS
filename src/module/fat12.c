@@ -1,4 +1,5 @@
 #include "fat12.h"
+#include "string.h"
 
 Boot_sector_t bootsector;
 Sector_t sec_tmp;
@@ -12,18 +13,33 @@ void get_fat() {
     read_sector(&fat, 1, FAT_SEC_COUNT);
 }
 
+void update_fat() {
+    write_sector(&fat, 1, FAT_SEC_COUNT);
+    get_fat();
+}
+
 int get_director() {
     return directory;
 }
 
-uint16_t get_fat_entry(uint16_t id) {
-    int offset = offset = id + id / 2;
+uint16_t get_fat_entry(uint16_t cl) {
+    int offset = cl + cl / 2;
     uint16_t val = *(uint16_t*)&fat.data[offset];
-    if (id % 2 == 1)
+    if (cl % 2 == 1)
         val >>= 4;
     else
         val = val & 0x0fff;
     return val;
+}
+
+void set_fat_entry(uint16_t cl, uint16_t new_val) {
+    int offset = cl + cl / 2;
+    uint16_t val = *(uint16_t*)&fat.data[offset];
+    if (cl % 2 == 1)
+        val = (new_val << 4) + (val & 0xf);
+    else
+        val = (val & 0xf000) + new_val;
+    *(uint16_t*)&fat.data[offset] = val;
 }
 
 uint16_t next_sector(uint16_t cnt) {
@@ -59,7 +75,7 @@ int file_name_match(File_entry_t *file, char *file_name) {
     return 1;
 }
 
-int get_file_fat_entry(char *file_name) {
+int get_file_fat_entry(char *file_name, int flag) {
     int sec_count, sec_cnt, found, i, j;
     File_entry_t *file;
     sec_count = total_cluster(directory);
@@ -72,20 +88,32 @@ int get_file_fat_entry(char *file_name) {
         else
             read_sector(&dir_tmp, sec_cnt + 31, 1);
 
-        if (directory != 0)
-            sec_cnt = get_fat_entry(sec_cnt);
-
         for (j = 0; j < FILE_ENT_PER_SEC; ++j) {
             file = &dir_tmp.data[j];
             if (file->name[0] == 0) continue;
+
             if (file_name_match(file, file_name) == 1) {
-                found = file->start_cluster;
                 if ((file->attribute & FILE_DIRECTORY) != 0)
-                    found = -found;
+                    found = -file->start_cluster;
+                else
+                    found = file->start_cluster;
                 break;
             }
         }
-        if (found != -1) break;
+        if (found != -1) {
+            if (flag == 1 && found > 0) {
+                memset((char *)file, 0, sizeof(File_entry_t));
+                //printf("ENTER\n"); getch();
+                if (directory == 0)
+                    write_sector(&dir_tmp, i + 19, 1);
+                else
+                    write_sector(&dir_tmp, sec_cnt + 31, 1);
+                //printf("LEAVE\n"); getch();
+            }
+            break;
+        }
+        if (directory != 0)
+            sec_cnt = get_fat_entry(sec_cnt);
     }
     return found;
 }
@@ -232,7 +260,6 @@ void write_sector(void *ptr, uint16_t LBA, uint16_t count) {
             "movw %%ds, %%di;"
             "movw %%di, %%es;"
             "int $0x13;"
-            "popw %%es;"
             : : "a"((0x03 << 8) + count), "b"(ptr), \
             "c"(((uint16_t)cylinder << 8) + sector), \
             "d"((uint16_t)head << 8) : "di", "si"
@@ -301,14 +328,13 @@ void ls() {
                     show_file_time(file, file_time), \
                     show_file_date(file, file_date), \
                     file->file_length);
-                    // file->start_cluster);
         }
     }
 }
 
 int cd(char *path) {
     int dir, i;
-    dir = get_file_fat_entry(path);
+    dir = get_file_fat_entry(path, 0);
     if (dir == -1 || dir > 0) return 0;
     if (strcmp(path, "..") == 0) {
         --cnt_dir_len;
@@ -326,7 +352,7 @@ int cd(char *path) {
 
 int cat(char *file_name) {
     int sec_cnt, sec_count, i;
-    sec_cnt = get_file_fat_entry(file_name);
+    sec_cnt = get_file_fat_entry(file_name, 0);
     if (sec_cnt <= 0) return 0;
     sec_count = total_cluster(sec_cnt);
     for (i = 0; i < sec_count; ++i) {
@@ -334,5 +360,33 @@ int cat(char *file_name) {
         sec_cnt = get_fat_entry(sec_cnt);
         print_sector(&sec_tmp);
     }
+    return 1;
+}
+
+void rm_file(uint16_t cl) {
+    uint16_t next;
+    while (0 < cl && cl < 0xff0) {
+        next = get_fat_entry(cl);
+        set_fat_entry(cl, 0);
+        cl = next;
+    }
+    update_fat();
+}
+
+int rm(char *file_name) {
+    int file_start_cl;
+    file_start_cl = get_file_fat_entry(file_name, 1);
+
+    if (file_start_cl == -1) {
+        printf("Error: file not found %s\n", file_name);
+        return 0;
+    } else if (file_start_cl == 0 || file_start_cl < -1) {
+        printf("Error: %s is a directory\n", file_name);
+        return 0;
+    }
+
+    rm_file((uint16_t)file_start_cl);
+    //printf("%d\n", get_fat_entry(file_start_cl));
+
     return 1;
 }

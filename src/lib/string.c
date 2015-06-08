@@ -76,3 +76,7 @@ int del_blank(char *str) {
     return len;
 }
 
+void memset(char *addr, char val, int size) {
+    while (size--)
+        *addr++ = val;
+}
