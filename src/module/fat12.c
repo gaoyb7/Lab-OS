@@ -34,7 +34,7 @@ uint16_t total_cluster(uint16_t start) {
     uint16_t c = 1, cl = start;
     if (start == 0) 
         return DIR_ENT_SEC_COUNT;
-    while (cl = next_sector(cl), 0 < cl && cl < 0xff0) c++;
+    while (cl = get_fat_entry(cl), 0 < cl && cl < 0xff0) ++c;
     if (cl == 0) --c;
     return c;
 }
@@ -76,7 +76,7 @@ int get_file_fat_entry(char *file_name) {
             read_sector(&dir_tmp, sec_cnt + 31, 1);
 
         if (directory != 0)
-            sec_cnt = next_sector(sec_cnt);
+            sec_cnt = get_fat_entry(sec_cnt);
 
         for (j = 0; j < FILE_ENT_PER_SEC; ++j) {
             file = &dir_tmp.data[j];
@@ -94,14 +94,12 @@ int get_file_fat_entry(char *file_name) {
 }
 
 void load_file(uint16_t cl, int address) {
-    int tot = total_cluster(cl);
-    while (tot--) {
-        printf("%x ", cl);
+    uint16_t tot = total_cluster(cl);
+    while (0 < cl && cl < 0xff0) {
         _read_sector(address, cl + 31, 1);
         address += SECTOR_SIZE;
-        cl = next_sector(cl);
+        cl = get_fat_entry(cl);
     }
-    printf("\n");
 }
 
 char* show_file_name(File_entry_t *file, char *str) {
@@ -193,26 +191,25 @@ char *show_file_date(File_entry_t *file, char *str) {
 }
 
 void read_sector(void *ptr, uint16_t LBA, uint16_t count) {
-    asm volatile("cli; pushw %es;");
+    asm volatile("pushl %ebx; pushw %es; cli;");
     uint8_t cylinder = LBA / (FLOPPY_SPT * FLOPPY_HPC);
     uint8_t head = (LBA / FLOPPY_SPT) % FLOPPY_HPC;
     uint8_t sector = LBA % FLOPPY_SPT + 1;
 
     __asm__ volatile(
-            "movw $0x4000, %%di;"
+            "movw $0x6000, %%di;"
             "movw %%di, %%es;"
             "int $0x13;"
-            "popw %%es;"
             : : "a"((0x02 << 8) + count), "b"(0x0000), \
             "c"(((uint16_t)cylinder << 8) + sector), \
             "d"((uint16_t)head << 8) : "di", "si"
             );
-    _read_mem(ptr, 0x40000000, count * SECTOR_SIZE);
-    asm volatile("sti;");
+    _read_mem(ptr, 0x60000000, count * SECTOR_SIZE);
+    asm volatile("sti; popw %es; popl %ebx;");
 }
 
 void _read_sector(int address, uint16_t LBA, uint16_t count) {
-    asm volatile("cli; pushw %es;");
+    asm volatile("pushl %ebx; pushw %es; cli;");
     uint8_t cylinder = LBA / (FLOPPY_SPT * FLOPPY_HPC);
     uint8_t head = (LBA / FLOPPY_SPT) % FLOPPY_HPC;
     uint8_t sector = LBA % FLOPPY_SPT + 1;
@@ -220,14 +217,13 @@ void _read_sector(int address, uint16_t LBA, uint16_t count) {
     __asm__ volatile(
             "movw %%di, %%es;"
             "int $0x13;"
-            "popw %%es;"
             : : "a"((0x02 << 8) + count), "b"(address & 0xffff), \
             "c"(((uint16_t)cylinder << 8) + sector), \
             "d"((uint16_t)head << 8), \
             "D"(address >> 16)
             : "si"
             );
-    asm volatile("sti;");
+    asm volatile("sti; popw %es; popl %ebx;");
 }
 
 void write_sector(void *ptr, uint16_t LBA, uint16_t count) {
@@ -236,7 +232,7 @@ void write_sector(void *ptr, uint16_t LBA, uint16_t count) {
     uint8_t head = (LBA / FLOPPY_SPT) % FLOPPY_HPC;
     uint8_t sector = LBA % FLOPPY_SPT + 1;
 
-    _write_mem(0x40000000, ptr, count * SECTOR_SIZE);
+    _write_mem(0x60000000, ptr, count * SECTOR_SIZE);
     __asm__ volatile(
             "movw $0x4000, %%di;"
             "movw %%di, %%es;"
@@ -301,16 +297,16 @@ void ls() {
             read_sector(&dir_tmp, sec_cnt + 31, 1);
 
         if (directory != 0)
-            sec_cnt = next_sector(sec_cnt);
+            sec_cnt = get_fat_entry(sec_cnt);
         for (j = 0; j < FILE_ENT_PER_SEC; ++j) {
             file = &dir_tmp.data[j];
             if (file->name[0] == 0) continue;
-            printf("%s %s %s %s %d %x\n", show_file_name(file, file_name),\
+            printf("%s %s %s %s %d\n", show_file_name(file, file_name),\
                     show_file_attrib(file, file_attr), \
                     show_file_time(file, file_time), \
                     show_file_date(file, file_date), \
-                    file->file_length, \
-                    file->start_cluster);
+                    file->file_length);
+                    // file->start_cluster);
         }
     }
 }
@@ -343,7 +339,7 @@ int cat(char *file_name) {
     sec_count = total_cluster(sec_cnt);
     for (i = 0; i < sec_count; ++i) {
         read_sector(&sec_tmp, sec_cnt + 31, 1);
-        sec_cnt = next_sector(sec_cnt);
+        sec_cnt = get_fat_entry(sec_cnt);
         print_sector(&sec_tmp);
     }
     return 1;

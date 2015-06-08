@@ -61,7 +61,7 @@ int schedule_prog(char *proc_name, uint16_t flags) {
     static int address;
     address = PROC_ADDR + pid_count * PROC_SIZE;
     start_fat = get_file_fat_entry(proc_name);
-    if (start_fat == -1) return 0;
+    if (start_fat <= 0) return 0;
     load_file(start_fat, address);
 
     cur_pcb.cs = cur_pcb.ds = cur_pcb.es = cur_pcb.ss = address >> 16;

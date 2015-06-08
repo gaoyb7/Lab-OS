@@ -1,7 +1,7 @@
 #include "comm_head.h"
 #include "process.h"
 #include "stdio.h"
-#include "stdlib.h"
+#include "string.h"
 #define CMD_BUFFER_LEN 512
 
 const char *cmd_flag="#";

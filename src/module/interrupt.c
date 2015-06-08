@@ -70,7 +70,7 @@ int _do_fork() {
         pcb_tmp.wait = 0;
 
         static uint16_t ret_addr;
-        pcb_tmp.ip = 0x3d5;
+        pcb_tmp.ip = 0x3c2;
         pcb_tmp.flags = cur_pcb.flags;
         pcb_tmp.stat = PROC_READY;
         pcb_tmp.name[0] = 0;

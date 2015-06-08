@@ -6,7 +6,7 @@ CC=i386-elf-gcc
 #CC=gcc
 CFLAGS=-m16 -mpreferred-stack-boundary=2 -ffreestanding -I./include
 DISK=disk.img
-PROG_LIST=reboot.com time.com date.com sh.com #help.com clear.com io_test.com rep1.com rep2.com sh.com top.com fork.com
+PROG_LIST=reboot.com time.com date.com help.com clear.com io_test.com rep1.com rep2.com sh.com top.com fork.com
 
 fs_ver: clean kernel.bin boot.bin user_program
 	sudo -u gaoyb7 dd if=/dev/zero of=$(DISK) count=2880
@@ -35,7 +35,7 @@ boot.bin: boot.o
 boot.o: boot.asm
 	$(AS) $(ASFLAGS) -o $@ $^
 
-kernel.bin: kernel.o interrupt.o isr_wrapper.o stdio.o stdlib.o utils.o process.o syscall.o fat12.o
+kernel.bin: kernel.o interrupt.o isr_wrapper.o stdio.o stdlib.o utils.o process.o syscall.o fat12.o string.o
 	$(LD) $(LDFLAGS) -Ttext 0x0000 --oformat binary -o $@ $^
 
 kernel.o: kernel.c include/interrupt.h include/syscall.h
@@ -58,6 +58,7 @@ isr_wrapper.o: module/isr_wrapper.asm
 	
 stdio.o: lib/stdio.c include/stdio.h
 stdlib.o: lib/stdlib.c include/stdlib.h
+string.o: lib/string.c include/string.h
 
 #user_program
 %.o: program/%.c
@@ -82,11 +83,11 @@ syscall.com: syscall.o syscall.o
 io_test.o: program/io_test.c include/stdio.h
 io_test.com: stdio.o io_test.o
 sh.o: program/sh.c include/stdio.h include/stdlib.h
-sh.com: sh.o stdio.o stdlib.o utils.o process.o fat12.o
+sh.com: sh.o stdio.o utils.o process.o fat12.o string.o
 top.o: program/top.c include/stdio.h include/process.h
-top.com: top.o stdio.o process.o utils.o stdlib.o fat12.o
+top.com: top.o stdio.o process.o utils.o fat12.o string.o
 fork.o: program/fork.c include/stdio.h include/process.h
-fork.com: fork.o stdio.o process.o utils.o stdlib.o fat12.o
+fork.com: fork.o stdio.o process.o utils.o fat12.o string.o
 kill.o: program/kill.c include/process.h
 kill.com: kill.o stdio.o process.o utils.o stdlib.o fat12.o
 rep1.o: program/rep1.c 

@@ -10,7 +10,7 @@
 #define PID_NUM_ADDR 0x00000500
 #define PCB_ADDR 0x00000600
 #define PROC_ADDR 0x20000500
-#define PROC_SIZE 0x04000000
+#define PROC_SIZE 0x08000000
 #define PROC_TIME 1
 
 #include "stdint.h"
