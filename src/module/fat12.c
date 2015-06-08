@@ -365,9 +365,11 @@ int cat(char *file_name) {
 
 void rm_file(uint16_t cl) {
     uint16_t next;
+    memset(&sec_tmp, 0, SECTOR_SIZE);
     while (0 < cl && cl < 0xff0) {
         next = get_fat_entry(cl);
         set_fat_entry(cl, 0);
+        write_sector(&sec_tmp, cl + 31, 1);
         cl = next;
     }
     update_fat();

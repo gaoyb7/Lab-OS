@@ -105,8 +105,7 @@ int is_builtin_func(char *cmd) {
         return 1;
 
     } else if (strncmp(cmd, "RM ", 3) == 0) {
-        if (!rm(cmd + 3)) 
-            printf("rm: no such file %s\n", cmd + 3);
+        rm(cmd + 3);
         return 1;
 
     } else if (strcmp(cmd, "LS") == 0) {
