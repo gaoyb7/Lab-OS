@@ -18,7 +18,7 @@ void update_fat() {
     get_fat();
 }
 
-int get_director() {
+int get_directoy() {
     return directory;
 }
 
@@ -26,23 +26,29 @@ uint16_t get_fat_entry(uint16_t cl) {
     int offset = cl + cl / 2;
     uint16_t val = *(uint16_t*)&fat.data[offset];
     if (cl % 2 == 1)
-        val >>= 4;
+        val /= 16;
     else
         val = val & 0x0fff;
     return val;
+}
+
+int next_empty_fat_entry(uint16_t cl) {
+    while (get_fat_entry(cl) != 0)
+        ++cl;
+    return cl;
 }
 
 void set_fat_entry(uint16_t cl, uint16_t new_val) {
     int offset = cl + cl / 2;
     uint16_t val = *(uint16_t*)&fat.data[offset];
     if (cl % 2 == 1)
-        val = (new_val << 4) + (val & 0xf);
+        val = (new_val * 16) + (val & 0xf);
     else
         val = (val & 0xf000) + new_val;
     *(uint16_t*)&fat.data[offset] = val;
 }
 
-uint16_t next_sector(uint16_t cnt) {
+uint16_t next_cluster(uint16_t cnt) {
     return get_fat_entry(cnt);
 }
 
@@ -103,12 +109,10 @@ int get_file_fat_entry(char *file_name, int flag) {
         if (found != -1) {
             if (flag == 1 && found > 0) {
                 memset((char *)file, 0, sizeof(File_entry_t));
-                //printf("ENTER\n"); getch();
                 if (directory == 0)
                     write_sector(&dir_tmp, i + 19, 1);
                 else
                     write_sector(&dir_tmp, sec_cnt + 31, 1);
-                //printf("LEAVE\n"); getch();
             }
             break;
         }
@@ -116,6 +120,59 @@ int get_file_fat_entry(char *file_name, int flag) {
             sec_cnt = get_fat_entry(sec_cnt);
     }
     return found;
+}
+
+File_entry_t get_file_entry(char *file_name) {
+    int sec_count, sec_cnt, i, j;
+    File_entry_t *file;
+    sec_count = total_cluster(directory);
+    sec_cnt = directory;
+
+    for (i = 0; i < sec_count; ++i) {
+        if (directory == 0)
+            read_sector(&dir_tmp, i + 19, 1);
+        else
+            read_sector(&dir_tmp, sec_cnt + 31, 1);
+
+        for (j = 0; j < FILE_ENT_PER_SEC; ++j) {
+            file = &dir_tmp.data[j];
+            if (file->name[0] == 0) continue;
+
+            if (file_name_match(file, file_name) == 1)
+                return dir_tmp.data[j];
+        }
+        if (directory != 0)
+            sec_cnt = get_fat_entry(sec_cnt);
+    }
+}
+
+void add_file_entry(File_entry_t *F) {
+    int sec_count, sec_cnt, i, j;
+    File_entry_t *file;
+    sec_count = total_cluster(directory);
+    sec_cnt = directory;
+    
+    for (i = 0; i < sec_count; ++i) {
+        if (directory == 0)
+            read_sector(&dir_tmp, i + 19, 1);
+        else
+            read_sector(&dir_tmp, sec_cnt + 31, 1);
+
+        for (j = 0; j < FILE_ENT_PER_SEC; ++j) {
+            file = &dir_tmp.data[j];
+            if (file->name[0] == 0) {
+                dir_tmp.data[j] = *F;
+                if (directory == 0)
+                    write_sector(&dir_tmp, i + 19, 1);
+                else
+                    write_sector(&dir_tmp, sec_cnt + 31, 1);
+                return;
+            }
+        }
+
+        if (directory != 0)
+            sec_cnt = get_fat_entry(sec_cnt);
+    }
 }
 
 void load_file(uint16_t cl, int address) {
@@ -372,38 +429,83 @@ void rm_file(uint16_t cl) {
 }
 
 int rm(char *file_name) {
-    int file_start_cl;
-    file_start_cl = get_file_fat_entry(file_name, 1);
+    int start_cl;
+    start_cl = get_file_fat_entry(file_name, 1);
 
-    if (file_start_cl == -1) {
+    if (start_cl == -1) {
         printf("rm: file not found '%s'\n", file_name);
         return 0;
-    } else if (file_start_cl == 0 || file_start_cl < -1) {
+    } else if (start_cl == 0 || start_cl < -1) {
         printf("rm: '%s' is a directory\n", file_name);
         return 0;
     }
 
-    rm_file((uint16_t)file_start_cl);
-    //printf("%d\n", get_fat_entry(file_start_cl));
+    rm_file((uint16_t)start_cl);
+    //printf("%d\n", get_fat_entry(src_start_cl));
 
     return 1;
 }
 
-void cp_file(uint16_t cl, char *dst) {
+void update_file_name(File_entry_t *F, char *dst) {
+    int dot_pos, len, ext_len, i;
+    dot_pos = strchr(dst, '.');
+    len = __builtin_strlen(dst);
+    if (dot_pos == -1) {
+        strncpy(dst, F->name, len);
+        memset(F->name + len, ' ', 8 - len);
+        memset(F->extension, ' ', 3);
+    } else {
+        ext_len = len - dot_pos - 1;
+        if (ext_len > 3) ext_len = 3;
+        strncpy(dst, F->name, dot_pos);
+        for (i = 0; i < ext_len; ++i)
+            F->extension[i] = dst[dot_pos + i + 1];
+        memset(F->name + dot_pos, ' ', 8 - dot_pos);
+        memset(F->extension + ext_len, ' ', 3 - ext_len);
+    }
+}
 
+uint16_t cp_file(uint16_t old_cl) {
+    uint16_t cnt_cl, next_cl, ret;
+    ret = next_cl = next_empty_fat_entry(2);
+    while (1) {
+        cnt_cl = next_cl;
+        read_sector(&sec_tmp, old_cl + 31, 1);
+        write_sector(&sec_tmp, cnt_cl + 31, 1);
+        old_cl = get_fat_entry(old_cl);
+        if (0 < old_cl && old_cl < 0xff0) {
+            next_cl = next_empty_fat_entry(next_cl + 1);
+            set_fat_entry(cnt_cl, next_cl);
+            cnt_cl = next_cl;
+        } else {
+            set_fat_entry(cnt_cl, 0xff8);
+            break;
+        }
+    }
+    update_fat();
+    return ret;
 }
 
 int cp(char *src, char *dst) {
-    printf("SRC_FILE:|%s|     DST_FILE:|%s|\n", src, dst);
-    int file_start_cl;
-    file_start_cl = get_file_fat_entry(src, 0);
-    if (file_start_cl == -1) {
+    //printf("SRC_FILE:|%s|     DST_FILE:|%s|\n", src, dst);
+    int src_start_cl;
+    uint16_t dst_start_cl;
+    static File_entry_t F_entry;
+    src_start_cl = get_file_fat_entry(src, 0);
+    if (src_start_cl == -1) {
         printf("cp: file not found '%s'\n", src);
         return 0;
-    } else if (file_start_cl = 0 || file_start_cl < -1) {
+    } else if (src_start_cl == 0 || src_start_cl < -1) {
         printf("cp: '%s' is a directory\n", src);
+        return 0;
+    } else if (strcmp(src, dst) == 0) {
+        printf("cp: '%s' and '%s' are the same file\n", src, dst);
         return 0;
     }
 
-    cp_file((uint16_t)file_start_cl, *dst);
+    dst_start_cl = cp_file((uint16_t)src_start_cl);
+    F_entry = get_file_entry(src);
+    F_entry.start_cluster = dst_start_cl;
+    update_file_name(&F_entry, dst);
+    add_file_entry(&F_entry);
 }

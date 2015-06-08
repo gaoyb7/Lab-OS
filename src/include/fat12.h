@@ -89,9 +89,9 @@ typedef struct FAT {
 } __attribute__((packed)) FAT_t;
 
 void get_fat();
-int get_director();
+int get_directory();
 uint16_t get_fat_entry(uint16_t id);
-uint16_t next_sector(uint16_t cnt);
+uint16_t next_cluster(uint16_t cnt);
 uint16_t total_cluster(uint16_t start);
 int file_name_match(File_entry_t *file, char *file_name);
 int get_file_fat_entry(char *file_name, int flag);
@@ -106,6 +106,7 @@ void read_sector(void *ptr, uint16_t LBA, uint16_t count);
 void _read_sector(int address, uint16_t LBA, uint16_t count);
 void write_sector(void *ptr, uint16_t LBA, uint16_t count);
 void rm_file(uint16_t cl);
+uint16_t cp_file(uint16_t old_cl);
 char* pwd();
 void ls();
 int cd(char *path);

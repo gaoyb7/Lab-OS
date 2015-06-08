@@ -15,9 +15,10 @@ fs_ver: clean kernel.bin boot.bin user_program
 	mount -o loop,fat=12 -t msdos $(DISK) ./img
 	cp kernel.bin ./img
 	mkdir ./img/prog
-	mkdir -p ./img/d1/d2/d3/d4
+	mkdir ./img/txt
+	mkdir -p ./img/d1/d2/d3/d4/d5/d6
 	cp $(PROG_LIST) ./img/prog
-	cp hello.txt ./img
+	cp hello.txt ./img/txt
 	cp hello.txt ./img/a.txt
 	umount ./img
 
