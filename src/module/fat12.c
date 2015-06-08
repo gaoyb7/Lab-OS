@@ -96,7 +96,7 @@ int get_file_fat_entry(char *file_name) {
 void load_file(uint16_t cl, int address) {
     int tot = total_cluster(cl);
     while (tot--) {
-        printf("%d ", cl);
+        printf("%x ", cl);
         _read_sector(address, cl + 31, 1);
         address += SECTOR_SIZE;
         cl = next_sector(cl);
@@ -305,7 +305,7 @@ void ls() {
         for (j = 0; j < FILE_ENT_PER_SEC; ++j) {
             file = &dir_tmp.data[j];
             if (file->name[0] == 0) continue;
-            printf("%s %s %s %s %d %d\n", show_file_name(file, file_name),\
+            printf("%s %s %s %s %d %x\n", show_file_name(file, file_name),\
                     show_file_attrib(file, file_attr), \
                     show_file_time(file, file_time), \
                     show_file_date(file, file_date), \

@@ -18,7 +18,6 @@ uint16_t cmd_len;
 
 int main() {
     get_fat();
-    printf("%d %d\n", next_sector(162), next_sector(163));
     while (1) {
         get_fat();
         printf("%s %s ", pwd(cnt_dir), cmd_flag);

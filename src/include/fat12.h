@@ -80,12 +80,13 @@ typedef struct Time {
 
 // Directory entry structure
 typedef struct Dir_entry {
-    File_entry_t data[SECTOR_SIZE / sizeof(File_entry_t)];
+    //File_entry_t data[SECTOR_SIZE / sizeof(File_entry_t)];
+    File_entry_t data[16];
 } __attribute__((packed)) Dir_entry_t;
 
 // Physical FAT structure
 typedef struct FAT {
-    uint8_t data[SECTOR_SIZE * FAT_SEC_COUNT];
+    uint8_t data[4608];
 } __attribute__((packed)) FAT_t;
 
 void get_fat();

@@ -1,12 +1,12 @@
 LD=ld
-LDFLAGS=-N -melf_i386 -nostdlib
+LDFLAGS=-N -melf_i386
 AS=nasm
 ASFLAGS=-f elf
 CC=i386-elf-gcc
 #CC=gcc
-CFLAGS=-m16 -nostdlib -mpreferred-stack-boundary=2 -ffreestanding -I./include
+CFLAGS=-m16 -mpreferred-stack-boundary=2 -ffreestanding -I./include
 DISK=disk.img
-PROG_LIST=reboot.com time.com date.com help.com clear.com io_test.com rep1.com rep2.com sh.com top.com fork.com
+PROG_LIST=reboot.com time.com date.com sh.com #help.com clear.com io_test.com rep1.com rep2.com sh.com top.com fork.com
 
 fs_ver: clean kernel.bin boot.bin user_program
 	sudo -u gaoyb7 dd if=/dev/zero of=$(DISK) count=2880

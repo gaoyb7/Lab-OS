@@ -79,7 +79,6 @@ void strncpy(char *stra, char *strb, int len) {
     *strb = 0;
 }
 
-/*
 void strcat(char *stra, char *strb) {
     int len = __builtin_strlen(stra);
     stra += len;
@@ -103,7 +102,6 @@ void to_lower(char *str) {
         ++str;
     }
 }
-*/
 
 void memcpy(void *dest, void *source, int size) {
     while (size--) {
