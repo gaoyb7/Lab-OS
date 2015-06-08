@@ -141,23 +141,21 @@ Time_t to_time(uint16_t time) {
 char* show_file_attrib(File_entry_t *file, char *str) {
     uint8_t attr = file->attribute;
     if (attr & 0x08) {
-        str = "LABEL   ";
+        str = "LABEL ";
         return str;
     }
     if (attr & 0x10) {
-        str = "DIR     ";
+        str = "DIR   ";
         return str;
     }
 
-    str[0] = 'r';
-    str[1] = (attr & 0x01) ? '+' : '-';
-    str[2] = 'h';
-    str[3] = (attr & 0x02) ? '+' : '-';
-    str[4] = 's';
-    str[5] = (attr & 0x04) ? '+' : '-';
-    str[6] = 'a';
-    str[7] = (attr & 0x20) ? '+' : '-';
-    str[8] = 0;
+    str[0] = 'R';
+    str[1] = (attr & 0x01) ? '-' : 'W';
+    str[2] = (attr & 0x02) ? 'H' : '-';
+    str[3] = (attr & 0x04) ? 'S' : '-';
+    str[4] = (attr & 0x20) ? 'A' : '-';
+    str[5] = ' ';
+    str[6] = 0;
     return str;
 }
 
@@ -278,14 +276,14 @@ char* pwd(char *dir) {
 }
 
 void ls() {
-    static char file_name[13], file_attr[10], file_time[6], file_date[12];
+    static char file_name[13], file_attr[7], file_time[6], file_date[12];
     File_entry_t *file;
     int sec_count = 0, i, j;
     uint16_t sec_cnt;
     sec_cnt = directory;
 
     sec_count = total_cluster(sec_cnt);
-    printf("Name         Attrib   Time  Date       Size\n");
+    printf("Name         Attrib Time  Date       Size\n");
     printf("-------------------------------------------\n");
     for (i = 0; i < sec_count; ++i) {
         if (directory == 0)
