@@ -191,7 +191,7 @@ void read_sector(void *ptr, uint16_t LBA, uint16_t count) {
     uint8_t head = (LBA / FLOPPY_SPT) % FLOPPY_HPC;
     uint8_t sector = LBA % FLOPPY_SPT + 1;
 
-    __asm__ volatile(
+    asm volatile(
             "movw %%ds, %%di;"
             "movw %%di, %%es;"
             "int $0x13;"
@@ -209,7 +209,7 @@ void _read_sector(int address, uint16_t LBA, uint16_t count) {
     uint8_t head = (LBA / FLOPPY_SPT) % FLOPPY_HPC;
     uint8_t sector = LBA % FLOPPY_SPT + 1;
 
-    __asm__ volatile(
+    asm volatile(
             "movw %%di, %%es;"
             "int $0x13;"
             : : "a"((0x02 << 8) + count), "b"(address & 0xffff), \
@@ -228,7 +228,7 @@ void write_sector(void *ptr, uint16_t LBA, uint16_t count) {
     uint8_t sector = LBA % FLOPPY_SPT + 1;
 
     //_write_mem(0x60000000, ptr, count * SECTOR_SIZE);
-    __asm__ volatile(
+    asm volatile(
             "movw %%ds, %%di;"
             "movw %%di, %%es;"
             "int $0x13;"
