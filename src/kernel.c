@@ -12,7 +12,7 @@ asm("jmp $0x1000, $main\n");
 #include "fat12.h"
 
 char *welcome_msg =
-"Steam OS v5.0\n"
+"Steam OS v5.1\n"
 "Copyright (c) 2015 Gaoyb7.\n"
 "Type 'help' for more information.\n";
 

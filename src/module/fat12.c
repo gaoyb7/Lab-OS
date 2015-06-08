@@ -487,7 +487,6 @@ uint16_t cp_file(uint16_t old_cl) {
 }
 
 int cp(char *src, char *dst) {
-    //printf("SRC_FILE:|%s|     DST_FILE:|%s|\n", src, dst);
     int src_start_cl;
     uint16_t dst_start_cl;
     static File_entry_t F_entry;

@@ -9,11 +9,12 @@ const char *help_msg =
 "=========================================\n"
 "clear              clear the terminal screen\n"
 "ls                 list directory contents\n" 
-"cd                 change the working directory\n"
-"cat                concatenate files and print on the standard output\n"
-"echo               display a line of text\n"
-"rm                 remove files\n"
-"cp                 copy files";
+"cd <DIR>           change the working directory\n"
+"cat <FILE>         concatenate files and print on the standard output\n"
+"echo <STR>         display a line of text\n"
+"rm <FILE>          remove files\n"
+"cp <SRC> <DST>     copy files\n"
+"exit               cause the shell to exit";
 
 const char *cmd_flag="#";
 char cmd_buff[CMD_BUFFER_LEN];
@@ -21,7 +22,7 @@ char cmd[CMD_BUFFER_LEN];
 char cnt_dir[512];
 
 uint16_t read_cmd();
-void load_user_program(char *cmd, int len);
+int load_user_program(char *cmd, int len);
 int is_builtin_func(char *cmd);
 int is_spec_prog(char *cmd);
 void clear();
@@ -30,6 +31,7 @@ uint16_t cmd_len;
 
 int main() {
     get_fat();
+    int exit_signal = 0;
     while (1) {
         printf("%s %s ", pwd(cnt_dir), cmd_flag);
         cmd_len = read_cmd();
@@ -43,10 +45,16 @@ int main() {
         while (p < cmd_len) {
             for (i = p; i < cmd_len && cmd_buff[i] != ';'; ++i);
             strncpy(cmd_buff + p, cmd, i - p);
-            load_user_program(cmd, i - p);
+            if (load_user_program(cmd, i - p) == -1) {
+                exit_signal = 1;
+                break;
+            }
             p = i + 1;
             puts("\n");
         }
+        
+        if (exit_signal == 1)
+            break;
     }
 }
 
@@ -57,14 +65,15 @@ uint16_t read_cmd() {
     return len;
 }
 
-void load_user_program(char *cmd, int len) {
-    uint8_t flag = 1;
+int load_user_program(char *cmd, int len) {
+    uint8_t flag = 1, tmp;
 
     len = del_blank(cmd);
     to_upper(cmd);
 
-    if (is_builtin_func(cmd) == 1) 
-        return;
+    tmp = is_builtin_func(cmd);
+    if (tmp == 1) return 1;
+    if (tmp == 2) return -1;
 
     if (cmd[len - 1] == '&') {
         flag = 0;
@@ -77,24 +86,23 @@ void load_user_program(char *cmd, int len) {
         strcat(cmd, ".COM");
 
     if (is_spec_prog(cmd) == 1) 
-        return;
+        return 2;
 
     if (schedule_prog(cmd, flag) == 0) {
         puts("Command not found: ");
         puts(cmd);
         puts("\n");
+        return 3;
     } else {
         if (flag == 1) {
             wait();
+            return 4;
         }
     }
 }
 
 int is_spec_prog(char *cmd) {
-    if (strcmp(cmd, "SH.COM") == 0) {
-        printf("Error: can not run two shell at the same time.\n");
-        return 1;
-    } else if (strcmp(cmd, "KERNEL.BIN") == 0) {
+    if (strcmp(cmd, "KERNEL.BIN") == 0) {
         printf("Error: Permission denied.\n");
         return 1;
     }
@@ -150,6 +158,8 @@ int is_builtin_func(char *cmd) {
     } else if (strcmp(cmd, "CLEAR") == 0) {
         clear();
         return 1;
+    } else if (strcmp(cmd, "EXIT") == 0) {
+        return 2;
     }
 
     return 0;

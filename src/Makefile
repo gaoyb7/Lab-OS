@@ -2,24 +2,23 @@ LD=ld
 LDFLAGS=-N -melf_i386
 AS=nasm
 ASFLAGS=-f elf
-CC=i386-elf-gcc
-#CC=gcc
+#CC=i386-elf-gcc
+CC=gcc
 CFLAGS=-m16 -mpreferred-stack-boundary=2 -ffreestanding -I./include
 DISK=disk.img
-PROG_LIST=reboot.com time.com date.com help.com io_test.com rep1.com rep2.com sh.com top.com fork.com
+PROG_LIST=reboot.com time.com date.com io_test.com rep1.com rep2.com sh.com top.com fork.com
 
 fs_ver: clean kernel.bin boot.bin user_program
 	sudo -u gaoyb7 dd if=/dev/zero of=$(DISK) count=2880
 	dd if=boot.bin of=$(DISK) conv=notrunc  
 	printf '\x55\xaa' | dd of=$(DISK) bs=1 seek=510 count=2 conv=notrunc
 	mount -o loop,fat=12 -t msdos $(DISK) ./img
-	cp kernel.bin ./img
+	cp kernel.bin license.txt ./img
 	mkdir ./img/prog
 	mkdir ./img/txt
 	mkdir -p ./img/d1/d2/d3/d4/d5/d6
 	cp $(PROG_LIST) ./img/prog
-	cp hello.txt ./img/txt
-	cp hello.txt ./img/a.txt
+	cp about.txt ./img/txt
 	umount ./img
 
 run:
@@ -73,8 +72,6 @@ time.o: program/time.c include/stdio.h
 time.com: time.o stdio.o
 date.o: program/date.c include/stdio.h
 date.com: date.o stdio.o
-help.o: program/help.c include/stdio.h
-help.com: help.o stdio.o
 syscall.o: program/syscall.c include/syscall.h
 syscall.com: syscall.o syscall.o
 io_test.o: program/io_test.c include/stdio.h
