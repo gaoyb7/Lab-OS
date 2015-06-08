@@ -19,13 +19,7 @@ uint16_t get_cur_pos();
 
 void set_cur_pos(uint16_t pos);
 
-void memcpy(void *dest, void *source, int size);
-
 void sleep(uint16_t time);
-
-void load_prog(uint16_t segment, uint16_t offset, uint8_t sectors, uint16_t LBA, uint8_t drive_id);
-
-int strncmp(char *stra, char *strb, int len);
 
 #endif
 

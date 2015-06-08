@@ -106,7 +106,7 @@ void read_sector(void *ptr, uint16_t LBA, uint16_t count);
 void _read_sector(int address, uint16_t LBA, uint16_t count);
 void write_sector(void *ptr, uint16_t LBA, uint16_t count);
 void rm_file(uint16_t cl);
-char* pwd(char *dir);
+char* pwd();
 void ls();
 int cd(char *path);
 int cat(char *file_name);

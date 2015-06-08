@@ -250,7 +250,7 @@ void _read_sector(int address, uint16_t LBA, uint16_t count) {
 }
 
 void write_sector(void *ptr, uint16_t LBA, uint16_t count) {
-    asm volatile("cli; pushw %es;");
+    asm volatile("pushw %es; cli;");
     uint8_t cylinder = LBA / (FLOPPY_SPT * FLOPPY_HPC);
     uint8_t head = (LBA / FLOPPY_SPT) % FLOPPY_HPC;
     uint8_t sector = LBA % FLOPPY_SPT + 1;
@@ -288,18 +288,14 @@ void print_sector(Sector_t *sec) {
     }
 }
 
-char* pwd(char *dir) {
+char* pwd() {
     int i;
     if (directory == 0) {
-        dir[0] = '/';
-        dir[1] = 0;
+        cnt_dir[0] = '/';
+        cnt_dir[1] = 0;
         cnt_dir_len = 1;
-    } else {
-        for (i = 0; i < cnt_dir_len; ++i)
-            dir[i] = cnt_dir[i];
-        dir[cnt_dir_len] = 0;
     }
-    return dir;
+    return cnt_dir;
 }
 
 void ls() {
@@ -393,8 +389,21 @@ int rm(char *file_name) {
     return 1;
 }
 
+void cp_file(uint16_t cl, char *dst) {
+
+}
+
 int cp(char *src, char *dst) {
     printf("SRC_FILE:|%s|     DST_FILE:|%s|\n", src, dst);
     int file_start_cl;
     file_start_cl = get_file_fat_entry(src, 0);
+    if (file_start_cl == -1) {
+        printf("cp: file not found '%s'\n", src);
+        return 0;
+    } else if (file_start_cl = 0 || file_start_cl < -1) {
+        printf("cp: '%s' is a directory\n", src);
+        return 0;
+    }
+
+    cp_file((uint16_t)file_start_cl, *dst);
 }

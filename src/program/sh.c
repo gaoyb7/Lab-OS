@@ -4,6 +4,17 @@
 #include "string.h"
 #define CMD_BUFFER_LEN 512
 
+const char *help_msg =
+"Builtin_Command    Description\n"
+"=========================================\n"
+"clear              clear the terminal screen\n"
+"ls                 list directory contents\n" 
+"cd                 change the working directory\n"
+"cat                concatenate files and print on the standard output\n"
+"echo               display a line of text\n"
+"rm                 remove files\n"
+"cp                 copy files";
+
 const char *cmd_flag="#";
 char cmd_buff[CMD_BUFFER_LEN];
 char cmd[CMD_BUFFER_LEN];
@@ -13,6 +24,7 @@ uint16_t read_cmd();
 void load_user_program(char *cmd, int len);
 int is_builtin_func(char *cmd);
 int is_spec_prog(char *cmd);
+void clear();
 
 uint16_t cmd_len;
 
@@ -117,6 +129,10 @@ int is_builtin_func(char *cmd) {
 
         cmd[tmp + 3] = 0;
         cp(cmd + 3, cmd + tmp + 4);
+        return 1;
+
+    } else if (strcmp(cmd, "HELP") == 0) {
+        printf("%s\n", help_msg);
         return 1;
 
     } else if (strncmp(cmd, "ECHO ", 5) == 0) {

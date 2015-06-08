@@ -21,4 +21,6 @@ int del_blank(char *str);
 
 void memset(char *addr, char val, int size);
 
+void memcpy(void *dest, void *source, int size);
+
 #endif

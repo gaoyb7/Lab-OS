@@ -52,9 +52,3 @@ void _putch(char ch) {
             : : "a"((0x0e << 8) + ch), "b"(0x00) :
             );
 }
-
-void memcpy(void *dest, void *source, int size) {
-    while (size--) {
-        *(char *)dest++ = *(char *)source++;
-    }
-}

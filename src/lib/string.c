@@ -81,3 +81,10 @@ void memset(char *addr, char val, int size) {
     while (size--)
         *addr++ = val;
 }
+
+
+void memcpy(void *dest, void *source, int size) {
+    while (size--) {
+        *(char *)dest++ = *(char *)source++;
+    }
+}
