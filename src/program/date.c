@@ -8,9 +8,9 @@ int main() {
 
     static int x = 10000;
 
-    __asm__ volatile("pushl %0; int $0x76; popl %0" : : "m"(x));
+    asm volatile("pushl %0; int $0x76; popl %0" : : "m"(x));
 
-    __asm__ volatile (
+    asm volatile (
             ".intel_syntax noprefix;"
             "mov ah, 0x04;"
             "int 0x1a;"

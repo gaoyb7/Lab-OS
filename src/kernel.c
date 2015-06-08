@@ -1,8 +1,8 @@
-__asm__(".code16gcc\n");
-__asm__("mov %cs, %ax\n");
-__asm__("mov %ax, %ds\n");
-__asm__("mov %ax, %es\n");
-__asm__("jmp $0x1000, $main\n");
+asm(".code16gcc\n");
+asm("mov %cs, %ax\n");
+asm("mov %ax, %ds\n");
+asm("mov %ax, %es\n");
+asm("jmp $0x1000, $main\n");
 
 #include "interrupt.h"
 #include "stdint.h"

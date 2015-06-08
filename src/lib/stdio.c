@@ -4,7 +4,7 @@ char buf[MAX_BUF_LEN];
 
 char getch() {
     char ch;
-    __asm__ volatile(
+    asm volatile(
             "int $0x16;"
             : "=a"(ch) : "a"(0x10 << 8) :
             );
@@ -12,14 +12,14 @@ char getch() {
 }
 
 void putch(char ch) {
-    __asm__ volatile(
+    asm volatile(
             "int $0x10;"
             : : "a"((0x0e << 8) + ch), "b"(0x00) :
             );
 }
 
 void put_color_ch(char ch, uint16_t attr) {
-    __asm__ volatile(
+    asm volatile(
             "int $0x10;"
             : : "a"((0x09 << 8) + ch), "b"(attr), "c"(1) :
             );
@@ -98,7 +98,7 @@ void printf(const char *fmt, ...) {
         if (*fmt == '%') {
             ++fmt;
             ptr += 4;
-            __asm__ volatile(
+            asm volatile(
                     "movl %%ss:(%%eax), %%ebx;"
                     : "=b"(data): "a"(ptr) :
                     );
@@ -126,7 +126,7 @@ void scanf(const char *fmt, ...) {
         if (*fmt == '%') {
             ++fmt;
             ptr += 4;
-            __asm__ volatile(
+            asm volatile(
                     "movl %%ss:(%%eax), %%ebx;"
                     : "=b"(data): "a"(ptr) :
                     );

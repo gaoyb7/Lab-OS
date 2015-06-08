@@ -1,21 +1,21 @@
 #ifndef _COMM_HEAD_H
 #define _COMM_HEAD_H
 
-__asm__(".code16gcc\n");
-__asm__("pushw %ds;");
-__asm__("pushw %es;");
-__asm__("mov %cs, %ax\n");
-__asm__("mov %ax, %ds\n");
-__asm__("mov %ax, %es\n");
-__asm__("call main\n");
-__asm__("popw %es;");
-__asm__("popw %ds;");
-__asm__("int $0x73;");
-//__asm__("infi_loop:;");
-//__asm__("xor %ax, %ax;");
-//__asm__("int $0x16;");
-//__asm__("jmp infi_loop;");
-__asm__("int $0x72;");
-//__asm__("lret\n");
+asm(".code16gcc\n");
+asm("pushw %ds;");
+asm("pushw %es;");
+asm("mov %cs, %ax\n");
+asm("mov %ax, %ds\n");
+asm("mov %ax, %es\n");
+asm("call main\n");
+asm("popw %es;");
+asm("popw %ds;");
+asm("int $0x73;");
+//asm("infi_loop:;");
+//asm("xor %ax, %ax;");
+//asm("int $0x16;");
+//asm("jmp infi_loop;");
+asm("int $0x72;");
+//asm("lret\n");
 
 #endif

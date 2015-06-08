@@ -7,7 +7,7 @@ int main()
     uint16_t H_M, S_D;
     uint8_t H, M, S;
 
-    __asm__ volatile (
+    asm volatile (
             ".intel_syntax noprefix;"
             "mov ah, 0x02;"
             "int 0x1a;"

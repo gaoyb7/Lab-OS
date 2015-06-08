@@ -28,11 +28,11 @@ void stack_cpy(int source_addr, int dest_addr, int size) {
 }
 
 void wait() {
-    __asm__ volatile("int $0x74; int $0x71;");
+    asm volatile("int $0x74; int $0x71;");
 }
 
 int fork() {
-    __asm__ volatile("int $0x75;");
+    asm volatile("int $0x75;");
 }
 
 int schedule_prog(char *proc_name, uint16_t flags) {
@@ -69,7 +69,7 @@ int schedule_prog(char *proc_name, uint16_t flags) {
     cur_pcb.pid = get_pid();
     cur_pcb.wait = 0;
     cur_pcb.ppid = flags ? 0: -1;
-    __asm__ volatile("pushf; popl %%eax;" : "=a"(cur_pcb.flags) : : );
+    asm volatile("pushf; popl %%eax;" : "=a"(cur_pcb.flags) : : );
 
     static char *ptr;
     ptr = cur_pcb.name;

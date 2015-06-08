@@ -29,7 +29,7 @@ void _sys_write_str(char *s);
 
 
 void _syscall() {
-    //__asm__ volatile(
+    //asm volatile(
     //        ".intel_syntax noprefix;"
     //        "pushad;"
     //        "mov di, cs;"
@@ -47,7 +47,7 @@ void _syscall() {
         case 5: a = _sys_to_char((char)(a & 0xff)); break;
         case 6: _sys_write_str((char *)b); break;
     }
-    //__asm__ volatile(
+    //asm volatile(
     //        ".intel_syntax noprefix;"
     //        "popad;"
     //        ".att_syntax prefix;"
@@ -57,7 +57,7 @@ void _syscall() {
 
 
 void sys_write_ch(char ch) {
-    __asm__ volatile (
+    asm volatile (
             "int $0x68;"
             : :"a"(ch) :
             );
@@ -65,21 +65,21 @@ void sys_write_ch(char ch) {
 
 
 void sys_ouch() {
-    __asm__ volatile (
+    asm volatile (
             "int $0x68;"
             : :"a"(1 << 8) :
             );
 }
 
 void sys_to_upper(char *ptr, uint16_t len) {
-    __asm__ volatile (
+    asm volatile (
             "int $0x68;"
             : :"a"(2 << 8), "b"(ptr), "c"(len): 
             );
 }
 
 void sys_to_lower(char *ptr, uint16_t len) {
-    __asm__ volatile (
+    asm volatile (
             "int $0x68;"
             : :"a"(3 << 8), "b"(ptr), "c"(len): 
             );
@@ -87,7 +87,7 @@ void sys_to_lower(char *ptr, uint16_t len) {
 
 uint8_t sys_to_num(char ch) {
     uint8_t res;
-    __asm__ volatile(
+    asm volatile(
             "int $0x68;"
             : "=a"(res) : "a"((4 << 8) + ch) :
             );
@@ -96,7 +96,7 @@ uint8_t sys_to_num(char ch) {
 
 char sys_to_char(uint8_t num) {
     char ch;
-    __asm__ volatile(
+    asm volatile(
             "int $0x68;"
             : "=a"(ch) : "a"((5 << 8) + num) :
             );
@@ -104,7 +104,7 @@ char sys_to_char(uint8_t num) {
 }
 
 void sys_write_str(char *s) {
-    __asm__ volatile(
+    asm volatile(
             "int $0x68;"
             : : "a"(6 << 8), "b"(s) :
             );

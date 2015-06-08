@@ -114,7 +114,7 @@ int is_builtin_func(char *cmd) {
 }
 
 void clear() {
-    __asm__ volatile(
+    asm volatile(
             "int $0x10;"
             : : "a"(3) :
             );

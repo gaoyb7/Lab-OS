@@ -5,7 +5,7 @@
 #include "stdint.h"
 
 void _sys_write_ch(char ch) {
-    __asm__ volatile(
+    asm volatile(
             "int $0x10;"
             : : "a"((0x0e << 8) + ch), "b"(0) :
             );
