@@ -6,7 +6,7 @@ CC=i386-elf-gcc
 #CC=gcc
 CFLAGS=-m16 -mpreferred-stack-boundary=2 -ffreestanding -I./include
 DISK=disk.img
-PROG_LIST=reboot.com time.com date.com help.com clear.com io_test.com rep1.com rep2.com sh.com top.com fork.com
+PROG_LIST=reboot.com time.com date.com help.com io_test.com rep1.com rep2.com sh.com top.com fork.com
 
 fs_ver: clean kernel.bin boot.bin user_program
 	sudo -u gaoyb7 dd if=/dev/zero of=$(DISK) count=2880
@@ -17,10 +17,6 @@ fs_ver: clean kernel.bin boot.bin user_program
 	mkdir ./img/prog
 	mkdir -p ./img/d1/d2/d3/d4
 	cp $(PROG_LIST) ./img/prog
-	cp date.com ./img/date2.com
-	cp date.com ./img/date3.com
-	cp date.com ./img/date4.com
-	cp date.com ./img/date5.com
 	umount ./img
 
 run:
@@ -76,8 +72,6 @@ date.o: program/date.c include/stdio.h
 date.com: date.o stdio.o
 help.o: program/help.c include/stdio.h
 help.com: help.o stdio.o
-clear.o: program/clear.c include/stdio.h
-clear.com: clear.o
 syscall.o: program/syscall.c include/syscall.h
 syscall.com: syscall.o syscall.o
 io_test.o: program/io_test.c include/stdio.h

@@ -47,12 +47,9 @@ int file_name_match(File_entry_t *file, char *file_name) {
     if (file_name_len > 12) return 0;
 
     show_file_name(file, buff_a);
-    for (i = 0; i < file_name_len; ++i) {
-        if ('a' <= file_name[i] && file_name[i] <= 'z')
-            buff_b[i] = file_name[i] - 'a' + 'A';
-        else
-            buff_b[i] = file_name[i];
-    }
+    strcpy(file_name, buff_b);
+    to_upper(buff_b);
+
     for (i = file_name_len; i < 12; ++i) buff_b[i] = ' ';
     buff_a[12] = buff_b[12] = 0;
 
@@ -191,25 +188,25 @@ char *show_file_date(File_entry_t *file, char *str) {
 }
 
 void read_sector(void *ptr, uint16_t LBA, uint16_t count) {
-    asm volatile("pushl %ebx; pushw %es; cli;");
+    asm volatile("pushw %es; cli;");
     uint8_t cylinder = LBA / (FLOPPY_SPT * FLOPPY_HPC);
     uint8_t head = (LBA / FLOPPY_SPT) % FLOPPY_HPC;
     uint8_t sector = LBA % FLOPPY_SPT + 1;
 
     __asm__ volatile(
-            "movw $0x6000, %%di;"
+            "movw %%ds, %%di;"
             "movw %%di, %%es;"
             "int $0x13;"
-            : : "a"((0x02 << 8) + count), "b"(0x0000), \
+            : : "a"((0x02 << 8) + count), "b"(ptr), \
             "c"(((uint16_t)cylinder << 8) + sector), \
-            "d"((uint16_t)head << 8) : "di", "si"
+            "d"((uint16_t)head << 8) : "si", "di"
             );
-    _read_mem(ptr, 0x60000000, count * SECTOR_SIZE);
-    asm volatile("sti; popw %es; popl %ebx;");
+    //_read_mem(ptr, 0x60000000, count * SECTOR_SIZE);
+    asm volatile("sti; popw %es;");
 }
 
 void _read_sector(int address, uint16_t LBA, uint16_t count) {
-    asm volatile("pushl %ebx; pushw %es; cli;");
+    asm volatile("pushw %es; cli;");
     uint8_t cylinder = LBA / (FLOPPY_SPT * FLOPPY_HPC);
     uint8_t head = (LBA / FLOPPY_SPT) % FLOPPY_HPC;
     uint8_t sector = LBA % FLOPPY_SPT + 1;
@@ -223,7 +220,7 @@ void _read_sector(int address, uint16_t LBA, uint16_t count) {
             "D"(address >> 16)
             : "si"
             );
-    asm volatile("sti; popw %es; popl %ebx;");
+    asm volatile("sti; popw %es;");
 }
 
 void write_sector(void *ptr, uint16_t LBA, uint16_t count) {
@@ -232,17 +229,17 @@ void write_sector(void *ptr, uint16_t LBA, uint16_t count) {
     uint8_t head = (LBA / FLOPPY_SPT) % FLOPPY_HPC;
     uint8_t sector = LBA % FLOPPY_SPT + 1;
 
-    _write_mem(0x60000000, ptr, count * SECTOR_SIZE);
+    //_write_mem(0x60000000, ptr, count * SECTOR_SIZE);
     __asm__ volatile(
-            "movw $0x4000, %%di;"
+            "movw %%ds, %%di;"
             "movw %%di, %%es;"
             "int $0x13;"
             "popw %%es;"
-            : : "a"((0x03 << 8) + count), "b"(0x0000), \
+            : : "a"((0x03 << 8) + count), "b"(ptr), \
             "c"(((uint16_t)cylinder << 8) + sector), \
             "d"((uint16_t)head << 8) : "di", "si"
             );
-    asm volatile("sti;");
+    asm volatile("sti; popw %es;");
 }
 
 void print_sector(Sector_t *sec) {

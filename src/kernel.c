@@ -22,7 +22,6 @@ void fat12_test();
 int tmp;
 
 int main() {
-    //clear();
     printf("%s\n", welcome_msg);
     load_ISR();
     //fat12_info();
