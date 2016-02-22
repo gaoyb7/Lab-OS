@@ -1,0 +1,10 @@
+*.o
+*.img
+*.bin
+*.com
+*.gch
+*.txt
+*.swp
+*.s
+docs/*
+report/*
